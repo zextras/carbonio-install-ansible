@@ -1,0 +1,27 @@
+---
+# tasks file  to upgrade OS
+ - name: Upgrade RHEL Family OS packages
+   become: true
+   yum:
+     name: '*'
+     state: latest
+   when: ansible_os_family == "RedHat"
+ 
+ # Debian Family upgrade
+ - name: Update repositories cache
+   become: true
+   apt:
+     update_cache: yes
+   when: ansible_os_family == "Debian"
+
+ - name: Update all packages to their latest version
+   become: true
+   apt:
+     name: "*"
+     state: latest
+   when: ansible_os_family == "Debian"
+ - name: Upgrade the OS (apt-get dist-upgrade)
+   become: true
+   apt:
+     upgrade: dist
+   when: ansible_os_family == "Debian"

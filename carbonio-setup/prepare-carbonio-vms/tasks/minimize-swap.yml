@@ -1,0 +1,8 @@
+---
+# minimize SWAP for VMs
+  - name: Minimize SWAP
+    become: true
+    ansible.posix.sysctl:
+      name: vm.swappiness
+      value: '1'
+      state: present

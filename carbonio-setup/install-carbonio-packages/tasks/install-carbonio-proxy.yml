@@ -1,0 +1,55 @@
+---
+  - name: Install Carbonio Proxy an UIs Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ proxy_packages }}"        
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] 
+    tags:
+      - install-carbonio-proxy 
+
+  - name: Install Carbonio files UI Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ files_ui_packages }}"        
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    tags:
+      - install-carbonio-proxy
+
+  - name: Install Carbonio task UI Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ task_ui_packages }}"        
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    tags:
+      - install-carbonio-proxy  
+
+######## RHEL
+  - name: Install Carbonio Proxy an UIs RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ proxy_packages }}"        
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
+    tags:
+      - install-carbonio-proxy    
+
+  - name: Install Carbonio files UI RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ files_ui_packages }}"        
+    when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    tags:
+      - install-carbonio-proxy  
+
+  - name: Install Carbonio task UI RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ task_ui_packages }}"        
+    when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    tags:
+      - install-carbonio-proxy        

@@ -1,0 +1,43 @@
+---
+# tasks file to prepare
+   - name: Install dependencies Ubuntu
+     become: true
+     ansible.builtin.apt:
+      pkg:
+       - libgmp10
+       - libaio1
+       - sysstat
+       - fontconfig
+       - curl
+       - wget
+       - sysstat
+       - jq
+       - python3-psycopg2
+     when: ansible_os_family == "Debian"
+     tags:
+        - set-os  
+        
+   - name: Install dependencies RHEL
+     become: true
+     ansible.builtin.yum:
+      pkg:
+       - sysstat
+       - fontconfig
+       - dos2unix
+       - curl
+       - wget
+       - nmap-ncat
+       - sysstat
+       - jq
+       - python3-psycopg2
+     when: ansible_os_family == "RedHat"
+     tags:
+        - set-os 
+       
+   - name: Create alias for z
+     become: true
+     lineinfile:
+      path: /root/.bashrc
+      line: alias z='su - zextras'
+     tags:
+        - set-os 

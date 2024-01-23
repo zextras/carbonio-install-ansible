@@ -1,0 +1,72 @@
+---
+  - name: Create Postgres repo on Ubuntu
+    template:
+      src: pgpool.list.j2
+      dest: /etc/apt/sources.list.d/pgdg.list
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+      - set-repos
+ 
+  - name: Add apt key Postgres repo on Ubuntu
+    become: true
+    ansible.builtin.apt_key:
+      url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+      state: present
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+       - set-repos
+       
+  - name: Update repos   
+    become: true
+    apt:
+      update_cache: yes
+    when: ansible_os_family == "Debian"
+    tags:
+       - set-repos
+       
+############ RHEL        
+  - name: Enable RHEL Postgres repository
+    become: true
+    ansible.builtin.yum:
+      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      state: present
+      disable_gpg_check : true
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+       - set-repos
+
+  - name: Add zextras release repo(RedHat)
+    ansible.builtin.get_url:
+      url: https://repo.zextras.io/release/rhel8/zextras.repo
+      dest: /etc/yum.repos.d/zextras.repo
+      mode: '0644'
+    when: ansible_os_family == "RedHat"
+    tags:
+      - set-repos
+  
+  - name: Update RedHat repo(RedHat)
+    become: true
+    shell:
+      cmd: "yum check-update -y 2>/dev/null"
+      executable: /bin/bash
+    register: pkgu
+    failed_when: "pkgu.rc not in [ 0, 100 ]"
+    when: ansible_os_family == "RedHat"
+    tags:
+      - set-repos
+
+  - name: Disable the postgresql stream module in AppStream
+    become: true
+    command: '/usr/bin/dnf -qy module disable postgresql'
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+       - set-repos
+       
+  - name: Enable Epel repo
+    become: true
+    ansible.builtin.yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      state: present
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["videoServers"]
+    tags:
+       - set-repos    

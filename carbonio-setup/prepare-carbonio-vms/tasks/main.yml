@@ -1,0 +1,6 @@
+---
+# tasks file for prepare-carbonio-vms
+  - import_tasks: set-repos.yml
+  - import_tasks: set-os.yml
+  - import_tasks: update-os.yml
+  - import_tasks: minimize-swap.yml

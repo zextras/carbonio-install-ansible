@@ -1,0 +1,79 @@
+---
+  # - name: Check dbs Connector Server
+    # fail:
+      # msg: "ERROR: No dbs Connector server found in inventory"
+    # when: (groups['dbsConnectorServers'] | length == 0)
+    
+  - name: Install mailbox db connector Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ mailbox_dbconnectors_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"]  
+    tags:
+      - install-carbonio-dbconnectors
+     
+  - name: Install files db connector Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ files_dbconnectors_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors
+      
+  - name: Install docs db connector Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ docs_dbconnectors_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['docsServers'] | length > 0 
+    tags:
+      - install-carbonio-dbconnectors
+
+  - name: Install tasks db connector Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ task_dbconnectors_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['taskServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors
+
+##### RHEL
+
+  - name: Install mailbox db connector RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ mailbox_dbconnectors_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"]  
+    tags:
+      - install-carbonio-dbconnectors
+     
+  - name: Install files db connector RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ files_dbconnectors_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0 
+    tags:
+      - install-carbonio-dbconnectors
+      
+  - name: Install docs db connector RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ docs_dbconnectors_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['docsServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors
+      
+  - name: Install tasks db connector RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ task_dbconnectors_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['taskServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors

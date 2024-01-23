@@ -1,0 +1,37 @@
+---
+  - name: Get local config zimbra_server_hostname to check if already boostraped
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    register: glc  
+    tags:
+      - execute-carbonio-bootstrap
+      
+  - name: Manage ldap password
+    ansible.builtin.set_fact:
+       carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password', chars=['ascii_letters', 'digits'], length=8) }}"
+    when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
+    tags:
+      - execute-carbonio-bootstrap
+      
+  - debug:
+      msg: "Carbonio bootstrap never performed" 
+    when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
+    tags:
+      - execute-carbonio-bootstrap
+      
+  - name: Create config file
+    template:
+      src: carbonio-config.txt.j2
+      dest: /tmp/carbonio-config.txt
+    when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
+    tags:
+      - execute-carbonio-bootstrap
+      
+  - name: run Carbonio Bootstrap
+    become: true
+    command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
+    when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
+    tags:
+      - execute-carbonio-bootstrap

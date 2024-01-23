@@ -1,0 +1,34 @@
+---
+  - name: Manage Consul password
+    ansible.builtin.set_fact:
+       carbonio_mesh_password: "{{ lookup('ansible.builtin.password', inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
+    tags:
+      - execute-pending-setups
+      
+  - name: Copy scripts to remote host
+    become: true
+    ansible.builtin.copy:
+      src: apply-pending-setups.sh
+      dest: /tmp/apply-pending-setups.sh
+      mode: '0755'
+    tags:
+      - execute-pending-setups
+      
+  - name: Run Carbonio pending-setups
+    become: true
+    command: /tmp/apply-pending-setups.sh {{ carbonio_mesh_password }}
+    register: pso
+    tags:
+      - execute-pending-setups
+      
+  - name: Remove scripts from remote host
+    become: true
+    ansible.builtin.file:
+      state: absent
+      path: /tmp/apply-pending-setups.sh
+    tags:
+      - execute-pending-setups
+      
+  # - local_action: copy content={{ pso.stdout }} dest=/tmp/pso_{{ inventory_hostname }}
+    # tags:
+      # - execute-pending-setups

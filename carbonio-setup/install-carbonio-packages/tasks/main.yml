@@ -1,0 +1,19 @@
+---
+# tasks file for install-carbonio-appserver
+# The order is 
+  - import_tasks: install-carbonio-postgres.yml
+  - import_tasks: install-carbonio-meshserver.yml
+  - import_tasks: install-carbonio-meshagent.yml
+  - import_tasks: install-carbonio-directoryserver.yml
+  - import_tasks: install-carbonio-appserver.yml
+  - import_tasks: install-carbonio-pgpool.yml
+  - import_tasks: install-carbonio-dbconnectors.yml
+  - import_tasks: install-carbonio-mta.yml
+  - import_tasks: install-carbonio-task.yml
+  - import_tasks: install-carbonio-proxy.yml
+  - import_tasks: install-carbonio-files.yml
+  - import_tasks: install-carbonio-docs.yml
+  - import_tasks: install-carbonio-preview.yml
+  - import_tasks: install-carbonio-videoserver.yml
+  - import_tasks: install-carbonio-prometheus.yml
+  

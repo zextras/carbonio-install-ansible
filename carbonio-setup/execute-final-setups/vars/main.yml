@@ -1,0 +1,7 @@
+---
+# vars file for execute-final-setups
+
+ds_master_count: "{{ groups['masterDirectoryServers'] | length }}"
+ds_replica_count: "{{ groups['replicaDirectoryServers'] | length }}"
+rhel_postgresql_service_name: "postgresql-16"
+postgresql_service_name: "postgresql"

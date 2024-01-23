@@ -1,0 +1,20 @@
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  roles:
+     - prepare-carbonio-vms
+     - install-carbonio-packages
+
+- hosts: all
+  serial: 1
+  order: inventory
+  gather_facts: yes
+  roles:
+     - bootstrap-cluster-services
+
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  roles:
+     - bootstrap-carbonio
+     - execute-final-setups

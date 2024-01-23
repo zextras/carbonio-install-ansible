@@ -1,0 +1,21 @@
+---
+  - name: Install Postgres Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ postgres_packages_ubuntu }}"  
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["postgresServers"]
+    tags:
+      - install-postgres
+
+  - name: Install Postgres RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ postgres_packages_rhel }}"  
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["postgresServers"] 
+    tags:
+      - install-postgres
+
+
+      

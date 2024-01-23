@@ -1,0 +1,21 @@
+---
+  - name: Install Carbonio MTA Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ mta_packages }}" 
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["mtaServers"] 
+    tags:
+      - install-carbonio-mta
+      
+  - name: Install Carbonio MTA RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ mta_packages }}" 
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["mtaServers"] 
+    tags:
+      - install-carbonio-mta
+
+    
+     

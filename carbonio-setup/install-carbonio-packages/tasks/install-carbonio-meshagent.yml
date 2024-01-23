@@ -1,0 +1,19 @@
+---
+  - name: Install Carbonio Service discover agent Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ sda_packages }}"  
+    when: ansible_os_family == "Debian" and inventory_hostname not in groups["serviceDiscoverServers"]
+    tags:
+      - intall-service-discover-agent
+      
+  - name: Install Carbonio Service discover agent RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ sda_packages }}"  
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname not in groups["serviceDiscoverServers"]
+    tags:
+      - intall-service-discover-agent
+   

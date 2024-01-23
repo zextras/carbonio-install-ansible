@@ -1,0 +1,7 @@
+---
+# tasks file for bootstrap-cluster-services
+  - import_tasks: configure-syslog-aggregator.yml
+  - import_tasks: execute-master-directory-bootstrap.yml
+  - import_tasks: execute-replica-directory-bootstrap.yml
+  - import_tasks: initialize-postgres.yml
+  - import_tasks: execute-service-discover-bootstrap.yml

@@ -1,0 +1,24 @@
+---
+  - name: Update auth keys
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmupdateauthkeys'
+    tags:
+      - post-install-cmds
+      
+  - name: Syslog setup
+    become: true
+    command: '/opt/zextras/libexec/zmsyslogsetup'
+    tags:
+      - post-install-cmds
+
+  - name: Set Replica and Master Url
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmlocalconfig -e ldap_url="ldap://"{{ groups["replicaDirectoryServers"][0] }}":389 ldap://"{{ groups["masterDirectoryServers"][0] }}":389"'
+    when: ds_replica_count | int > 0 and (inventory_hostname not in groups["masterDirectoryServers"] or inventory_hostname not in groups["replicaDirectoryServers"])
+    tags:
+      - post-install-cmds
+      

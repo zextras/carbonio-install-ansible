@@ -1,0 +1,21 @@
+---
+  - name: Install Carbonio Docs Ubuntu 
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ docs_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["docsServers"] 
+    tags:
+      - install-carbonio-docs
+      
+  - name: Install Carbonio Docs RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ docs_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["docsServers"] 
+    tags:
+      - install-carbonio-docs
+
+    
+     

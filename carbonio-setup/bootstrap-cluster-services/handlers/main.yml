@@ -1,0 +1,10 @@
+---
+# handlers file for bootstrap-cluster-services
+  - name: restart_postgres
+    service: name={{ postgresql_service_name }} state=restarted
+
+  - name: restart_postgres-rhel
+    service: name={{ rhel_postgresql_service_name }} state=restarted
+
+  - name: restart_rsyslog
+    service: name=rsyslog state=restarted

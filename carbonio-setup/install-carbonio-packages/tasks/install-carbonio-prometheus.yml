@@ -1,0 +1,39 @@
+---
+  - name: Install Carbonio Prometheus Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ prometheus_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
+    tags:
+      - install-carbonio-prometheus
+      
+  - name: Install Carbonio Prometheus Server RH
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ prometheus_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
+    tags:
+      - install-carbonio-prometheus
+
+        #  - name: Install Carbonio Grafana Server Ubuntu
+        # become: true
+        #apt: name={{ item }} state=present
+        #with_items:
+        # - "{{ grafana_packages }}"
+        #when: ansible_os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
+        #tags:
+        #- install-carbonio-grafana
+      
+        # - name: Install Carbonio Grafana Server RH
+        #become: true
+        # yum: name={{ item }} state=present
+        # with_items:
+        # - "{{ grafana_packages }}"
+        #when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
+        #tags:
+        #- install-carbonio-grafana
+
+    
+     

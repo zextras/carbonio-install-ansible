@@ -1,0 +1,20 @@
+---
+  - name: Enable remote syslog
+    lineinfile:
+        # firstmatch: true
+        dest: /etc/rsyslog.conf
+        regex: '^#\s*{{ item.regex }}(.*)$'
+        line: '{{ item.line }}'
+    loop:
+        - regex: 'module\(load="imudp"\)'
+          line: 'module(load="imudp")'
+        - regex: 'input\(type="imudp" port="514"\)'
+          line: 'input(type="imudp" port="514")'
+        - regex: 'module\(load="imtcp"\)'
+          line: 'module(load="imtcp")'
+        - regex: 'input\(type="imtcp" port="514"\)'
+          line: 'input(type="imtcp" port="514")'
+    notify: restart_rsyslog
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["syslogServer"]
+    tags:
+      - enable-log-aggregator

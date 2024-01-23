@@ -1,0 +1,84 @@
+---
+# vars file for install-carbonio-packages
+
+  appserver_packages: 
+    - carbonio-appserver
+    - carbonio-zal
+    - carbonio-advanced
+  
+  mailbox_dbconnectors_packages: 
+    - carbonio-mailbox-db
+    
+  files_dbconnectors_packages: 
+    - carbonio-files-db
+
+  docs_dbconnectors_packages: 
+    - carbonio-docs-connector-db
+
+  task_dbconnectors_packages:
+    - carbonio-tasks-db
+    
+  pgpool_packages_ubuntu: 
+    - postgresql-client-16
+    - pgpool2    
+    
+  pgpool_packages_rhel: 
+    - pgpool-II
+
+  postgres_packages_ubuntu: 
+    - python3-psycopg2
+    - postgresql-16
+
+  postgres_packages_rhel: 
+    - python38-psycopg2
+    - postgresql16-server
+    
+  ds_packages: 
+    - carbonio-directory-server
+
+  mta_packages: 
+    - carbonio-mta
+    
+  proxy_packages: 
+    - carbonio-proxy
+    - carbonio-webui
+    - carbonio-chats-ui
+    - carbonio-admin-ui
+    - carbonio-admin-console-ui
+      
+  preview_packages: 
+    - carbonio-preview
+
+  task_packages:
+    - carbonio-tasks
+    
+  files_packages: 
+    - carbonio-files  
+    - carbonio-user-management
+    
+  files_ui_packages: 
+    - carbonio-files-public-folder-ui
+    - carbonio-files-ui
+  
+  task_ui_packages:
+      - carbonio-tasks-ui
+  
+  docs_packages: 
+    - carbonio-docs-editor
+    - carbonio-docs-connector
+  
+  videoserver_packages: 
+    - carbonio-videoserver
+    - carbonio-videoserver-recorder
+    
+  sda_packages: 
+    - service-discover-agent    
+    
+  sds_packages: 
+    - service-discover-server
+    
+  prometheus_packages: 
+    - carbonio-prometheus
+
+  grafana_packages:
+    - grafana 

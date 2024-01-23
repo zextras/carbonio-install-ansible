@@ -1,0 +1,4 @@
+---
+# tasks file for bootstrap-carbonio
+  - import_tasks: execute-carbonio-bootstrap.yml
+  - import_tasks: execute-service-discover-agent-bootstrap.yml

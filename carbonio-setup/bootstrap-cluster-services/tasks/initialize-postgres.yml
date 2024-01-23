@@ -1,0 +1,240 @@
+---
+  - name: "Set Postgres Service name RHEL"
+    set_fact:
+      postgresql_service_name: "{{ rhel_postgresql_service_name }}"
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: Check if PostgreSQL database is initialized.
+    stat:
+      path: "{{ rhel_postgresql_data_dir }}/PG_VERSION"
+    register: pgdata_dir_version
+    tags:
+      - initialize-postgres
+      
+  - name:  Initialize Postgres on RHEL
+    become: true
+    command: '{{ rhel_postgres_init_script }} initdb'
+    notify: restart_postgres-rhel
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"] and not pgdata_dir_version.stat.exists
+    tags:
+      - initialize-postgres
+
+  - name: Enable Postgres service RHEL
+    ansible.builtin.systemd:
+      name: "{{ rhel_postgresql_service_name }}"
+      state: started
+      enabled: true
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+
+  - name: "Set md5"
+    postgresql_set:
+     name: password_encryption
+     value: md5
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres
+    tags:
+      - initialize-postgres
+
+  - name: "Set md5"
+    postgresql_set:
+     name: password_encryption
+     value: md5
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres-rhel
+    tags:
+      - initialize-postgres
+      
+  - name: "Create carbonio_adm database"
+    postgresql_db:
+      state: present
+      name: "carbonio_adm"
+    become: yes
+    become_user: postgres
+    when: inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: Manage Postgres password
+    ansible.builtin.set_fact:
+       carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
+    when: inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: "Create carbonio_adm role"
+    postgresql_user:
+      state: present
+      name: "carbonio_adm"
+      password: "{{ carbonio_postgres_password }}"
+      role_attr_flags: LOGIN,SUPERUSER
+    become: yes
+    become_user: postgres
+    when: inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  # - name: "Create carbonio_replica role"
+    # postgresql_user:
+      # state: present
+      # name: "carbonio_postgres_replica"
+      # password: "{{ carbonio_postgres_password }}"
+      # role_attr_flags: LOGIN,REPLICATION
+    # become: yes
+    # become_user: postgres
+    # when: inventory_hostname in groups["postgresServers"]
+    # tags:
+      # - initialize-postgres
+      
+  - name: "Grant carbonio_adm db access"
+    postgresql_privs:
+      type: database
+      database: "carbonio_adm"
+      roles: "carbonio_adm"
+      grant_option: no
+      privs: all
+    become: yes
+    become_user: postgres
+    when: inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: "Allow md5 connection for the carbonio_adm user Ubuntu"
+    postgresql_pg_hba:
+      dest: "{{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
+      contype: host
+      databases: all
+      method: md5
+      users: "all"
+      source: "0.0.0.0/0"
+      create: true
+    become: yes
+    become_user: postgres
+    notify: restart_postgres
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres      
+
+  - name: "Allow md5 connection for the carbonio_adm user RHEL"
+    postgresql_pg_hba:
+      dest: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
+      contype: host
+      databases: all
+      method: md5
+      users: "all"
+      source: "0.0.0.0/0"
+      create: true
+    become: yes
+    become_user: postgres
+    notify: restart_postgres-rhel
+    when: ansible_os_family == "Redhat"  and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres 
+
+  - name: Add Postgres config(RedHat)
+    become: true
+    notify: restart_postgres-rhel
+    ansible.builtin.lineinfile:
+      path: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
+      insertafter: '# \$inet_socket_port = \[10024,10026\];.*'
+      line: "host    all             all             0.0.0.0/0               md5"
+      regexp: host\s*all\s*all\s*0.0.0.0/0\s*md5
+    when: inventory_hostname in groups["postgresServers"] and ansible_os_family == "RedHat"
+    tags:
+      - install-postgres
+      
+  - name: "Set listen_addresses"
+    postgresql_set:
+     name: listen_addresses
+     value: "*"
+    become: yes
+    become_user: postgres
+    notify: restart_postgres
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: "Set port"
+    postgresql_set:
+     name: port
+     value: 5432 
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres
+    tags:
+      - initialize-postgres
+      
+  - name: "Set max_connections"
+    postgresql_set:
+     name: max_connections
+     value: 500
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres
+    tags:
+      - initialize-postgres 
+      
+  - name: "Set shared_buffers"
+    postgresql_set:
+     name: shared_buffers
+     value: 5000
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres
+    tags:
+      - initialize-postgres
+
+  - name: "Set listen_addresses"
+    postgresql_set:
+     name: listen_addresses
+     value: "*"
+    become: yes
+    become_user: postgres
+    notify: restart_postgres-rhel
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+      
+  - name: "Set port"
+    postgresql_set:
+     name: port
+     value: 5432 
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres-rhel
+    tags:
+      - initialize-postgres
+      
+  - name: "Set max_connections"
+    postgresql_set:
+     name: max_connections
+     value: 500
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres-rhel
+    tags:
+      - initialize-postgres 
+      
+  - name: "Set shared_buffers"
+    postgresql_set:
+     name: shared_buffers
+     value: 5000
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    notify: restart_postgres-rhel
+    tags:
+      - initialize-postgres
+      

@@ -1,0 +1,21 @@
+---
+  - name: Install Carbonio preview Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ preview_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["previewServers"] 
+    tags:
+      - install-carbonio-preview
+      
+  - name: Install Carbonio preview RH
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ preview_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["previewServers"] 
+    tags:
+      - install-carbonio-preview
+
+    
+     

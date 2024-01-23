@@ -1,0 +1,114 @@
+---  
+  - name: Create pgpool config file Ubuntu
+    template:
+      src: pgpool.conf.j2
+      dest: /etc/pgpool2/pgpool.conf
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Create pgpool config file RedHat
+    template:
+      src: pgpool.conf.j2
+      dest: /etc/pgpool-II/pgpool.conf
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Creates pgpool log folder
+    file:
+      path: /var/log/pgpool
+      state: directory
+      owner: postgres
+      group: postgres
+      mode: 0775
+    when: inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"]
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Creates pgpool pid folder(Redhat)
+    file:
+      path: /var/run/pgpool
+      state: directory
+      owner: postgres
+      group: postgres
+      mode: 0775
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Creates pool_passwd file(Redhat)
+    file:
+      path: /etc/pgpool-II/pool_passwd
+      owner: postgres
+      group: postgres
+      state: touch
+      mode: 0775
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: restart_pgpool(Ubuntu)
+    ansible.builtin.service:
+      name: pgpool2
+      state: restarted
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+
+  - name: restart_pgpool(RedHat)
+    ansible.builtin.service:
+      name: pgpool-II
+      state: restarted
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: Manage Postgres password
+    ansible.builtin.set_fact:
+       carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
+    when: inventory_hostname in groups["dbsConnectorServers"]
+    tags:
+      - db-connectors-bootstrap
+
+  - name: run mailbox db-connectors Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
+    become: yes
+    when: inventory_hostname in groups["dbsConnectorServers"][0]
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: run files-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
+    become: yes
+    #run_once: true
+    when: groups['filesServers'] | length > 0 and inventory_hostname in groups["dbsConnectorServers"][0]
+    #when: inventory_hostname in groups["dbsConnectorServers"][0]
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: run docs-connector-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: yes
+    #run_once: true
+    command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
+    when: groups['docsServers'] | length > 0 and inventory_hostname in groups["dbsConnectorServers"][0]
+    #when: inventory_hostname in groups["dbsConnectorServers"][0]
+    tags:
+      - db-connectors-bootstrap
+     
+  - name: run tasks-connector-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: yes
+    #run_once: true
+    command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
+    when: groups['taskServers'] | length > 0 and inventory_hostname in groups["dbsConnectorServers"][0]
+    #when: inventory_hostname in groups["dbsConnectorServers"][0]
+    tags:
+      - db-connectors-bootstrap

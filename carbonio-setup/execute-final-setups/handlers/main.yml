@@ -1,0 +1,19 @@
+---
+# handlers file for execute-final-setups
+    - name: restart_pgpool
+      service:
+        name: pgpool2.service
+        state: restarted
+
+    - name: restart_preview
+      service:
+        name: carbonio-preview.service
+        state: restarted
+
+    - name: restart_videoserver
+      service:
+        name: videoserver.service
+        state: restarted
+
+    - name: restart_postgres-rhel
+      service: name={{ postgresql_service_name }} state=restarted

@@ -1,0 +1,62 @@
+---
+  - name: Get local config zimbra_server_hostname to check if already boostraped
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    register: glc  
+    when: inventory_hostname in groups["masterDirectoryServers"]
+    tags:
+      - master-directory-bootstrap
+      
+  - debug:
+      msg: "Carbonio bootstrap never performed" 
+    when: glc is search("localhost")
+    tags:
+      - master-directory-bootstrap
+      
+  - name: Manage ldap password
+    ansible.builtin.set_fact:
+       carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password', chars=['ascii_letters', 'digits'], length=8) }}"
+    when: glc is search("localhost") and inventory_hostname in groups["masterDirectoryServers"]
+    tags:
+      - master-directory-bootstrap
+      
+  - debug:
+      msg: "Ldap password {{ carbonio_ldap_password }}"
+    when: glc is search("localhost") and inventory_hostname in groups["masterDirectoryServers"]
+    tags:
+      - master-directory-bootstrap
+      
+  - name: Create config file
+    template:
+      src: carbonio-config.txt.j2
+      dest: /tmp/carbonio-config.txt
+    when: glc is search("localhost") and inventory_hostname in groups["masterDirectoryServers"]
+    tags:
+      - master-directory-bootstrap
+      
+  - name: run Carbonio Master Directory Bootstrap
+    become: true
+    command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
+    when: glc is search("localhost") and inventory_hostname in groups["masterDirectoryServers"]
+    tags:
+      - master-directory-bootstrap
+
+  - name: Enable Directory replica
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/libexec/zmldapenablereplica'
+    when: glc is search("localhost") and (groups['replicaDirectoryServers'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"])
+    tags:
+      - master-directory-bootstrap
+
+  - name: Configure syslog server
+    become: true
+    become_method: su
+    become_user: zextras
+    command: "/opt/zextras/bin/zmprov mcf zimbraLogHostname {{ hostvars[groups['syslogServer'][0]].inventory_hostname }}"
+    when: (groups['syslogServer'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"])
+    tags:
+      - master-directory-bootstrap     
