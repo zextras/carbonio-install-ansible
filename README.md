@@ -56,7 +56,7 @@ srv5.example.com
 #Specify the hostname and public IP address for every server
 [videoServers]  
 #hostname public_ip_address=x.y.z.t  
-srv3.example.com 8.9.10.11
+srv3.example.com public_ip_address=8.9.10.11
 
 [prometheusServers]  
 srv4.example.com
