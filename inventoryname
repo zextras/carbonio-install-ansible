@@ -12,8 +12,6 @@
 
 [proxyServers]
 
-[taskServers]
-
 [proxyServers:vars]
 #webmailHostname=webmailPublicHostname
 
@@ -22,6 +20,8 @@
 [filesServers]
 
 [docsServers]
+
+[taskServers]
 
 [previewServers]
 
