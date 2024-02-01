@@ -105,7 +105,17 @@
     when: inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
-      
+
+  - name: "Change scram-sha-256 to md5"
+    ansible.builtin.shell:
+      cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
+    become: yes
+    become_user: postgres
+    notify: restart_postgres
+    when: inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+
   - name: "Allow md5 connection for the carbonio_adm user Ubuntu"
     postgresql_pg_hba:
       dest: "{{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
@@ -120,7 +130,7 @@
     notify: restart_postgres
     when: ansible_os_family == "Debian"  and inventory_hostname in groups["postgresServers"]
     tags:
-      - initialize-postgres      
+      - initialize-postgres 
 
   - name: "Allow md5 connection for the carbonio_adm user RHEL"
     postgresql_pg_hba:
