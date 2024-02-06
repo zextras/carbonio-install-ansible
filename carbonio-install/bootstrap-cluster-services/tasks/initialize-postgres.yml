@@ -111,8 +111,16 @@
       cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
     become: yes
     become_user: postgres
-    notify: restart_postgres
-    when: inventory_hostname in groups["postgresServers"]
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+
+  - name: "Change scram-sha-256 to md5 RHEL"
+    ansible.builtin.shell:
+      cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
+    become: yes
+    become_user: postgres
+    when: ansible_os_family == "Redhat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 
