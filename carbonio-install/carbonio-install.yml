@@ -1,18 +1,41 @@
-- hosts: all
+- hosts: postgresServers, masterDirectoryServers, replicaDirectoryServers
+  order: inventory
+  serial: 1
+  gather_facts: yes
+  roles:
+     - prepare-carbonio-vms
+     - install-carbonio-packages
+
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
   order: inventory
   gather_facts: yes
   roles:
      - prepare-carbonio-vms
      - install-carbonio-packages
 
-- hosts: all
+
+- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   serial: 1
   order: inventory
   gather_facts: yes
   roles:
      - bootstrap-cluster-services
 
-- hosts: all
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+  serial: 1
+  order: inventory
+  gather_facts: yes
+  roles:
+     - bootstrap-cluster-services
+
+- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+  order: inventory
+  gather_facts: yes
+  roles:
+     - bootstrap-carbonio
+     - execute-final-setups
+
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
   order: inventory
   gather_facts: yes
   roles:
