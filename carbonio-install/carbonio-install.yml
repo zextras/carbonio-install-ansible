@@ -1,18 +1,9 @@
-- hosts: postgresServers, masterDirectoryServers, replicaDirectoryServers
-  order: inventory
-  serial: 1
-  gather_facts: yes
-  roles:
-     - prepare-carbonio-vms
-     - install-carbonio-packages
-
-- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+- hosts: all
   order: inventory
   gather_facts: yes
   roles:
      - prepare-carbonio-vms
      - install-carbonio-packages
-
 
 - hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   serial: 1
