@@ -75,7 +75,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: "carbonio chats video-server add {{item}} port 8188 servlet_port 8090 secret {{ carbonio_videoserver_password }}" 
+    command: "/opt/zextras/bin/carbonio chats video-server add {{item}} port 8188 servlet_port 8090 secret {{ carbonio_videoserver_password }}" 
     loop: "{{ groups['videoServers'] }}"    
     when: inventory_hostname in groups["applicationServers"][0]
     tags:
