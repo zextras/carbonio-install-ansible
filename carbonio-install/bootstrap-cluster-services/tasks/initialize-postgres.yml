@@ -120,7 +120,7 @@
       cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
     become: yes
     become_user: postgres
-    when: ansible_os_family == "Redhat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 

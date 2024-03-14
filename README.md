@@ -5,8 +5,8 @@ To install  Carbonio using this role you have to insert information in the inven
 All VMs must be configured and the Zextras repo to be used already set.
 
 
-Multi master for directory server is not supported.
-Postgres server cannot be installed on dbsConnectorServers
+Multi master for directory server is not supported.  
+__Postgres server cannot be installed on dbsConnectorServers__
 
 
 Example for inventory file
