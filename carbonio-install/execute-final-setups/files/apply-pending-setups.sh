@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 if [ $# -ne 1 ]; then
 	echo "${0} Service Discover Password"
 	exit 1	

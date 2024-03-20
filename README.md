@@ -1,4 +1,5 @@
 # Install Carbonio Ansible role
+
 An ansible role to install Zextras Carbonio infrastructures
 
 To install  Carbonio using this role you have to insert information in the inventory file It supports only FQDN.
@@ -11,6 +12,7 @@ Postgres server cannot be installed on dbsConnectorServers
 
 Example for inventory file
 
+```
 [postgresServers]  
 srv1.example.com
 
@@ -63,3 +65,8 @@ srv4.example.com
 
 [syslogServer]  
 srv4.example.com
+```
+
+## License(s)
+
+See [COPYING](COPYING.md) file for detail.
