@@ -4,7 +4,7 @@ backend_hostname0 = {{ hostvars[groups['postgresServers'][0]].inventory_hostname
 backend_port0 = 5432
 backend_flag0 = 'DISALLOW_TO_FAILOVER'
 
-num_init_children = 32
+num_init_children = 15
 max_pool=8
 reserved_connections=1
 
