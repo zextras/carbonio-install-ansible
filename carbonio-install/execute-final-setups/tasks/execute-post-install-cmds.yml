@@ -22,7 +22,7 @@
     become_method: su
     become_user: zextras
     command: '/opt/zextras/bin/zmlocalconfig -e ldap_url="ldap://"{{ groups["replicaDirectoryServers"][0] }}":389 ldap://"{{ groups["masterDirectoryServers"][0] }}":389"'
-    when: ds_replica_count | int > 0 and (inventory_hostname not in groups["masterDirectoryServers"] or inventory_hostname not in groups["replicaDirectoryServers"])
+    when: ds_replica_count | int > 0 and (inventory_hostname not in groups["masterDirectoryServers"] and inventory_hostname not in groups["replicaDirectoryServers"])
     tags:
       - post-install-cmds
       
