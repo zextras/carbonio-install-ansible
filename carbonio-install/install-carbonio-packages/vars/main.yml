@@ -49,6 +49,7 @@
     - carbonio-chats-ui
     - carbonio-admin-ui
     - carbonio-admin-console-ui
+    - carbonio-avdb-updater
       
   preview_packages: 
     - carbonio-preview
