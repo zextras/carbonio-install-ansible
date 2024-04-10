@@ -208,6 +208,7 @@
   - name: Calculate 25% of RAM
     set_fact:
       ram_size_mb: "{{ (ansible_memtotal_mb * 0.25) | int }}MB"
+    when: ansible_os_family == 'Debian' and inventory_hostname in groups['postgresServers']
     tags:
       - initialize-postgres
 
@@ -254,15 +255,21 @@
     notify: restart_postgres-rhel
     tags:
       - initialize-postgres 
-      
-  - name: "Set shared_buffers"
+
+  - name: Calculate 25% of RAM
+    set_fact:
+      ram_size_mb: "{{ (ansible_memtotal_mb * 0.25) | int }}MB"
+    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    tags:
+      - initialize-postgres
+
+  - name: Set shared_buffers
     postgresql_set:
-     name: shared_buffers
-     value: 5000
+      name: shared_buffers
+      value: "{{ ram_size_mb }}"
     become: yes
     become_user: postgres
     when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres-rhel
     tags:
-      - initialize-postgres
-      
+      - initialize-postgres      
