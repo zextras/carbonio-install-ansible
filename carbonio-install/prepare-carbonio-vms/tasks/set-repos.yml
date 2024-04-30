@@ -40,14 +40,19 @@
        - set-repos
 
   - name: Add zextras release repo(RedHat)
-    ansible.builtin.get_url:
-      url: https://repo.zextras.io/release/rhel{{ ansible_distribution_major_version }}/zextras.repo
-      dest: /etc/yum.repos.d/zextras.repo
-      mode: '0644'
-    when: ansible_os_family == "RedHat"
+    ansible.builtin.yum_repository:
+      name: zextras
+      description: Zextras Carbonio Release for RHEL {{ ansible_distribution_major_version }} x86_64 (RPMs)
+      file: zextras
+      baseurl: https://repo.zextras.io/release/rhel{{ ansible_distribution_major_version }}/
+      gpgkey: https://repo.zextras.io/repomd.xml.key
+      gpgcheck: no
+      repo_gpgcheck: no
+      enabled: yes
+    when: ansible_facts['os_family'] == "RedHat"
     tags:
       - set-repos
-  
+
   - name: Update RedHat repo(RedHat)
     become: true
     shell:
