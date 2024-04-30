@@ -32,7 +32,7 @@
   - name: Enable RHEL Postgres repository
     become: true
     ansible.builtin.yum:
-      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
       state: present
       disable_gpg_check : true
     when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
@@ -40,14 +40,19 @@
        - set-repos
 
   - name: Add zextras release repo(RedHat)
-    ansible.builtin.get_url:
-      url: https://repo.zextras.io/release/rhel8/zextras.repo
-      dest: /etc/yum.repos.d/zextras.repo
-      mode: '0644'
-    when: ansible_os_family == "RedHat"
+    ansible.builtin.yum_repository:
+      name: zextras
+      description: Zextras Carbonio Release for RHEL {{ ansible_distribution_major_version }} x86_64 (RPMs)
+      file: zextras
+      baseurl: https://repo.zextras.io/release/rhel{{ ansible_distribution_major_version }}/
+      gpgkey: https://repo.zextras.io/repomd.xml.key
+      gpgcheck: no
+      repo_gpgcheck: no
+      enabled: yes
+    when: ansible_facts['os_family'] == "RedHat"
     tags:
       - set-repos
-  
+
   - name: Update RedHat repo(RedHat)
     become: true
     shell:
@@ -69,8 +74,8 @@
   - name: Enable Epel repo
     become: true
     ansible.builtin.yum:
-      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
       state: present
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["videoServers"]
+    when: ansible_os_family == "RedHat"
     tags:
        - set-repos    
