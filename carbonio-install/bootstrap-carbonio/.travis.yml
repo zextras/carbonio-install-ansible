@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
 ---
 language: python
 python: "2.7"
