@@ -13,7 +13,7 @@
 
   - name: Create pgpool config file RedHat
     template:
-      src: pgpool.conf.j2
+      src: pgpool-rhel.conf.j2
       dest: /etc/pgpool-II/pgpool.conf
     when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
     tags:
