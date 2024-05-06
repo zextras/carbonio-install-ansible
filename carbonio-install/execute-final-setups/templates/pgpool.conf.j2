@@ -25,3 +25,7 @@ log_rotation_age = 1d
 #Prints all SQL statements to the log separately for each DB node. It can be useful to make sure that replication or load-balancing is working..
 #log_per_node_statement = on
 
+{% if ansible_os_family == "RedHat" %}
+#PID file name
+pid_file_name = '/var/run/pgpool-II/pgpool.pid'
+{% endif %}
