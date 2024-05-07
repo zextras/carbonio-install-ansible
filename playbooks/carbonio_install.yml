@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/prepare_carbonio_vms
+     - ../roles/install_carbonio_packages
+
+- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+  serial: 1
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/bootstrap_cluster_services
+
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+  serial: 1
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/bootstrap_cluster_services
+
+- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/bootstrap_carbonio
+     - ../roles/execute_final_setups
+
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/bootstrap_carbonio
+     - ../roles/execute_final_setups
