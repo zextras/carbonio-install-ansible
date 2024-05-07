@@ -105,7 +105,7 @@
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ docs_dbconnectors_packages }}"
+      - "{{ ws_collaboration_dbconnectors_packages }}"
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['WorkStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
