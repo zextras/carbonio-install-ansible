@@ -10,6 +10,9 @@
     - carbonio-zal
     - carbonio-advanced
   
+  carbonio_storages_packages: 
+    - carbonio-storages
+
   mailbox_dbconnectors_packages: 
     - carbonio-mailbox-db
     
