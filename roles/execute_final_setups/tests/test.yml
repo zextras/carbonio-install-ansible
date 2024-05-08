@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - execute_final_setups
