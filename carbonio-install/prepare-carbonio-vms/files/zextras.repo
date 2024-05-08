@@ -1,7 +1,0 @@
-[Zextras]
-name=zextras-carbonio
-baseurl=https://repo.zextras.io/release/rhel8
-enabled=1
-gpgcheck=0
-
-
