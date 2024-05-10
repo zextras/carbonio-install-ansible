@@ -65,7 +65,6 @@
     
   files_packages: 
     - carbonio-files  
-    - carbonio-user-management
     
   files_ui_packages: 
     - carbonio-files-public-folder-ui
