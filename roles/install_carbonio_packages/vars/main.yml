@@ -13,6 +13,9 @@
   carbonio_storages_packages: 
     - carbonio-storages
 
+  carbonio-user-management_packages: 
+    - carbonio-user-management
+
   mailbox_dbconnectors_packages: 
     - carbonio-mailbox-db
     
