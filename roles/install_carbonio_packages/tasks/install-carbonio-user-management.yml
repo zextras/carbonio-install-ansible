@@ -3,22 +3,22 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install carbonio-user-management Ubuntu
+  - name: Install carbonio user management Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
-      - "{{ carbonio-user-management_packages }}"
+      - "{{ carbonio_user_management_packages }}"
     when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
     tags:
-      - install-carbonio-storages
+      - install-carbonio-user-management
 
 ##### RHEL
 
-  - name: Install carbonio-user-management RHEL
+  - name: Install carbonio user management RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ carbonio-user-managements_packages }}"
+      - "{{ carbonio_user_managements_packages }}"
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
     tags:
-      - install-carbonio-storages
+      - install-carbonio-user-management
