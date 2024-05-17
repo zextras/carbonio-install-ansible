@@ -18,7 +18,7 @@
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ carbonio_user_managements_packages }}"
+      - "{{ carbonio_user_management_packages }}"
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
     tags:
       - install-carbonio-user-management
