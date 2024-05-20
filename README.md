@@ -1,8 +1,8 @@
-# Install Carbonio Ansible role
+# Install Carbonio Ansible Playbook
 
-An ansible role to install Zextras Carbonio infrastructures
+An ansible playbook to install Zextras Carbonio infrastructures
 
-To install  Carbonio using this role you have to insert information in the inventory file It supports only FQDN.
+To install  Carbonio using this playbook you have to insert information in the inventory file It supports only FQDN.
 All VMs must be configured and the Zextras repo to be used already set.
 
 
