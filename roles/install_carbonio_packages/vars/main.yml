@@ -10,6 +10,12 @@
     - carbonio-zal
     - carbonio-advanced
   
+  carbonio_storages_packages: 
+    - carbonio-storages
+
+  carbonio_user_management_packages: 
+    - carbonio-user-management
+
   mailbox_dbconnectors_packages: 
     - carbonio-mailbox-db
     
@@ -49,6 +55,7 @@
     - carbonio-chats-ui
     - carbonio-admin-ui
     - carbonio-admin-console-ui
+    - carbonio-avdb-updater
       
   preview_packages: 
     - carbonio-preview
@@ -58,7 +65,6 @@
     
   files_packages: 
     - carbonio-files  
-    - carbonio-user-management
     
   files_ui_packages: 
     - carbonio-files-public-folder-ui
