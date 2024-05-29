@@ -34,6 +34,7 @@
     
   pgpool_packages_rhel: 
     - pgpool-II
+    - postgresql16
 
   postgres_packages_ubuntu: 
     - python3-psycopg2
