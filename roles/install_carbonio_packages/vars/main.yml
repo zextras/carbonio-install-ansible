@@ -41,7 +41,7 @@
     - postgresql-16
 
   postgres_packages_rhel: 
-    - python38-psycopg2
+    - python3-psycopg2
     - postgresql16-server
     
   ds_packages: 
