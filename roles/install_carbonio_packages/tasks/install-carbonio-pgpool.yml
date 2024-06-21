@@ -19,4 +19,13 @@
        - "{{ pgpool_packages_rhel }}"
     when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
     tags:
-       - install-pgpool      
+       - install-pgpool
+       
+  - name: Start and enable service pgpool
+    ansible.builtin.systemd:
+      name: pgpool2
+      state: started
+      enabled: true
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] and inventory_hostname not in groups["postgresServers"])
+    tags:
+      - install-pgpool
