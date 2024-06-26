@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Restart application service
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmmailboxdctl restart'
+    when: inventory_hostname in groups["applicationServers"]
+    register: appserver_status
+    changed_when: appserver_status.rc == 0
+    tags:
+      - restart-carbonio-app-services
+
+
+  - name: Debug restart application service
+    when: inventory_hostname in groups["applicationServers"]
+    debug:
+      msg: "{{ appserver_status.stdout }}"
+
+
+
