@@ -16,7 +16,7 @@
 
     - name: restart_videoserver
       service:
-        name: videoserver.service
+        name: carbonio-videoserver.service
         state: restarted
 
     - name: restart_postgres-rhel
