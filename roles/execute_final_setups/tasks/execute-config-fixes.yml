@@ -85,7 +85,7 @@
     tags:
       - fix-config
       
-  - name: Start and enable service carbonio-videoserver
+  - name: Start and enable service videoserver
     ansible.builtin.systemd:
       name: videoserver
       state: started
