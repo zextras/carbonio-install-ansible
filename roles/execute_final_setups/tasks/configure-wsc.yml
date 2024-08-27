@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---  
+  - name: Manage Postgres password
+    ansible.builtin.set_fact:
+       carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
+    when: inventory_hostname in groups['WorkStreamServers']
+    tags:
+      - carbonio-message-dispatcher-migration
+
+  - name: run carbonio-message-dispatcher-migration
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: true
+    command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm {{ hostvars[groups['postgresServer']].ansible_default_ipv4.address }}
+    when: inventory_hostname in groups['WorkStreamServers']
+    tags:
+      - carbonio-message-dispatcher-migration

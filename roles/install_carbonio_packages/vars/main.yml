@@ -97,6 +97,7 @@
     - carbonio-message-dispatcher
     - carbonio-message-broker
     - carbonio-ws-collaboration
+    - postgresql-client-16
   
   message_dispatcher_dbconnectors_packages:
     - carbonio-message-dispatcher-db

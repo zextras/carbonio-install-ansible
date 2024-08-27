@@ -107,7 +107,7 @@
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
     command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
-    when: groups['WorkStreamServers'] | length > 0 and inventory_hostname in groups["dbsConnectorServers"][0]
+    when: groups['WorkStreamServers'] | length > 0 and inventory_hostname in groups["postgresServers"]
     tags:
       - db-connectors-bootstrap
 
@@ -116,7 +116,7 @@
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
     command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
-    when: groups['WorkStreamServers'] | length > 0 and inventory_hostname in groups["dbsConnectorServers"][0]
+    when: groups['WorkStreamServers'] | length > 0 and inventory_hostname in groups["postgresServers"]
     tags:
       - db-connectors-bootstrap
      
