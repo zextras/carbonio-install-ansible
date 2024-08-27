@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Install carbonio-storages Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ carbonio_storages_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
+    tags:
+      - install-carbonio-storages
+
+##### RHEL
+
+  - name: Install carbonio-storages RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ carbonio_storages_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
+    tags:
+      - install-carbonio-storages

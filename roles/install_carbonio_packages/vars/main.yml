@@ -10,6 +10,12 @@
     - carbonio-zal
     - carbonio-advanced
   
+  carbonio_storages_packages: 
+    - carbonio-storages
+
+  carbonio_user_management_packages: 
+    - carbonio-user-management
+
   mailbox_dbconnectors_packages: 
     - carbonio-mailbox-db
     
@@ -28,13 +34,14 @@
     
   pgpool_packages_rhel: 
     - pgpool-II
+    - postgresql16
 
   postgres_packages_ubuntu: 
     - python3-psycopg2
     - postgresql-16
 
   postgres_packages_rhel: 
-    - python38-psycopg2
+    - python3-psycopg2
     - postgresql16-server
     
   ds_packages: 
@@ -49,6 +56,7 @@
     - carbonio-chats-ui
     - carbonio-admin-ui
     - carbonio-admin-console-ui
+    - carbonio-avdb-updater
       
   preview_packages: 
     - carbonio-preview
@@ -58,7 +66,6 @@
     
   files_packages: 
     - carbonio-files  
-    - carbonio-user-management
     
   files_ui_packages: 
     - carbonio-files-public-folder-ui
