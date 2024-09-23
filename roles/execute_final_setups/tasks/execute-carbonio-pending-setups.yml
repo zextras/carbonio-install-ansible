@@ -11,8 +11,8 @@
       
   - name: Copy scripts to remote host
     become: true
-    ansible.builtin.copy:
-      src: apply-pending-setups.sh
+    template:
+      src: apply-pending-setups.sh.j2
       dest: /tmp/apply-pending-setups.sh
       mode: '0755'
     tags:
