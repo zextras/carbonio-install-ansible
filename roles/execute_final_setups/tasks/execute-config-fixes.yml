@@ -30,12 +30,20 @@
     tags:
       - fix-config  
 
-  - name: Restart memcached
+  - name: Restart memcached[SysV]
     become: true
     become_method: su
     become_user: zextras
     command: '/opt/zextras/bin/zmmemcachedctl restart'
-    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0)
+    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0) and ansible_distribution_major_version != "9"
+    tags:
+      - fix-config
+
+  - name: Restart memcached[Systemd]
+    ansible.builtin.service:
+      name: carbonio-memcached
+      state: restarted
+    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0) and ansible_distribution_major_version == "9"
     tags:
       - fix-config
       
