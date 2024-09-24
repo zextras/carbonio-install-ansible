@@ -8,7 +8,7 @@
     become_method: su
     become_user: zextras
     command: '/opt/zextras/bin/zmmailboxdctl restart'
-    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9"
+    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
     register: appserver_status
     changed_when: appserver_status.rc == 0
     tags:
@@ -18,13 +18,13 @@
     ansible.builtin.service:
       name: carbonio-appserver
       state: restarted
-    when: inventory_hostname in groups["applicationServers"] and (ansible_distribution_major_version == "9" and ansible_os_family == "RedHat")
+    when: inventory_hostname in groups["applicationServers"] and (ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24")
     tags:
       - restart-carbonio-app-servicesp
 
 
   - name: Debug restart application service
-    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9"
+    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
     debug:
       msg: "{{ appserver_status.stdout }}"
 
