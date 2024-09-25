@@ -3,20 +3,28 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Restart application service
+  - name: Restart application service[sysV]
     become: true
     become_method: su
     become_user: zextras
     command: '/opt/zextras/bin/zmmailboxdctl restart'
-    when: inventory_hostname in groups["applicationServers"]
+    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
     register: appserver_status
     changed_when: appserver_status.rc == 0
     tags:
       - restart-carbonio-app-services
 
+  - name: Restart application service[Systemd]
+    ansible.builtin.service:
+      name: carbonio-appserver
+      state: restarted
+    when: inventory_hostname in groups["applicationServers"] and (ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24")
+    tags:
+      - restart-carbonio-app-servicesp
+
 
   - name: Debug restart application service
-    when: inventory_hostname in groups["applicationServers"]
+    when: inventory_hostname in groups["applicationServers"] and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
     debug:
       msg: "{{ appserver_status.stdout }}"
 
