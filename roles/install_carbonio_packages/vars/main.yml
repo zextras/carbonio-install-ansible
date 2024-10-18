@@ -91,5 +91,8 @@
   prometheus_packages: 
     - carbonio-prometheus
 
+  message_broker_packages:
+    - carbonio-message-broker
+
   grafana_packages:
     - grafana 
