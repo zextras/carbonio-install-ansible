@@ -15,7 +15,7 @@ pending-setups -a
 
 {% if ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24" %}
 su - zextras -c "/opt/zextras/bin/zmcontrol stop"
-systemctl list-units --no-legend --plain  | awk '/carbonio/ {print $1}' |  xargs -I@ systemctl restart @
+systemctl list-unit-files --state=enabled | awk '/carbonio/ {print $1}' |  xargs -I@ systemctl restart @
 {% else %}
 su - zextras -c "/opt/zextras/bin/zmcontrol restart"
 {% endif %}
