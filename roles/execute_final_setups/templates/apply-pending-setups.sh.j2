@@ -12,4 +12,10 @@ fi
 export CONSUL_HTTP_TOKEN=$(echo $1| gpg --batch --yes --passphrase-fd 0 -qdo - /etc/zextras/service-discover/cluster-credentials.tar.gpg | tar xOf - consul-acl-secret.json | jq .SecretID -r);
 export SETUP_CONSUL_TOKEN=$(echo $1 | gpg --batch --yes --passphrase-fd 0 -qdo - /etc/zextras/service-discover/cluster-credentials.tar.gpg | tar xOf - consul-acl-secret.json | jq .SecretID -r);
 pending-setups -a
+
+{% if ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24" %}
+su - zextras -c "/opt/zextras/bin/zmcontrol stop"
+systemctl list-unit-files --state=enabled | awk '/carbonio/ {print $1}' |  xargs -I@ systemctl restart @
+{% else %}
 su - zextras -c "/opt/zextras/bin/zmcontrol restart"
+{% endif %}

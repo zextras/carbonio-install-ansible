@@ -9,7 +9,6 @@
      ansible.builtin.apt:
       pkg:
        - libgmp10
-       - libaio1
        - sysstat
        - fontconfig
        - curl
