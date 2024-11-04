@@ -32,7 +32,7 @@ srv2.example.com
 srv3.example.com  
 
 [dbsConnectorServers]  
-srv2.example.com
+srv1.example.com
 
 [mtaServers]  
 srv3.example.com
