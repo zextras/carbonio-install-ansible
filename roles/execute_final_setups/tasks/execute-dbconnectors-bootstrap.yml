@@ -7,9 +7,10 @@
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when: 
-      - inventory_hostname in groups["dbsConnectorServers"]
-      - groups['dbsConnectorServers'] | length == 1
-      - groups['dbsConnectorServers'][0] == groups['postgresServers'][0]
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
     tags:
       - db-connectors-bootstrap
 
@@ -19,9 +20,10 @@
     command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
     become: yes
     when: 
-      - inventory_hostname in groups["dbsConnectorServers"][0]
-      - groups['dbsConnectorServers'] | length == 1
-      - groups['dbsConnectorServers'][0] == groups['postgresServers'][0]
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
     tags:
       - db-connectors-bootstrap
       
@@ -31,9 +33,10 @@
     command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
     become: yes
     when: 
-      - inventory_hostname in groups["dbsConnectorServers"][0]
-      - groups['dbsConnectorServers'] | length == 1
-      - groups['dbsConnectorServers'][0] == groups['postgresServers'][0]
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
       - groups['filesServers'] | length > 0
     tags:
       - db-connectors-bootstrap
@@ -44,9 +47,10 @@
     become: yes
     command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
     when: 
-      - inventory_hostname in groups["dbsConnectorServers"][0]
-      - groups['dbsConnectorServers'] | length == 1
-      - groups['dbsConnectorServers'][0] == groups['postgresServers'][0]
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
       - groups['docsServers'] | length > 0 
     tags:
       - db-connectors-bootstrap
@@ -57,71 +61,10 @@
     become: yes
     command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
     when: 
-      - inventory_hostname in groups["dbsConnectorServers"][0]
-      - groups['dbsConnectorServers'] | length == 1
-      - groups['dbsConnectorServers'][0] == groups['postgresServers'][0]
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
       - groups['taskServers'] | length > 0
-    tags:
-      - db-connectors-bootstrap
-
-#Only if dbsConnectorServers group is wrong in inventory
-  - name: Manage Postgres password
-    ansible.builtin.set_fact:
-       carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
-    when: 
-      - inventory_hostname in groups["dbsConnectorServers"] 
-      - groups['dbsConnectorServers'] | length > 1 or (groups['dbsConnectorServers'] | length == 1 and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-    delegate_to: "{{ groups['postgresServers'][0] }}"
-    tags:
-      - db-connectors-bootstrap
-
-  - name: run mailbox db-connectors Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
-    become: yes
-    when: 
-      - inventory_hostname in groups["dbsConnectorServers"] 
-      - groups['dbsConnectorServers'] | length > 1 or (groups['dbsConnectorServers'] | length == 1 and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-    delegate_to: "{{ groups['postgresServers'][0] }}"
-    tags:
-      - db-connectors-bootstrap
-      
-  - name: run files-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
-    become: yes
-    when: 
-      - inventory_hostname in groups["dbsConnectorServers"] 
-      - groups['dbsConnectorServers'] | length > 1 or (groups['dbsConnectorServers'] | length == 1 and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-      - groups['filesServers'] | length > 0
-    delegate_to: "{{ groups['postgresServers'][0] }}"
-    tags:
-      - db-connectors-bootstrap
-      
-  - name: run docs-connector-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    become: yes
-    command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - inventory_hostname in groups["dbsConnectorServers"] 
-      - groups['dbsConnectorServers'] | length > 1 or (groups['dbsConnectorServers'] | length == 1 and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-      - groups['docsServers'] | length > 0 
-    delegate_to: "{{ groups['postgresServers'][0] }}"
-    tags:
-      - db-connectors-bootstrap
-     
-  - name: run tasks-connector-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    become: yes
-    command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - inventory_hostname in groups["dbsConnectorServers"] 
-      - groups['dbsConnectorServers'] | length > 1 or (groups['dbsConnectorServers'] | length == 1 and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-      - groups['taskServers'] | length > 0
-    delegate_to: "{{ groups['postgresServers'][0] }}"
     tags:
       - db-connectors-bootstrap
