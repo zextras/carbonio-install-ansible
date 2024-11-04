@@ -10,7 +10,6 @@
   - import_tasks: install-carbonio-meshagent.yml
   - import_tasks: install-carbonio-directoryserver.yml
   - import_tasks: install-carbonio-appserver.yml
-  - import_tasks: install-carbonio-pgpool.yml
   - import_tasks: install-carbonio-dbconnectors.yml
   - import_tasks: install-carbonio-storages.yml
   - import_tasks: install-carbonio-user-management.yml
