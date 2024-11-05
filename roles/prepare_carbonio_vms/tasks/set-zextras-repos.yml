@@ -5,25 +5,23 @@
 # Set Zextras repository
 
 - name: Update repositories (Ubuntu)
-  apt:
-    update_cache: yes
+  command: "apt-get update*"
   when: ansible_os_family == "Debian"
   register: update_result
 
 - name: Check for carbonio-* packages in repositories (Ubuntu)
-  command: "apt list | grep carbonio-"
+  command: "apt-cache search carbonio*"
   when: ansible_os_family == "Debian"
   register: carbonio_packages
 
-- name: Verify if carbonio-* packages are found in repositories (Ubuntu)
-  block:
-    - name: Display list of carbonio-* packages in repositories
-      debug:
-        msg: "{{ carbonio_packages.stdout_lines }}"
-      
-    - name: Wait 10 seconds to allow users to review the output
-      pause:
-        seconds: 10
+- name: Display list of repositories
+  debug:
+    msg: "{{ update_result.stdout_lines }}"
+  when: ansible_os_family == "Debian" and carbonio_packages.stdout != ""
+
+- name: Wait 10 seconds to allow users to review the output
+  pause:
+    seconds: 10
   when: ansible_os_family == "Debian" and carbonio_packages.stdout != ""
 
 - name: Display notice if Zextras repository is not prepared (Ubuntu)
@@ -32,7 +30,7 @@
       debug:
         msg: |
           Repository update completed successfully:
-          {{ update_result }}
+          {{ update_result.stdout_lines }}
           
           Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
 
