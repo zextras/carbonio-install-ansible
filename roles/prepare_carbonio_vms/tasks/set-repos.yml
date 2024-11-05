@@ -5,7 +5,7 @@
 ---
   - name: Create Postgres repo on Ubuntu
     template:
-      src: pgpool.list.j2
+      src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
     when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
