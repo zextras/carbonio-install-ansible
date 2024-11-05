@@ -4,11 +4,6 @@
 
 ---
 # handlers file for execute-final-setups
-    - name: restart_pgpool
-      service:
-        name: pgpool2.service
-        state: restarted
-
     - name: restart_preview
       service:
         name: carbonio-preview.service

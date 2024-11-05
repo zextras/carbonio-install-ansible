@@ -32,7 +32,7 @@ srv2.example.com
 srv3.example.com  
 
 [dbsConnectorServers]  
-srv2.example.com
+#must be filled for HA only
 
 [mtaServers]  
 srv3.example.com

@@ -7,13 +7,18 @@
     # fail:
       # msg: "ERROR: No dbs Connector server found in inventory"
     # when: (groups['dbsConnectorServers'] | length == 0)
-    
+            
   - name: Install mailbox db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ mailbox_dbconnectors_packages }}"
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"]  
+    when: 
+      - ansible_os_family == "Debian"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
     tags:
       - install-carbonio-dbconnectors
      
@@ -22,7 +27,13 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ files_dbconnectors_packages }}"
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0
+    when: 
+      - ansible_os_family == "Debian"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['filesServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       
@@ -31,7 +42,13 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['docsServers'] | length > 0 
+    when: 
+      - ansible_os_family == "Debian"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['docsServers'] | length > 0 
     tags:
       - install-carbonio-dbconnectors
 
@@ -40,18 +57,28 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["dbsConnectorServers"] and groups['taskServers'] | length > 0
+    when: 
+      - ansible_os_family == "Debian"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['taskServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
 ##### RHEL
-
   - name: Install mailbox db connector RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
       - "{{ mailbox_dbconnectors_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"]  
+    when:
+      - ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
     tags:
       - install-carbonio-dbconnectors
      
@@ -60,7 +87,13 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ files_dbconnectors_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['filesServers'] | length > 0 
+    when:
+      - ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['filesServers'] | length > 0 
     tags:
       - install-carbonio-dbconnectors
       
@@ -69,7 +102,13 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['docsServers'] | length > 0
+    when: 
+      - ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['docsServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       
@@ -78,6 +117,13 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["dbsConnectorServers"] and groups['taskServers'] | length > 0
+    when: 
+      - ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['taskServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
+
