@@ -8,3 +8,4 @@
   - import_tasks: set-os.yml
   - import_tasks: update-os.yml
   - import_tasks: minimize-swap.yml
+  - import_tasks: set-zextras-repos.yml

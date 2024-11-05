@@ -1,0 +1,147 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+# Set Zextras repository
+
+- name: Update repositories (Ubuntu)
+  command: "apt-get update"
+  when: ansible_os_family == "Debian"
+  register: update_result
+  tag: 
+    - set-zextras-repos
+
+- name: Check for carbonio-* packages in repositories (Ubuntu)
+  command: "apt-cache search carbonio*"
+  when: ansible_os_family == "Debian"
+  register: carbonio_packages
+  tag: 
+    - set-zextras-repos
+
+- name: Display list of repositories
+  debug:
+    msg: "{{ update_result.stdout_lines }}"
+  when: ansible_os_family == "Debian" and carbonio_packages.stdout != ""
+  tag: 
+    - set-zextras-repos
+
+- name: Wait 10 seconds to allow users to review the output
+  pause:
+    seconds: 10
+  when: ansible_os_family == "Debian" and carbonio_packages.stdout != ""
+  tag: 
+    - set-zextras-repos
+
+- name: Display notice if Zextras repository is not prepared (Ubuntu)
+  block:
+    - name: Display Zextras repository notice
+      debug:
+        msg: |
+          Repository update completed successfully:
+          {{ update_result.stdout_lines }}
+          
+          Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
+
+    - name: Wait 10 seconds to allow users to review the notice
+      pause:
+        seconds: 10
+  when: ansible_os_family == "Debian" and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+
+- name: Copy Zextras repository for Ubuntu
+  become: true
+  ansible.builtin.template:
+    src: zextras.list.j2
+    dest: /etc/apt/sources.list.d/zextras.list
+  when: ansible_os_family == "Debian" and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+
+- name: Add apt key by id from a keyserver [Ubuntu 20]
+  become: true
+  ansible.builtin.apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: '{{ repo_key }}'
+  when: ansible_os_family == "Debian" and ansible_distribution_major_version == "20" and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+
+- name: Add apt gpg key [Ubuntu 22] or [Ubuntu 24]
+  become: true
+  shell: "wget -O- 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21' | gpg --dearmor | sudo tee /usr/share/keyrings/zextras.gpg > /dev/null"
+  when: ansible_os_family == "Debian" and (ansible_distribution_major_version == "22" or ansible_distribution_major_version == "24") and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+
+- name: Update repos Ubuntu  
+  become: true
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+  tag: 
+    - set-zextras-repos
+
+############ RHEL ############
+
+- name: Update repositories (RHEL)
+  command: "dnf update"
+  when: ansible_os_family == "RedHat"
+  register: update_result
+  tag: 
+    - set-zextras-repos
+
+- name: Check for carbonio-* packages in repositories (RHEL)
+  command: "dnf list available | grep carbonio"
+  when: ansible_os_family == "RedHat"
+  register: carbonio_packages
+  tag: 
+    - set-zextras-repos
+    
+- name: Verify repositories (RHEL)
+  block:
+    - name: Display list of repositories
+      debug:
+        msg: "{{ update_result.stdout_lines }}"
+      
+    - name: Wait 10 seconds to allow users to review the output
+      pause:
+        seconds: 10
+  when: ansible_os_family == "RedHat" and carbonio_packages.stdout != ""
+  tag: 
+    - set-zextras-repos
+    
+- name: Display notice if Zextras repository is not prepared (RHEL)
+  block:
+    - name: Display Zextras repository notice
+      debug:
+        msg: |
+          Repository update completed successfully:
+          {{ update_result.stdout_lines }}
+          
+          Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
+
+    - name: Wait 10 seconds to allow users to review the notice
+      pause:
+        seconds: 10
+  when: ansible_os_family == "RedHat" and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+    
+- name: Copy Zextras repository for RHEL
+  become: true
+  ansible.builtin.template:
+    src: zextras.repo.j2
+    dest: /etc/yum.repos.d/zextras.repo
+  when: ansible_os_family == "RedHat" and carbonio_packages.stdout == ""
+  tag: 
+    - set-zextras-repos
+    
+- name: Update repos RHEL  
+  become: true
+  yum:
+    update_cache: yes
+  when: ansible_os_family == "RedHat"
+  tag: 
+    - set-zextras-repos
+    

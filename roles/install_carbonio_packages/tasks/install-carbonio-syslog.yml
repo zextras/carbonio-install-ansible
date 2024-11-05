@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Install Syslog Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ syslog_packages }}"    
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["syslogServer"]
+    tags:
+      - install-carbonio-syslog
+      
+  - name: Install Syslog Server RHEL
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ syslog_packages }}"    
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["syslogServer"]
+    tags:
+      - install-carbonio-syslog

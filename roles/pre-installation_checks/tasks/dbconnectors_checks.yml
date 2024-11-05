@@ -14,7 +14,7 @@
     when: groups['dbsConnectorServers'] | length > 0
     register: user_confirmation
     tags:
-      - install-carbonio-dbconnectors
+      - check-carbonio-dbconnectors
 
   - name: Fail if user does not confirm
     run_once: true
@@ -23,5 +23,5 @@
       msg: "User did not confirm to proceed with non-empty dbsConnectorServers."
     when: groups['dbsConnectorServers'] | length > 0 and user_confirmation.user_input != 'yes'
     tags:
-      - install-carbonio-dbconnectors
+      - check-carbonio-dbconnectors
             
