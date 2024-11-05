@@ -10,6 +10,9 @@
      name: '*'
      state: latest
    when: ansible_os_family == "RedHat"
+  tag: 
+    - update-os
+    
  
  # Debian Family upgrade
  - name: Update repositories cache
@@ -17,6 +20,8 @@
    apt:
      update_cache: yes
    when: ansible_os_family == "Debian"
+  tag: 
+    - update-os
 
  - name: Update all packages to their latest version
    become: true
@@ -29,3 +34,5 @@
    apt:
      upgrade: dist
    when: ansible_os_family == "Debian"
+  tag: 
+    - update-os

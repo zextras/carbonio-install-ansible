@@ -7,3 +7,5 @@
   fail:
     msg: "This playbook does not support multi-server PostgreSQL installation. To continue, please ensure there is only one PostgreSQL server defined in the postgresServers group."
   when: groups['postgresServers'] | length > 1
+  tags:
+    - check-carbonio-postgres
