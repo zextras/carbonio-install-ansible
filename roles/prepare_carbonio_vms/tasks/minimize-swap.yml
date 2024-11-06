@@ -10,5 +10,5 @@
       name: vm.swappiness
       value: '1'
       state: present
-    tag: 
+    tags: 
       - minimize-swap
