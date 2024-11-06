@@ -10,7 +10,7 @@
     name: '*'
     state: latest
   when: ansible_os_family == "RedHat"
-  tag: 
+  tags: 
     - update-os
   
 # Debian Family upgrade
@@ -19,7 +19,7 @@
   apt:
     update_cache: yes
   when: ansible_os_family == "Debian"
-  tag: 
+  tags: 
     - update-os
 
 - name: Update all packages to their latest version
@@ -28,7 +28,7 @@
     name: "*"
     state: latest
   when: ansible_os_family == "Debian"
-  tag: 
+  tags: 
     - update-os
 
 - name: Upgrade the OS (apt-get dist-upgrade)
@@ -36,5 +36,5 @@
   apt:
     upgrade: dist
   when: ansible_os_family == "Debian"
-  tag: 
+  tags: 
     - update-os
