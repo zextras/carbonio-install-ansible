@@ -84,25 +84,33 @@
 
 ############ RHEL ############
 
-- name: Update repositories (RHEL)
-  command: "dnf update"
+- name: Update repos RHEL  
+  become: true
+  yum:
+    update_cache: yes
   when: ansible_os_family == "RedHat"
-  register: update_result
   tags: 
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (RHEL)
-  command: "dnf list available | grep carbonio"
+  command: "dnf list available | grep carbonio* "
   when: ansible_os_family == "RedHat"
   register: carbonio_packages
   tags: 
     - set-zextras-repos
-    
+
+- name: Check list of repositories
+  command: "dnf repolist "
+  when: ansible_os_family == "RedHat"
+  register: update_result_rhel
+  tags: 
+    - set-zextras-repos
+
 - name: Verify repositories (RHEL)
   block:
     - name: Display list of repositories
       debug:
-        msg: "{{ update_result.stdout_lines }}"
+        msg: "{{ update_result_rhel.stdout_lines }}"
       
     - name: Wait 10 seconds to allow users to review the output
       pause:
@@ -117,7 +125,7 @@
       debug:
         msg: |
           Repository update completed successfully:
-          {{ update_result.stdout_lines }}
+          {{ update_result_rhel.stdout_lines }}
           
           Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
 
