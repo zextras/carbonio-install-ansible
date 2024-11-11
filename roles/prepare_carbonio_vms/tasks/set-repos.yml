@@ -46,6 +46,13 @@
     tags:
       - set-repos
        
+  - name: Import EPEL GPG key
+    rpm_key:
+      state: present
+      key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+    tags:
+      - set-repos
+
   - name: Enable Epel repo
     become: true
     ansible.builtin.yum:
