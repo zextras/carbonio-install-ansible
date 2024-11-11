@@ -50,14 +50,35 @@
     rpm_key:
       state: present
       key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     tags:
-      - set-repos
+      - set-repos 
 
-  - name: Enable Epel repo
+  - name: Install EPEL repository package[RHEL 8]
     become: true
     ansible.builtin.yum:
-      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
       state: present
-    when: ansible_os_family == "RedHat" and ansible_distribution != "Rocky"
+      update_cache: yes
+      disable_gpg_check: true
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     tags:
-      - set-repos    
+      - set-repos 
+
+  - name: Install EPEL repository package[RHEL 9]
+    become: true
+    ansible.builtin.yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+      state: present
+      update_cache: yes
+      disable_gpg_check: true
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9" and ansible_distribution != "Rocky"
+    tags:
+      - set-repos 
+
+  - name: Enable powertools or crb on Rocky Linux
+    become: true
+    command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
+    when: ansible_distribution == "Rocky"
+    tags:
+      - set-repos 
