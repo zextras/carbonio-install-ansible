@@ -72,7 +72,7 @@
       state: present
       update_cache: yes
       disable_gpg_check: true
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9" and ansible_distribution != "Rocky"
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9"
     tags:
       - set-repos 
 
