@@ -43,6 +43,7 @@
     - carbonio-mta
     
   proxy_packages: 
+    - carbonio-catalog
     - carbonio-proxy
     - carbonio-webui
     - carbonio-chats-ui
