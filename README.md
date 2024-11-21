@@ -11,7 +11,7 @@ All VMs must be configured and the Zextras repo to be used already set.
 ansible-galaxy install -r requirements.yml
 
 Multi master for directory server is not supported.  
-__Postgres server cannot be installed on dbsConnectorServers__
+__dbsConnectorServers should be installed on Postgres server__ 
 
 
 Example for inventory file
