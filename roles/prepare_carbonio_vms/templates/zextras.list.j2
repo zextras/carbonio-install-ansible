@@ -1,0 +1,6 @@
+#Release Pub
+{% if ansible_distribution_major_version == "20" %}
+deb https://repo.zextras.io/release/ubuntu {{ ansible_distribution_release }} main
+{% elif ansible_distribution_major_version == "22" or ansible_distribution_major_version == "24" %}
+deb [signed-by=/usr/share/keyrings/zextras.gpg] https://repo.zextras.io/release/ubuntu {{ ansible_distribution_release }} main
+{% endif %}

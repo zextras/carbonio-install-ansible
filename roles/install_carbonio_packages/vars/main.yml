@@ -27,14 +27,6 @@
 
   task_dbconnectors_packages:
     - carbonio-tasks-db
-    
-  pgpool_packages_ubuntu: 
-    - postgresql-client-16
-    - pgpool2    
-    
-  pgpool_packages_rhel: 
-    - pgpool-II
-    - postgresql16
 
   postgres_packages_ubuntu: 
     - python3-psycopg2
@@ -49,6 +41,9 @@
 
   mta_packages: 
     - carbonio-mta
+
+  catalog_packages:
+    - carbonio-catalog
     
   proxy_packages: 
     - carbonio-proxy
@@ -91,5 +86,11 @@
   prometheus_packages: 
     - carbonio-prometheus
 
+  message_broker_packages:
+    - carbonio-message-broker
+
   grafana_packages:
     - grafana 
+
+  syslog_packages:
+    - carbonio-pflogsumm

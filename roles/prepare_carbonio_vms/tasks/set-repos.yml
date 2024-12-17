@@ -5,7 +5,7 @@
 ---
   - name: Create Postgres repo on Ubuntu
     template:
-      src: pgpool.list.j2
+      src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
     when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
@@ -18,7 +18,7 @@
       state: present
     when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
-       - set-repos
+      - set-repos
        
   - name: Update repos   
     become: true
@@ -26,7 +26,7 @@
       update_cache: yes
     when: ansible_os_family == "Debian"
     tags:
-       - set-repos
+      - set-repos
        
 ############ RHEL        
   - name: Enable RHEL Postgres repository
@@ -37,20 +37,48 @@
       disable_gpg_check : true
     when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
-       - set-repos
+      - set-repos
 
   - name: Disable the postgresql stream module in AppStream
     become: true
     command: '/usr/bin/dnf -qy module disable postgresql'
     when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
-       - set-repos
+      - set-repos
        
-  - name: Enable Epel repo
+  - name: Import EPEL GPG key
+    rpm_key:
+      state: present
+      key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    tags:
+      - set-repos 
+
+  - name: Install EPEL repository package[RHEL 8]
     become: true
     ansible.builtin.yum:
-      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
       state: present
-    when: ansible_os_family == "RedHat"
+      update_cache: yes
+      disable_gpg_check: true
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
     tags:
-       - set-repos    
+      - set-repos 
+
+  - name: Install EPEL repository package[RHEL 9]
+    become: true
+    ansible.builtin.yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+      state: present
+      update_cache: yes
+      disable_gpg_check: true
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9"
+    tags:
+      - set-repos 
+
+  - name: Enable powertools or crb on Rocky Linux
+    become: true
+    command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
+    when: ansible_distribution == "Rocky"
+    tags:
+      - set-repos 

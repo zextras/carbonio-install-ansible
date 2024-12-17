@@ -1,0 +1,18 @@
+---
+  - name: Install Message Broker on Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ message_broker_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["masterDirectoryServers"] 
+    tags:
+      - install-carbonio-message-broker
+      
+  - name: Install Message Broker on RH
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ message_broker_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["masterDirectoryServers"] 
+    tags:
+      - install-carbonio-message-broker

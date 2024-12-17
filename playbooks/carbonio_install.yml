@@ -2,11 +2,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+---
 - hosts: all
   order: inventory
   gather_facts: yes
   roles:
      - ../roles/prepare_carbonio_vms
+     - ../roles/pre-installation_checks
      - ../roles/install_carbonio_packages
 
 - hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
