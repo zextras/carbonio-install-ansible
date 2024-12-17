@@ -3,4 +3,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# handlers file for pre-installation_checks    
+# vars file for pre_installation_checks
+

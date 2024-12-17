@@ -6,4 +6,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - pre-installation_checks
+    - pre_installation_checks
