@@ -41,6 +41,9 @@
 
   mta_packages: 
     - carbonio-mta
+
+  catalog_packages:
+    - carbonio-catalog
     
   proxy_packages: 
     - carbonio-catalog

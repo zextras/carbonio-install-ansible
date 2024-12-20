@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Make sure there is only one server in the PostgresServers group
+  fail:
+    msg: "This playbook does not support multi-server PostgreSQL installation. To continue, please ensure there is only one PostgreSQL server defined in the postgresServers group."
+  when: groups['postgresServers'] | length > 1
+  tags:
+    - check-carbonio-postgres
