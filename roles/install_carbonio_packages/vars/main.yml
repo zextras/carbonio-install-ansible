@@ -51,7 +51,7 @@
     - carbonio-admin-console-ui
     - carbonio-avdb-updater
 
-  search_ui_package:
+  search_ui_packages:
     - carbonio-search-ui
 
   preview_packages: 
