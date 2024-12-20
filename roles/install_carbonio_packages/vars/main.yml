@@ -41,9 +41,6 @@
 
   mta_packages: 
     - carbonio-mta
-
-  catalog_packages:
-    - carbonio-catalog
     
   proxy_packages: 
     - carbonio-catalog
@@ -53,7 +50,10 @@
     - carbonio-admin-ui
     - carbonio-admin-console-ui
     - carbonio-avdb-updater
-      
+
+  search_ui_package:
+    - carbonio-search-ui
+
   preview_packages: 
     - carbonio-preview
 
