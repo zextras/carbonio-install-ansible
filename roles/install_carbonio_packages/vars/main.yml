@@ -28,6 +28,12 @@
   task_dbconnectors_packages:
     - carbonio-tasks-db
 
+  message_dispatcher_dbconnectors_packages:
+    - carbonio-message-dispatcher-db
+
+  ws_collaboration_dbconnectors_packages:
+    - carbonio-ws-collaboration-db
+
   postgres_packages_ubuntu: 
     - python3-psycopg2
     - postgresql-16
@@ -70,14 +76,22 @@
   task_ui_packages:
       - carbonio-tasks-ui
   
+  ws_ui_packages:
+    - carbonio-ws-collaboration-ui
+
   docs_packages: 
     - carbonio-docs-editor
     - carbonio-docs-connector
   
   videoserver_packages: 
-    - carbonio-videoserver
-    - carbonio-videoserver-recorder
-    
+    - carbonio-videoserver-advanced
+    - carbonio-videorecorder
+
+  workstream_packages:
+    - carbonio-message-dispatcher
+    - carbonio-ws-collaboration
+    - postgresql-client-16
+
   sda_packages: 
     - service-discover-agent    
     

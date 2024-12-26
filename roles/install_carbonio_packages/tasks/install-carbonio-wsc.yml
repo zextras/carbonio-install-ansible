@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+---
+  - name: Install WorkStream on Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ workstream_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
+      
+  - name: Install WorkStream on RH
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ workstream_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
