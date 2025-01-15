@@ -1,5 +1,5 @@
 ---
-- name: 
+- name: Make sure there is only one server in the masterDirectoryServers group
   fail:
     msg: "This playbook does not support multi-server Master Directory installation. To continue, please ensure there is only one Master Directory server defined in the masterDirectoryServers group."
   when: groups['masterDirectoryServers'] | length > 1
