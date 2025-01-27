@@ -26,12 +26,6 @@
     tags:
       - service-discover-bootstrap
       
-  - debug:
-      msg: "Ldap password {{ carbonio_ldap_password }}"
-    when: glc is search("localhost") and inventory_hostname in groups["serviceDiscoverServers"]
-    tags:
-      - service-discover-bootstrap
-      
   - name: Create config file
     template:
       src: carbonio-config.txt.j2

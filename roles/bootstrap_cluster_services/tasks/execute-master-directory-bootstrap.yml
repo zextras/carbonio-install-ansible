@@ -26,12 +26,6 @@
     tags:
       - master-directory-bootstrap
       
-  - debug:
-      msg: "Ldap password {{ carbonio_ldap_password }}"
-    when: glc is search("localhost") and inventory_hostname in groups["masterDirectoryServers"]
-    tags:
-      - master-directory-bootstrap
-      
   - name: Create config file
     template:
       src: carbonio-config.txt.j2
