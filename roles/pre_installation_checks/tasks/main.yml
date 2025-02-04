@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for pre-installation_checks
+# tasks file for pre_installation_checks
   - import_tasks: dbconnectors_checks.yml
   - import_tasks: consul_checks.yml
   - import_tasks: postgres_checks.yml
