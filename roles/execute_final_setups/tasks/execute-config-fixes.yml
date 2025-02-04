@@ -95,7 +95,7 @@
       
   - name: Start and enable service videoserver
     ansible.builtin.systemd:
-      name: videoserver
+      name: carbonio-videoserver
       state: started
       enabled: true
     when: inventory_hostname in groups["videoServers"]
