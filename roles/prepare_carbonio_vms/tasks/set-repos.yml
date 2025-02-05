@@ -29,52 +29,6 @@
       - set-repos
        
 ############ RHEL        
-  - name: Enable RHEL Postgres repository
-    become: true
-    ansible.builtin.yum:
-      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-      state: present
-      disable_gpg_check : true
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
-    tags:
-      - set-repos
-
-  - name: Disable the postgresql stream module in AppStream
-    become: true
-    command: '/usr/bin/dnf -qy module disable postgresql'
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
-    tags:
-      - set-repos
-       
-  # - name: Import EPEL GPG key
-  #   rpm_key:
-  #     state: present
-  #     key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-  #   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
-  #   tags:
-  #     - set-repos 
-
-  # - name: Install EPEL repository package[RHEL 8]
-  #   become: true
-  #   ansible.builtin.yum:
-  #     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
-  #     state: present
-  #     update_cache: yes
-  #     disable_gpg_check: true
-  #   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
-  #   tags:
-  #     - set-repos 
-
-  # - name: Install EPEL repository package[RHEL 9]
-  #   become: true
-  #   ansible.builtin.yum:
-  #     name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-  #     state: present
-  #     update_cache: yes
-  #     disable_gpg_check: true
-  #   when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9"
-  #   tags:
-  #     - set-repos 
 
   - name: Enable powertools or crb on Rocky Linux
     become: true
@@ -98,7 +52,7 @@
     when:
       - ansible_os_family == "RedHat"
       - ansible_distribution_major_version == "8"
-      - baseos_check_8.rc != 0
+      - baseos_check_8.rc == 1
     register: baseos_enable_8
     tags:
       - set-repos
@@ -131,7 +85,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "8"
-      - appstream_check_8.rc != 0
+      - appstream_check_8.rc == 1
     register: appstream_enable_8
     tags:
       - set-repos
@@ -168,7 +122,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "8"
-      - codeready_check_8.rc != 0
+      - codeready_check_8.rc == 1
     register: codeready_enable_8
     tags:
       - set-repos
@@ -213,7 +167,7 @@
     when:
       - ansible_os_family == "RedHat"
       - ansible_distribution_major_version == "8"
-      - epel_check_rhel8.rc != 0
+      - epel_check_rhel8.rc == 1
     register: epel_install_rhel8
     tags:
       - set-repos
@@ -246,7 +200,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "9"
-      - baseos_check_9.rc != 0
+      - baseos_check_9.rc == 1
     register: baseos_enable_9
     tags:
       - set-repos
@@ -283,7 +237,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "9"
-      - appstream_check_9.rc != 0
+      - appstream_check_9.rc == 1
     register: appstream_enable_9
     tags:
       - set-repos
@@ -320,7 +274,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "9"
-      - codeready_check_9.rc != 0
+      - codeready_check_9.rc == 1
     register: codeready_enable_9
     tags:
       - set-repos
@@ -361,7 +315,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "9"
-      - epel_check_rhel9.rc != 0
+      - epel_check_rhel9.rc == 1
     register: epel_install_rhel9
     tags:
       - set-repos
@@ -378,3 +332,21 @@
       - ansible_distribution_major_version == "9"
     tags:
       - set-repos
+
+  - name: Enable RHEL Postgres repository
+    become: true
+    ansible.builtin.yum:
+      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      state: present
+      disable_gpg_check : true
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+      - set-repos
+
+  - name: Disable the postgresql stream module in AppStream
+    become: true
+    command: '/usr/bin/dnf -qy module disable postgresql'
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+      - set-repos
+       
