@@ -7,8 +7,8 @@
   order: inventory
   gather_facts: yes
   roles:
-     - ../roles/prepare_carbonio_vms
      - ../roles/pre_installation_checks
+     - ../roles/prepare_carbonio_vms
      - ../roles/install_carbonio_packages
 
 - hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
