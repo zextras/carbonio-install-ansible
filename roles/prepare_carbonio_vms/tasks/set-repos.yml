@@ -7,7 +7,7 @@
     template:
       src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
-    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
       - set-repos
  
@@ -16,7 +16,7 @@
     ansible.builtin.apt_key:
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
       state: present
-    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
     tags:
       - set-repos
        
@@ -29,52 +29,6 @@
       - set-repos
        
 ############ RHEL        
-  - name: Enable RHEL Postgres repository
-    become: true
-    ansible.builtin.yum:
-      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-      state: present
-      disable_gpg_check : true
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
-    tags:
-      - set-repos
-
-  - name: Disable the postgresql stream module in AppStream
-    become: true
-    command: '/usr/bin/dnf -qy module disable postgresql'
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
-    tags:
-      - set-repos
-       
-  - name: Import EPEL GPG key
-    rpm_key:
-      state: present
-      key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
-    tags:
-      - set-repos 
-
-  - name: Install EPEL repository package[RHEL 8]
-    become: true
-    ansible.builtin.yum:
-      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm 
-      state: present
-      update_cache: yes
-      disable_gpg_check: true
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
-    tags:
-      - set-repos 
-
-  - name: Install EPEL repository package[RHEL 9]
-    become: true
-    ansible.builtin.yum:
-      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
-      state: present
-      update_cache: yes
-      disable_gpg_check: true
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9"
-    tags:
-      - set-repos 
 
   - name: Enable powertools or crb on Rocky Linux
     become: true
@@ -82,3 +36,317 @@
     when: ansible_distribution == "Rocky"
     tags:
       - set-repos 
+
+  # 1. RHEL 8 BaseOS
+  - name: Check if rhel-8-for-x86_64-baseos-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep rhel-8-for-x86_64-baseos-rpms"
+    register: baseos_check_8
+    changed_when: false
+    failed_when: false
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  - name: Enable rhel-8-for-x86_64-baseos-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+      - baseos_check_8.rc == 1
+    register: baseos_enable_8
+    tags:
+      - set-repos
+
+  - name: Assert that rhel-8-for-x86_64-baseos-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - baseos_check_8.rc == 0 or baseos_enable_8.rc == 0
+      success_msg: "The repository rhel-8-for-x86_64-baseos-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository rhel-8-for-x86_64-baseos-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  # 2. RHEL 8 AppStream
+  - name: Check if rhel-8-for-x86_64-appstream-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep rhel-8-for-x86_64-appstream-rpms"
+    register: appstream_check_8
+    changed_when: false
+    failed_when: false
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8" and ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  - name: Enable rhel-8-for-x86_64-appstream-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=rhel-8-for-x86_64-appstream-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "8"
+      - appstream_check_8.rc == 1
+    register: appstream_enable_8
+    tags:
+      - set-repos
+
+  - name: Assert that rhel-8-for-x86_64-appstream-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - appstream_check_8.rc == 0 or appstream_enable_8.rc == 0
+      success_msg: "The repository rhel-8-for-x86_64-appstream-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository rhel-8-for-x86_64-appstream-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  # 3. CodeReady Builder for RHEL 8
+  - name: Check if codeready-builder-for-rhel-8-x86_64-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep codeready-builder-for-rhel-8-x86_64-rpms"
+    register: codeready_check_8
+    changed_when: false
+    failed_when: false
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  - name: Enable codeready-builder-for-rhel-8-x86_64-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=codeready-builder-for-rhel-8-x86_64-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "8"
+      - codeready_check_8.rc == 1
+    register: codeready_enable_8
+    tags:
+      - set-repos
+
+  - name: Assert that codeready-builder-for-rhel-8-x86_64-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - codeready_check_8.rc == 0 or codeready_enable_8.rc == 0
+      success_msg: "The repository codeready-builder-for-rhel-8-x86_64-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository codeready-builder-for-rhel-8-x86_64-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  # 4. EPEL for RHEL 8
+  - name: Import EPEL GPG key (RHEL 8)
+    ansible.builtin.rpm_key:
+      state: present
+      key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  - name: Check if EPEL is installed (RHEL 8)
+    ansible.builtin.shell: "rpm -q epel-release"
+    register: epel_check_rhel8
+    changed_when: false
+    failed_when: false
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  - name: Install EPEL repository package (RHEL 8)
+    ansible.builtin.yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      state: present
+      update_cache: yes
+      disable_gpg_check: true
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+      - epel_check_rhel8.rc == 1
+    register: epel_install_rhel8
+    tags:
+      - set-repos
+
+  - name: Assert EPEL release is installed (RHEL 8)
+    ansible.builtin.assert:
+      that:
+        - epel_check_rhel8.rc == 0 or epel_install_rhel8.rc == 0
+      success_msg: "The EPEL release for RHEL 8 is successfully installed."
+      fail_msg: "ERROR: The EPEL release for RHEL 8 is NOT installed."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "8"
+    tags:
+      - set-repos
+
+  # 1. RHEL 9 BaseOS
+  - name: Check if rhel-9-for-x86_64-baseos-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep rhel-9-for-x86_64-baseos-rpms"
+    register: baseos_check_9
+    changed_when: false
+    failed_when: false
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "9" and ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  - name: Enable rhel-9-for-x86_64-baseos-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=rhel-9-for-x86_64-baseos-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+      - baseos_check_9.rc == 1
+    register: baseos_enable_9
+    tags:
+      - set-repos
+
+  - name: Assert that rhel-9-for-x86_64-baseos-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - baseos_check_9.rc == 0 or baseos_enable_9.rc == 0
+      success_msg: "The repository rhel-9-for-x86_64-baseos-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository rhel-9-for-x86_64-baseos-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "9"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  # 2. RHEL 9 AppStream
+  - name: Check if rhel-9-for-x86_64-appstream-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep rhel-9-for-x86_64-appstream-rpms"
+    register: appstream_check_9
+    changed_when: false
+    failed_when: false
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "9"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  - name: Enable rhel-9-for-x86_64-appstream-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=rhel-9-for-x86_64-appstream-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+      - appstream_check_9.rc == 1
+    register: appstream_enable_9
+    tags:
+      - set-repos
+
+  - name: Assert that rhel-9-for-x86_64-appstream-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - appstream_check_9.rc == 0 or appstream_enable_9.rc == 0
+      success_msg: "The repository rhel-9-for-x86_64-appstream-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository rhel-9-for-x86_64-appstream-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "9"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  # 3. CodeReady Builder for RHEL 9
+  - name: Check if codeready-builder-for-rhel-9-x86_64-rpms is enabled
+    ansible.builtin.shell: "subscription-manager repos --list-enabled | grep codeready-builder-for-rhel-9-x86_64-rpms"
+    register: codeready_check_9
+    changed_when: false
+    failed_when: false
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "9"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  - name: Enable codeready-builder-for-rhel-9-x86_64-rpms if not enabled
+    ansible.builtin.command: "subscription-manager repos --enable=codeready-builder-for-rhel-9-x86_64-rpms"
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+      - codeready_check_9.rc == 1
+    register: codeready_enable_9
+    tags:
+      - set-repos
+
+  - name: Assert that codeready-builder-for-rhel-9-x86_64-rpms is enabled
+    ansible.builtin.assert:
+      that:
+        - codeready_check_9.rc == 0 or codeready_enable_9.rc == 0
+      success_msg: "The repository codeready-builder-for-rhel-9-x86_64-rpms was successfully enabled."
+      fail_msg: "ERROR: The repository codeready-builder-for-rhel-9-x86_64-rpms is NOT enabled."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution_major_version == "9"
+      - ansible_distribution != "Rocky"
+    tags:
+      - set-repos
+
+  # 4. EPEL for RHEL 9
+  - name: Check if EPEL is installed (RHEL 9)
+    ansible.builtin.shell: "rpm -q epel-release"
+    register: epel_check_rhel9
+    changed_when: false
+    failed_when: false
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+    tags:
+      - set-repos
+
+  - name: Install EPEL repository package (RHEL 9)
+    ansible.builtin.yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+      state: present
+      update_cache: yes
+      disable_gpg_check: true
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+      - epel_check_rhel9.rc == 1
+    register: epel_install_rhel9
+    tags:
+      - set-repos
+
+  - name: Assert EPEL release is installed (RHEL 9)
+    ansible.builtin.assert:
+      that:
+        - epel_check_rhel9.rc == 0 or epel_install_rhel9.rc == 0
+      success_msg: "The EPEL release for RHEL 9 is successfully installed."
+      fail_msg: "ERROR: The EPEL release for RHEL 9 is NOT installed."
+    when:
+      - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
+      - ansible_distribution_major_version == "9"
+    tags:
+      - set-repos
+
+  - name: Enable RHEL Postgres repository
+    become: true
+    ansible.builtin.yum:
+      name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+      state: present
+      disable_gpg_check : true
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+      - set-repos
+
+  - name: Disable the postgresql stream module in AppStream
+    become: true
+    command: '/usr/bin/dnf -qy module disable postgresql'
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    tags:
+      - set-repos
+       
