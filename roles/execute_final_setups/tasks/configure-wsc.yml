@@ -14,7 +14,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm {{ hostvars[ groups['postgresServers'][0] ].ansible_default_ipv4.address }} 20000
+    command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm 127.78.0.10 20000
     when: inventory_hostname in groups['workStreamServers']
     tags:
       - carbonio-message-dispatcher-migration
