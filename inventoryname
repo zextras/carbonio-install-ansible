@@ -28,6 +28,8 @@
 [videoServers]
 #hostname public_ip_address=x.y.z.t
 
+[workStreamServers]
+
 [prometheusServers]
 
 [syslogServer]

@@ -5,7 +5,6 @@ An ansible role to install Zextras Carbonio infrastructures
 To install  Carbonio using this role you have to insert information in the inventory file It supports only FQDN.
 All VMs must be configured and the Zextras repo to be used already set.
 
-
 # Install dependencies
 
 ansible-galaxy install -r requirements.yml
@@ -63,6 +62,9 @@ srv5.example.com
 [videoServers]  
 #hostname public_ip_address=x.y.z.t  
 srv3.example.com public_ip_address=8.9.10.11
+
+[workStreamServers]
+srv6.example.com
 
 [prometheusServers]  
 srv4.example.com
