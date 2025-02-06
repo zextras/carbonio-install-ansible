@@ -30,7 +30,7 @@
        
 ############ RHEL        
 
-  - name: Enable powertools or crb on Rocky Linux
+  - name: Enable powertools or crb 
     become: true
     command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
     when: ansible_distribution == "Rocky"
@@ -43,7 +43,7 @@
     register: baseos_check_8
     changed_when: false
     failed_when: false
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8" and ansible_distribution != "Rocky"
     tags:
       - set-repos
 
@@ -51,6 +51,7 @@
     ansible.builtin.command: "subscription-manager repos --enable=rhel-8-for-x86_64-baseos-rpms"
     when:
       - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "8"
       - baseos_check_8.rc == 1
     register: baseos_enable_8
@@ -65,6 +66,7 @@
       fail_msg: "ERROR: The repository rhel-8-for-x86_64-baseos-rpms is NOT enabled."
     when:
       - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "8"
     tags:
       - set-repos
@@ -145,7 +147,7 @@
     ansible.builtin.rpm_key:
       state: present
       key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8" and ansible_distribution != "Rocky"
     tags:
       - set-repos
 
@@ -154,7 +156,7 @@
     register: epel_check_rhel8
     changed_when: false
     failed_when: false
-    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8"
+    when: ansible_os_family == "RedHat" and ansible_distribution_major_version == "8" and ansible_distribution != "Rocky"
     tags:
       - set-repos
 
@@ -168,6 +170,7 @@
       - ansible_os_family == "RedHat"
       - ansible_distribution_major_version == "8"
       - epel_check_rhel8.rc == 1
+      - ansible_distribution != "Rocky"
     register: epel_install_rhel8
     tags:
       - set-repos
@@ -180,6 +183,7 @@
       fail_msg: "ERROR: The EPEL release for RHEL 8 is NOT installed."
     when:
       - ansible_os_family == "RedHat"
+      - ansible_distribution != "Rocky"
       - ansible_distribution_major_version == "8"
     tags:
       - set-repos
