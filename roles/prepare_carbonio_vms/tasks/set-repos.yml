@@ -7,7 +7,7 @@
     template:
       src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
-    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
     tags:
       - set-repos
  
@@ -16,7 +16,7 @@
     ansible.builtin.apt_key:
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
       state: present
-    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
     tags:
       - set-repos
        
@@ -343,14 +343,14 @@
       name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
       state: present
       disable_gpg_check : true
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"] )
     tags:
       - set-repos
 
   - name: Disable the postgresql stream module in AppStream
     become: true
     command: '/usr/bin/dnf -qy module disable postgresql'
-    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
     tags:
       - set-repos
        
