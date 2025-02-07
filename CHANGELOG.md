@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. 
 
-### [25.3.0] (2024-10-14)
+### [25.3.0] (2025-2-7)
 
 
 ### Features
