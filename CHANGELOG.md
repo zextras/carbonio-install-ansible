@@ -8,9 +8,9 @@ All notable changes to this project will be documented in this file.
 ### Features
 * Added the carbonio-search-ui package
 * Introduced WSC installation support
-* Introduced New Videoserver installation support
-* Removed the old Chat and Videoserver components
-* Added validation of RHEL repositories; if not configured, Ansible will configure them automatically.
+* Introduced New Videoserver and Videorecorder installation support
+* Removed installation of old Chat, Videoserver and Videorecorder components
+* Added validation of RHEL repositories; if not configured, Ansible will configure them automatically
 
 ### Bug Fixes
 * Fixed the repository configuration process: after verifying the absence of the Zextras repository, the system now correctly configures and installs it if needed
