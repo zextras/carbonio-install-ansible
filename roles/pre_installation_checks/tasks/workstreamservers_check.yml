@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Check that the workStreamServers group is defined in the inventory
+  fail:
+    msg: "The inventory file must include the group [workStreamServers]. Starting with version 25.3.0, this group is mandatory. Even if WSC installation is not required, the group must be present (it can be left empty). Please update your inventory file and re-run the installation."
+  when: "'workStreamServers' not in groups"
+  tags:
+  - check-wsc-group
