@@ -4,6 +4,7 @@
 
 ---
 # tasks file for pre-installation_checks
+  - import_tasks: workstreamservers_check.yml
   - import_tasks: dbconnectors_checks.yml
   - import_tasks: consul_checks.yml
   - import_tasks: postgres_checks.yml
