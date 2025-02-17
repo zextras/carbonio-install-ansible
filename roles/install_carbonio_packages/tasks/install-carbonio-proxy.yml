@@ -30,15 +30,6 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Search UI Ubuntu
-    become: true
-    apt: name={{ item }} state=present
-    with_items:
-      - "{{ search_ui_packages }}"        
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] 
-    tags:
-      - install-carbonio-proxy
-
   - name: Install Carbonio ws UI Ubuntu
     become: true
     apt: name={{ item }} state=present
@@ -75,15 +66,6 @@
     when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
     tags:
       - install-carbonio-proxy   
-     
-  - name: Install Search UI RHEL
-    become: true
-    yum: name={{ item }} state=present
-    with_items:
-      - "{{ search_ui_packages }}"        
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
-    tags:
-      - install-carbonio-proxy
 
   - name: Install Carbonio ws UI RHEL
     become: true

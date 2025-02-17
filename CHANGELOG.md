@@ -2,11 +2,10 @@
 
 All notable changes to this project will be documented in this file. 
 
-### [25.6.0] (2025-2-13)
+### [25.3.0] (2025-2-17)
 
 
 ### Features
-* Added the carbonio-search-ui package
 * Introduced WSC installation support
 * Introduced New Videoserver and Videorecorder installation support
 * Removed installation of old Chat, Videoserver and Videorecorder components

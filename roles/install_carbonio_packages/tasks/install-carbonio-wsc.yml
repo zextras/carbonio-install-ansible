@@ -11,11 +11,29 @@
     tags:
       - install-carbonio-ws
       
+  - name: Install Postgres Clent on Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ postgres_clent_package_ubuntu }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
+
   - name: Install WorkStream on RH
     become: true
     yum: name={{ item }} state=present
     with_items:
       - "{{ workstream_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
+
+  - name: Install Postgres Client on RH
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ postgres_clent_package_rhel }}"
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
     tags:
       - install-carbonio-ws

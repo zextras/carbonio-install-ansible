@@ -56,9 +56,6 @@
     - carbonio-admin-console-ui
     - carbonio-avdb-updater
 
-  search_ui_packages:
-    - carbonio-search-ui
-
   preview_packages: 
     - carbonio-preview
 
@@ -89,7 +86,12 @@
   workstream_packages:
     - carbonio-message-dispatcher
     - carbonio-ws-collaboration
+  
+  postgres_clent_package_ubuntu:
     - postgresql-client-16
+
+  postgres_clent_package_rhel:
+    - postgresql16
 
   sda_packages: 
     - service-discover-agent    
