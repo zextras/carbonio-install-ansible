@@ -132,7 +132,7 @@
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ docs_dbconnectors_packages }}"
+      - "{{ message_dispatcher_dbconnectors_packages }}"
     when: 
       - ansible_os_family == "RedHat" or ansible_os_family == "CentOS"
       - (
