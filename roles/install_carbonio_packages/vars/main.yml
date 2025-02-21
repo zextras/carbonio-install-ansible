@@ -34,6 +34,9 @@
   ws_collaboration_dbconnectors_packages:
     - carbonio-ws-collaboration-db
 
+  notification_push_dbconnectors_packages:
+    - carbonio-notification-push-db
+
   postgres_packages_ubuntu: 
     - python3-psycopg2
     - postgresql-16
@@ -58,6 +61,7 @@
 
   preview_packages: 
     - carbonio-preview
+    - carbonio-docs-editor
 
   task_packages:
     - carbonio-tasks
@@ -87,6 +91,10 @@
     - carbonio-message-dispatcher
     - carbonio-ws-collaboration
   
+  notification_push_packages:
+    - carbonio-notification-push
+    - carbonio-push-connector
+
   postgres_clent_package_ubuntu:
     - postgresql-client-16
 

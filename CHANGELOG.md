@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file. 
 
-### [25.3.0] (2025-2-17)
+### [25.3.0] (2025-2-20)
 
 
 ### Features
-* Introduced WSC installation support
+* Introduced WSC and Notification Push installation support
 * Introduced New Videoserver and Videorecorder installation support
 * Removed installation of old Chat, Videoserver and Videorecorder components
 * Added validation of RHEL repositories; if not configured, Ansible will configure them automatically
