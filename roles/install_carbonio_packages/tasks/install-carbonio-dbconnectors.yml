@@ -94,6 +94,8 @@
       - groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-dbconnectors
+      - install-carbonio-notification-push
+
       
 ##### RHEL
   - name: Install mailbox db connector RHEL
@@ -187,3 +189,4 @@
       - groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-dbconnectors
+      - install-carbonio-notification-push

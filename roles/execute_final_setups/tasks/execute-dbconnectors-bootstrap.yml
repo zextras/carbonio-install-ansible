@@ -95,3 +95,4 @@
       - groups['workStreamServers'] | length > 0
     tags:
       - db-connectors-bootstrap
+      - install-carbonio-notification-push
