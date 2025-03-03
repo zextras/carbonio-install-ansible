@@ -66,3 +66,12 @@
     when: inventory_hostname in groups["previewServers"]
     tags:
       - fix-config
+      
+  - name: Configure public service hostname
+    become: true
+    become_method: su
+    become_user: zextras
+    command: "/opt/zextras/bin/zmprov mcf zimbraPublicServiceHostname {{ hostvars[inventory_hostname].webmailHostname }}"
+    when: inventory_hostname in groups["proxyServers"] and hostvars[inventory_hostname].webmailHostname is defined
+    tags:
+      - fix-config
