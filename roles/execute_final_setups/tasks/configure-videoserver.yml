@@ -3,17 +3,11 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Manage Videoserver password
-    ansible.builtin.set_fact:
-       carbonio_videoserver_password: "{{ lookup('ansible.builtin.password', inventory_file + '_videoserver_password', chars=['ascii_letters', 'digits'], length=8) }}"
-    when: inventory_hostname in groups["videoServers"]
-    tags:
-      - carbonio-videoserver-config
-      
-  - name: Create config file
-    template:
-      src: janus.jcfg.j2
-      dest: /etc/janus/janus.jcfg
+  - name: Configure nat_1_1_mapping on janus.jcfg
+    lineinfile:
+      path: /etc/janus/janus.jcfg
+      regexp: '^\s*nat_1_1_mapping\s*='
+      line: '        nat_1_1_mapping = "{{ hostvars[inventory_hostname].public_ip_address }}"'
     notify: restart_videoserver
     when: inventory_hostname in groups["videoServers"]
     tags:
