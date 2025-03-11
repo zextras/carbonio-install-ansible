@@ -3,14 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Update auth keys
-    become: true
-    become_method: su
-    become_user: zextras
-    command: '/opt/zextras/bin/zmupdateauthkeys'
-    tags:
-      - post-install-cmds
-      
   - name: Syslog setup
     become: true
     command: '/opt/zextras/libexec/zmsyslogsetup'

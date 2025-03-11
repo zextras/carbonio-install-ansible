@@ -37,4 +37,14 @@
   gather_facts: yes
   roles:
      - ../roles/bootstrap_carbonio
-     - ../roles/execute_final_setups
+     - ../roles/
+     
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  tasks: 
+    - name: Update auth keys
+      become: true
+      become_method: su
+      become_user: zextras
+      command: '/opt/zextras/bin/zmupdateauthkeys'
