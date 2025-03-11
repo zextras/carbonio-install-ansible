@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-  - name: Install WorkStream on Server Ubuntu
+  - name: Install WorkStream on Server [Ubuntu]
     become: true
     apt: name={{ item }} state=present
     with_items:
@@ -11,7 +11,7 @@
     tags:
       - install-carbonio-ws
       
-  - name: Install Postgres Clent on Server Ubuntu
+  - name: Install Postgres Clent on Server [Ubuntu]
     become: true
     apt: name={{ item }} state=present
     with_items:
@@ -20,7 +20,8 @@
     tags:
       - install-carbonio-ws
 
-  - name: Install WorkStream on RH
+### RHEL
+  - name: Install WorkStream on Server [RHEL]
     become: true
     yum: name={{ item }} state=present
     with_items:
@@ -29,7 +30,7 @@
     tags:
       - install-carbonio-ws
 
-  - name: Install Postgres Client on RH
+  - name: Install Postgres Client on Server [RHEL]
     become: true
     yum: name={{ item }} state=present
     with_items:

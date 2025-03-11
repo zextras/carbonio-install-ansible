@@ -21,6 +21,7 @@
   - import_tasks: install-carbonio-preview.yml
   - import_tasks: install-carbonio-videoserver.yml
   - import_tasks: install-carbonio-wsc.yml
+  - import_tasks: install-carbonio-notification-push.yml
   - import_tasks: install-carbonio-prometheus.yml
   - import_tasks: install-carbonio-message-broker.yml
   - import_tasks: install-carbonio-syslog.yml
