@@ -37,7 +37,7 @@
   gather_facts: yes
   roles:
      - ../roles/bootstrap_carbonio
-     - ../roles/
+     - ../roles/execute_final_setups
      
 - hosts: all
   order: inventory
