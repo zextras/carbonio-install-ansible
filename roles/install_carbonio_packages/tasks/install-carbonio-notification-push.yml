@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+---
+  - name: Install Notification Push on WSC Server [Ubuntu]
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ notification_push_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
+      - install-carbonio-notification-push
+
+      
+
+### RHEL
+  - name: Install Notification Push on WSC Server [RHEL]
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ notification_push_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
+    tags:
+      - install-carbonio-ws
+      - install-carbonio-notification-push

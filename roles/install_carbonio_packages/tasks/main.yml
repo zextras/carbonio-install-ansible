@@ -15,12 +15,13 @@
   - import_tasks: install-carbonio-user-management.yml
   - import_tasks: install-carbonio-mta.yml
   - import_tasks: install-carbonio-task.yml
-  - import_tasks: install-carbonio-catalog.yml
   - import_tasks: install-carbonio-proxy.yml
   - import_tasks: install-carbonio-files.yml
   - import_tasks: install-carbonio-docs.yml
   - import_tasks: install-carbonio-preview.yml
   - import_tasks: install-carbonio-videoserver.yml
+  - import_tasks: install-carbonio-wsc.yml
+  - import_tasks: install-carbonio-notification-push.yml
   - import_tasks: install-carbonio-prometheus.yml
   - import_tasks: install-carbonio-message-broker.yml
   - import_tasks: install-carbonio-syslog.yml
