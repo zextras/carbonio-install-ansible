@@ -5,30 +5,29 @@
 # Set Zextras repository
 ---
 - name: Update repositories (Ubuntu)
-  command: "apt-get update"
+  shell: "apt update"
   when: ansible_os_family == "Debian"
   register: update_result
   tags: 
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (Ubuntu)
-  command: "apt-cache search carbonio*"
+  shell: "apt list 2>/dev/null | grep -w '^carbonio'"
   when: ansible_os_family == "Debian"
   failed_when: false
   register: carbonio_packages
   tags: 
     - set-zextras-repos
 
-- name: Display list of repositories
-  debug:
-    msg: "{{ update_result.stdout_lines }}"
-  when: ansible_os_family == "Debian" and carbonio_packages.rc == 0
-  tags: 
-    - set-zextras-repos
+- name: Display notice if Zextras repository is prepared (Ubuntu)
+  block:
+    - name: Display Zextras repository notice
+      debug:
+        msg: "{{ update_result.stdout_lines }}"
 
-- name: Wait 10 seconds to allow users to review the output
-  pause:
-    seconds: 10
+    - name: Wait 10 seconds to allow users to review the notice
+      pause:
+        seconds: 10
   when: ansible_os_family == "Debian" and carbonio_packages.rc == 0
   tags: 
     - set-zextras-repos
@@ -94,7 +93,7 @@
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (RHEL)
-  command: "dnf list available | grep carbonio* "
+  shell: "dnf list available | grep carbonio* "
   when: ansible_os_family == "RedHat"
   failed_when: false
   register: carbonio_packages_rhel
@@ -102,7 +101,7 @@
     - set-zextras-repos
 
 - name: Check list of repositories (RHEL)
-  command: "dnf repolist "
+  shell: "dnf repolist "
   when: ansible_os_family == "RedHat"
   register: update_result_rhel
   tags: 
