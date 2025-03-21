@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 ### [25.3.0] (2025-3-11)
 
 
+### Bug Fixes
+* Fixed zextras repository configuration for Ubuntu 20: added repo_key value
+
+
+### [25.3.0] (2025-3-11)
+
+
 ### Features
 * Introduced WSC and Notification Push installation support
 * Introduced New Videoserver and Videorecorder installation support
