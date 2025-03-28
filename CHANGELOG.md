@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.3.2] (2025-3-28)
+
+
+### Bug Fixes
+* Fixed message dispatcher conflict
+
+
 ### [25.3.1] (2025-3-21)
 
 
