@@ -27,7 +27,7 @@
     tags:
       - carbonio-message-dispatcher-migration
 
-  - name: Restart WSC service if wsc servers > 1
+  - name: Restart secondary WSC if wsc servers > 1
     systemd:
       name: carbonio-ws-collaboration
       state: restarted
