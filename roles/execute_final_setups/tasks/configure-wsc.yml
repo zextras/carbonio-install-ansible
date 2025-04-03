@@ -26,3 +26,11 @@
     when: inventory_hostname in groups['workStreamServers'][0]
     tags:
       - carbonio-message-dispatcher-migration
+
+  - name: Restart WSC service if wsc servers > 1
+    systemd:
+      name: carbonio-ws-collaboration
+      state: restarted
+    when: groups['workStreamServers'] | length > 1 and inventory_hostname in groups['workStreamServers'][1] 
+    tags:
+      - carbonio-wsc-restart

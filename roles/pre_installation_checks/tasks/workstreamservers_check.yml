@@ -13,6 +13,6 @@
 - name: Check that the workStreamServers server is defined in the inventory if videoServers server is defined
   fail:
     msg: "The inventory file must include server in [workStreamServers] group if videoserver is defined in [videoServers] group. Starting with version 25.3.0, WSC server is mandatory if videoserver is defined. Please update your inventory file and re-run the installation."
-  when: (groups['videoServers'] | length > 1) and (groups['workStreamServers'] | length == 0)
+  when: (groups['videoServers'] | length != 0) and (groups['workStreamServers'] | length == 0)
   tags:
   - check-wsc
