@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.3.2] (2025-04-04)
+
+
+### Features
+* Added a check that if at least one server was specified in [videoServers] group, then there should also be a server in [workStreamServers]
+
+
+### Bug Fixes
+* Fixed message dispatcher conflict
+* Fixed typo in install-service-discover-agent tag
+
+
 ### [25.3.1] (2025-3-21)
 
 
