@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'infra-agent-v3'
+            label 'infra-v1'
         }
     }
 
@@ -12,14 +12,13 @@ pipeline {
     }
     
     stages {
-
         stage('Checkout') {
             when {
                 expression { env.BRANCH_NAME == 'main'}
             }
-                steps {
-                    checkout scm
-                }
+            steps {
+                checkout scm
+            }
         }
 
         stage('Build Collection') { 
@@ -27,7 +26,9 @@ pipeline {
                 expression { env.BRANCH_NAME == 'main'}
             }          
             steps {
-                sh 'ansible-galaxy collection build'
+                container('ansible') {
+                    sh 'ansible-galaxy collection build'
+                }
             }
         }
 
@@ -36,12 +37,14 @@ pipeline {
                 expression { env.BRANCH_NAME == 'main'}
             }         
             steps {
-                withCredentials([string(credentialsId: 'ansible-galaxy-token', variable: 'galaxy_token')]) {
-                    sh """
-                    ARTIFACT=`ls | grep tar.gz`
-                    ansible-galaxy   collection publish \$ARTIFACT --token ${galaxy_token}
-                """
-                }   
+                container('ansible') {
+                    withCredentials([string(credentialsId: 'ansible-galaxy-token', variable: 'galaxy_token')]) {
+                        sh """
+                        ARTIFACT=`ls | grep tar.gz`
+                        ansible-galaxy   collection publish \$ARTIFACT --token ${galaxy_token}
+                    """
+                    }   
+                }
             }
         }
     }
