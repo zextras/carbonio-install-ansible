@@ -6,7 +6,7 @@
   - name: Manage Postgres password
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
-    when: inventory_hostname in groups['workStreamServers'][0]
+    when: groups['workStreamServers'] | length > 0 and inventory_hostname in groups['workStreamServers'][0] 
     tags:
       - carbonio-message-dispatcher-migration
 
@@ -15,7 +15,7 @@
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
     command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm 127.78.0.10 20000
-    when: inventory_hostname in groups['workStreamServers'][0]
+    when: groups['workStreamServers'] | length > 0 and inventory_hostname in groups['workStreamServers'][0]
     tags:
       - carbonio-message-dispatcher-migration
 
@@ -23,7 +23,7 @@
     systemd:
       name: carbonio-message-dispatcher
       state: restarted
-    when: inventory_hostname in groups['workStreamServers'][0]
+    when: groups['workStreamServers'] | length > 0 and inventory_hostname in groups['workStreamServers'][0]
     tags:
       - carbonio-message-dispatcher-migration
 
