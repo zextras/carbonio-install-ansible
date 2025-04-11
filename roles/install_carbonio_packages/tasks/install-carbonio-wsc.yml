@@ -16,7 +16,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_packages }}"
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["workStreamServers"][0]
+    when: ansible_os_family == "Debian" and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0]
     tags:
       - install-carbonio-ws
 
@@ -25,7 +25,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ postgres_clent_package_ubuntu }}"
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["workStreamServers"][0]
+    when: ansible_os_family == "Debian" and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0]
     tags:
       - install-carbonio-ws
 
@@ -44,7 +44,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"][0] 
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0] 
     tags:
       - install-carbonio-ws
 
@@ -53,6 +53,6 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ postgres_clent_package_rhel }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["workStreamServers"][0]
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0]
     tags:
       - install-carbonio-ws

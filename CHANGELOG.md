@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.3.3] (2025-04-10)
+
+
+### Bug Fixes
+* Added condition to install user-management if tasks feature is installed (without files)
+* Added additional condition for message-dispatcher 
+
+
 ### [25.3.2] (2025-04-04)
 
 
