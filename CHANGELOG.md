@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.6.0] (2025-05-09)
+
+
+### Bug Fixes
+* Added condition to install user-management if wsc feature is installed (without files)
+
+
 ### [25.3.3] (2025-04-10)
 
 
