@@ -14,8 +14,7 @@ export SETUP_CONSUL_TOKEN=$(echo $1 | gpg --batch --yes --passphrase-fd 0 -qdo -
 pending-setups -a
 
 {% if ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24" %}
-su - zextras -c "/opt/zextras/bin/zmcontrol stop"
-systemctl list-unit-files --state=enabled | awk '/carbonio/ {print $1}' |  xargs -I@ systemctl restart @
+systemctl restart carbonio.target
 {% else %}
 su - zextras -c "/opt/zextras/bin/zmcontrol restart"
 {% endif %}
