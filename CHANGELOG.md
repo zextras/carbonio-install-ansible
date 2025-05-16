@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 * Added condition to install user-management if wsc feature is installed (without files)
-* Fixed pending-setups task hanging
+* Fixed pending-setups task hanging (changed the order of video server setup to server-by-server)
+* Moved video server configuration after WSC configuration
 
 
 ### [25.3.3] (2025-04-10)
