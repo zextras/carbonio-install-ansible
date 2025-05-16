@@ -32,7 +32,15 @@
      - ../roles/bootstrap_carbonio
      - ../roles/execute_final_setups
 
-- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+- hosts: videoServers
+  serial: 1
+  order: inventory
+  gather_facts: yes
+  roles:
+     - ../roles/bootstrap_carbonio
+     - ../roles/execute_final_setups
+
+- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers, !videoServers
   order: inventory
   gather_facts: yes
   roles:
