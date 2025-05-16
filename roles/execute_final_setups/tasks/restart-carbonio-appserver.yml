@@ -14,13 +14,15 @@
     tags:
       - restart-carbonio-app-services
 
-  - name: Restart application service[Systemd]
-    ansible.builtin.service:
-      name: carbonio-appserver
+  - name: Restart application services [Sysd]
+    become: true
+    ansible.builtin.systemd:
+      name: carbonio-appserver.target
       state: restarted
     when: inventory_hostname in groups["applicationServers"] and (ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24")
     tags:
-      - restart-carbonio-app-servicesp
+      - restart-carbonio-app-services
+
 
 
   - name: Debug restart application service
