@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file. 
 
-### [25.6.0] (2025-05-09)
+### [25.6.0] (2025-05-16)
 
+
+### Features
+* Added RHEL 9 and Ubuntu 24 support
 
 ### Bug Fixes
 * Added condition to install user-management if wsc feature is installed (without files)
+* Fixed pending-setups task hanging
 
 
 ### [25.3.3] (2025-04-10)
@@ -22,7 +26,6 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 * Added a check that if at least one server was specified in [videoServers] group, then there should also be a server in [workStreamServers]
-
 
 ### Bug Fixes
 * Fixed message dispatcher conflict
