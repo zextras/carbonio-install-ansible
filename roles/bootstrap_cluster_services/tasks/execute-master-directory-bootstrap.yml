@@ -43,17 +43,8 @@
 
   - name: Enable Directory replica
     become: true
-    become_method: su
-    become_user: zextras
     command: '/opt/zextras/libexec/zmldapenablereplica'
-    when: glc is search("localhost") and (groups['replicaDirectoryServers'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"]) and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
-    tags:
-      - master-directory-bootstrap
-
-  - name: Enable Directory replica (Sysd)
-    become: true
-    command: '/opt/zextras/libexec/zmldapenablereplica'
-    when: glc is search("localhost") and (groups['replicaDirectoryServers'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"]) and (ansible_distribution_major_version == "9" or ansible_distribution_major_version == "24")
+    when: glc is search("localhost") and (groups['replicaDirectoryServers'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"])
     tags:
       - master-directory-bootstrap
 
