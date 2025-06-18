@@ -43,8 +43,6 @@
 
   - name: Enable Directory replica
     become: true
-    become_method: su
-    become_user: zextras
     command: '/opt/zextras/libexec/zmldapenablereplica'
     when: glc is search("localhost") and (groups['replicaDirectoryServers'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"])
     tags:
