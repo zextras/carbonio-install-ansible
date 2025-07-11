@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. 
 
+
+### [25.9.0] (2025-07-11)
+
+
+### Features
+* Removed config.ini fixes (config.ini is optional now)
+
+
 ### [25.6.0] (2025-05-16)
 
 
