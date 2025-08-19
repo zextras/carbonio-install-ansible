@@ -35,7 +35,7 @@
       - initialize-postgres
 
   - name: "Set md5"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: password_encryption
      value: md5
     become: yes
@@ -46,7 +46,7 @@
       - initialize-postgres
 
   - name: "Set md5"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: password_encryption
      value: md5
     become: yes
@@ -173,7 +173,7 @@
       - install-postgres
       
   - name: "Set listen_addresses"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: listen_addresses
      value: "*"
     become: yes
@@ -184,7 +184,7 @@
       - initialize-postgres
       
   - name: "Set port"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: port
      value: 5432 
     become: yes
@@ -195,7 +195,7 @@
       - initialize-postgres
       
   - name: "Set max_connections"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: max_connections
      value: 500
     become: yes
@@ -213,7 +213,7 @@
       - initialize-postgres
 
   - name: Set shared_buffers
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb }}"
     become: yes
@@ -224,7 +224,7 @@
       - initialize-postgres
 
   - name: "Set listen_addresses"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: listen_addresses
      value: "*"
     become: yes
@@ -235,7 +235,7 @@
       - initialize-postgres
       
   - name: "Set port"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: port
      value: 5432 
     become: yes
@@ -246,7 +246,7 @@
       - initialize-postgres
       
   - name: "Set max_connections"
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
      param: max_connections
      value: 500
     become: yes
@@ -264,7 +264,7 @@
       - initialize-postgres
 
   - name: Set shared_buffers
-    postgresql_alter_system:
+    community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb }}"
     become: yes
