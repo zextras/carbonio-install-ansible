@@ -3,11 +3,12 @@
 All notable changes to this project will be documented in this file. 
 
 
-### [25.9.0] (2025-07-11)
+### [25.9.0] (2025-08-25)
 
 
 ### Features
 * Removed config.ini fixes (config.ini is optional now)
+* Replaced deprecated Ansible module `postgresql_set` with `postgresql_alter_system` and deprecated alias `database` in PostgreSQL modules  (ensures forward compatibility with community.postgresql ≥ 5.0, removes deprecation warnings)
 
 
 ### [25.6.0] (2025-05-16)
