@@ -3,6 +3,15 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
+  - name: Add and enable service-discover service
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/zmprov -l ms {{ ansible_fqdn }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
+    when: inventory_hostname in groups["serviceDiscoverServers"]
+    tags:
+      - fix-config  
+
   - name: Add TrustedIp
     become: true
     become_method: su

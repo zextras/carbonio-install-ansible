@@ -41,7 +41,7 @@ tags: [zextras, carbonio]
 # L(specifiers,https://python-semanticversion.readthedocs.io/en/latest/#requirement-specification). Multiple version
 # range specifiers can be set and are separated by ','
 dependencies: 
-  "community.postgresql": ">=3.4.0"
+  "community.postgresql": ">=3.13.0"
   "ansible.posix": ">=1.5.4"
 
 # The URL of the originating SCM repository
