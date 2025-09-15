@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/zmprov -l ms {{ ansible_fqdn }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover
+    command: '/opt/zextras/bin/zmprov -l ms {{ ansible_fqdn }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
     when: inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - fix-config  
