@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Features
 * Removed config.ini fixes (config.ini is optional now)
 * Replaced deprecated Ansible module `postgresql_set` with `postgresql_alter_system` and deprecated alias `database` in PostgreSQL modules  (ensures forward compatibility with community.postgresql ≥ 5.0, removes deprecation warnings)
+* Updated collection dependency: now requires community.postgresql version 3.13.0 or higher, as newer module is used
 
 ### Bug Fixes
 * Added automated task to install and enable the service-discover service (previously required manual configuration via +zimbraServiceInstalled/+zimbraServiceEnabled)
