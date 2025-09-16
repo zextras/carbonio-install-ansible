@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. 
 
 
-### [25.9.0] (2025-08-25)
+### [25.9.0] (2025-09-16)
 
 
 ### Features
@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 * Replaced deprecated Ansible module `postgresql_set` with `postgresql_alter_system` and deprecated alias `database` in PostgreSQL modules  (ensures forward compatibility with community.postgresql ≥ 5.0, removes deprecation warnings)
 
 ### Bug Fixes
-* Added automated task to install and enable the service-discover service (previously required manual configuration via +zimbraServiceInstalled/+zimbraServiceEnabled).
+* Added automated task to install and enable the service-discover service (previously required manual configuration via +zimbraServiceInstalled/+zimbraServiceEnabled)
+* Made prov write values directly to LDAP without SOAP calls to the application server
 
 ### [25.6.0] (2025-05-16)
 

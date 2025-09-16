@@ -52,7 +52,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: "/opt/zextras/bin/carbonio prov mcf zimbraLogHostname {{ hostvars[groups['syslogServer'][0]].inventory_hostname }}"
+    command: "/opt/zextras/bin/carbonio prov -l mcf zimbraLogHostname {{ hostvars[groups['syslogServer'][0]].inventory_hostname }}"
     when: (groups['syslogServer'] | length > 0) and (inventory_hostname in groups["masterDirectoryServers"])
     tags:
       - master-directory-bootstrap     
