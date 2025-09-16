@@ -13,7 +13,14 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 * Added automated task to install and enable the service-discover service (previously required manual configuration via +zimbraServiceInstalled/+zimbraServiceEnabled)
+
+
+### [25.6.1] (2025-09-16)
+
+
+### Bug Fixes
 * Made carbonio prov write values directly to LDAP without SOAP calls to the application server
+
 
 ### [25.6.0] (2025-05-16)
 
