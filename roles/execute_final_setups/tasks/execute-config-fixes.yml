@@ -3,6 +3,15 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
+  - name: Add and enable service-discover service
+    become: true
+    become_method: su
+    become_user: zextras
+    command: '/opt/zextras/bin/carbonio prov -l ms {{ ansible_fqdn }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
+    when: inventory_hostname in groups["serviceDiscoverServers"]
+    tags:
+      - fix-config  
+
   - name: Add TrustedIp
     become: true
     become_method: su
@@ -19,53 +28,7 @@
     command: '/opt/zextras/bin/carbonio prov -l ms {{ ansible_fqdn }} zimbraSmtpHostname localhost zimbraSmtpPort 25'
     when: inventory_hostname in groups["mtaServers"]
     tags:
-      - fix-config   
-
-  - name: Fix memcached config
-    become: true
-    become_method: su
-    become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{ ansible_fqdn }} zimbraMemcachedBindAddress {{ansible_default_ipv4.address}}'
-    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0)
-    tags:
-      - fix-config  
-
-  - name: Restart memcached[SysV]
-    become: true
-    become_method: su
-    become_user: zextras
-    command: '/opt/zextras/bin/zmmemcachedctl restart'
-    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0) and ansible_distribution_major_version != "9" and ansible_distribution_major_version != "24"
-    tags:
-      - fix-config
-
-  - name: Restart memcached[Systemd]
-    ansible.builtin.service:
-      name: carbonio-memcached
-      state: restarted
-    when: inventory_hostname in groups["proxyServers"] and (groups['filesServers'] | length > 0 or groups['docsServers'] | length > 0 or groups['previewServers'] | length > 0) and (ansible_distribution_major_version == "9"  or ansible_distribution_major_version == "24")
-    tags:
-      - fix-config
-      
-  - name: Reconfigure preview memcache
-    replace:
-      path: /etc/carbonio/preview/config.ini
-      regexp: "127.0.0.1:11211"
-      replace: "{{ hostvars[groups['proxyServers'][0]].inventory_hostname }}:11211"
-    notify:  restart_preview
-    when: inventory_hostname in groups["previewServers"]
-    tags:
-      - fix-config   
-      
-  - name: Reconfigure preview lookup handler
-    replace:
-      path: /etc/carbonio/preview/config.ini
-      regexp: "127.0.0.1:7072"
-      replace: "{{ hostvars[groups['applicationServers'][0]].inventory_hostname }}:7072"
-    notify:  restart_preview
-    when: inventory_hostname in groups["previewServers"]
-    tags:
-      - fix-config
+      - fix-config    
       
   - name: Configure public service hostname
     become: true
