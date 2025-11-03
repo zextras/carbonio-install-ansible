@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Count localhost occurrences in /etc/hosts
+  ansible.builtin.shell: "grep -w localhost /etc/hosts | grep -v '^#' | wc -l"
+  register: localhost_count
+  changed_when: false
+  tags:
+    - check-hosts-file
+
+- name: Fail if localhost is defined more than once
+  ansible.builtin.fail:
+    msg: >
+      Multiple localhost definitions found in /etc/hosts ({{ localhost_count.stdout }}).
+      Please ensure only '127.0.0.1 localhost' remains and remove localhost from IPv6.
+  when: localhost_count.stdout | int > 1
+  tags:
+  - check-hosts-file
