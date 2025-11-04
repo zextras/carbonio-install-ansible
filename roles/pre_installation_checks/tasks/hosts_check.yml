@@ -15,6 +15,7 @@
     msg: >
       Multiple localhost definitions found in /etc/hosts ({{ localhost_count.stdout }}).
       Please ensure only '127.0.0.1 localhost' remains and remove localhost from IPv6.
+  any_errors_fatal: true
   when: localhost_count.stdout | int > 1
   tags:
   - check-hosts-file
