@@ -4,7 +4,7 @@
 
 ---
 - name: Count localhost occurrences in /etc/hosts
-  ansible.builtin.shell: "grep -w localhost /etc/hosts | grep -v '^#' | wc -l"
+  ansible.builtin.shell: grep -Pc '^(?!\s*#).*(?:^|\s)localhost(?:\s|$)' /etc/hosts
   register: localhost_count
   changed_when: false
   tags:
