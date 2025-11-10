@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.9.2] (2025-11-10)
+
+
+### Bug Fixes
+* Added automated task to wait for Consul to be ready before running the db-connectors Bootstrap script.
+
 
 ### [25.9.0] (2025-09-30)
 
