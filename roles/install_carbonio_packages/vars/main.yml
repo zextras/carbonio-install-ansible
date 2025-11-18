@@ -55,7 +55,6 @@
     - carbonio-catalog
     - carbonio-proxy
     - carbonio-webui
-    - carbonio-admin-ui
     - carbonio-admin-console-ui
     - carbonio-avdb-updater
 
