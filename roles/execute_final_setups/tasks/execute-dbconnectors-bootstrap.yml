@@ -3,6 +3,20 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---  
+  - name: Wait for Consul to be ready (elect a leader)
+    ansible.builtin.uri:
+      url: http://127.0.0.1:8500/v1/status/leader
+      method: GET
+      status_code: 200
+    register: consul_leader_status
+    until: consul_leader_status.json is defined and consul_leader_status.json | length > 0
+    retries: 20
+    delay: 3
+    when:
+      - inventory_hostname in groups['postgresServers'][0]
+    tags:
+      - db-connectors-bootstrap
+      
   - name: Manage Postgres password
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
