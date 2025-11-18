@@ -3,11 +3,12 @@
 All notable changes to this project will be documented in this file. 
 
 
-### [25.12.0] (2025-11-03)
+### [25.12.0] (2025-11-18)
 
 
 ### Features
 * Added `/etc/hosts` file check to ensure `localhost` is not defined in IPv6 section and no duplicate entries exist
+* Removed carbonio-admin-ui package from the list of Proxy packages
 
 
 
