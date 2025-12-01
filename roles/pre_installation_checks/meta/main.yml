@@ -27,7 +27,7 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - 22.04
-    - 20.06
+    - 24.04
 
   galaxy_tags: [zextras, carbonio]
 
