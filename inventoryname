@@ -34,7 +34,9 @@
 
 [syslogServer]
 
-
+# Custom Default Domain (Optional)
+[masterDirectoryServers:vars]
+#default_domain= # Replace with your desired domain (e.g., domain.com)
 
 
 
