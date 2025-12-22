@@ -8,6 +8,8 @@
   - import_tasks: execute-post-install-cmds.yml
   - import_tasks: execute-dbconnectors-bootstrap.yml
   - import_tasks: restart-carbonio-appserver.yml
+  - import_tasks: execute-carbonio-pending-setups.yml
+    when: "groups['all'] | unique | length == 1"
   - import_tasks: configure-wsc.yml
   - import_tasks: configure-videoserver.yml
   - import_tasks: execute-config-fixes.yml
