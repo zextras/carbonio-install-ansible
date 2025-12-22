@@ -13,12 +13,10 @@ Multi master for directory server is not supported.
 __db connectors will be installed on Postgres server__ 
 
 If default_domain is defined:
-
 The bootstrap process will create only this domain as the default/first domain.
 All system accounts (admin, spam., ham., virus-quarantine., galsync.) will be created under this domain.
 
 If omitted:
-
 Falls back to a domain derived from the server's hostname.
 
 Example for inventory file
