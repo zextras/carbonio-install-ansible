@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [25.12.1] (2025-12-22)
+
+
+### Bug Fixes
+* Added one more pending-setups to finish WSC installation on Single Server
+
+
 ### [25.12.0] (2025-11-18)
 
 

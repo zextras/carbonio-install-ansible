@@ -15,7 +15,10 @@
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
     command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm 127.78.0.10 20000
-    when: groups['workStreamServers'] | length > 0 and inventory_hostname in groups['workStreamServers'][0] and inventory_hostname not in groups['postgresServers'][0]
+    when: 
+      - "groups['workStreamServers'] | length > 0"
+      - "inventory_hostname == groups['workStreamServers'][0]"
+      - "groups['all'] | unique | length > 1"
     tags:
       - carbonio-message-dispatcher-migration
 
@@ -24,7 +27,10 @@
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
     command: /usr/bin/carbonio-message-dispatcher-migration carbonio_adm 127.0.0.1
-    when: groups['workStreamServers'] | length > 0 and inventory_hostname in groups['workStreamServers'][0] and inventory_hostname in groups['postgresServers'][0]
+    when: 
+      - "groups['workStreamServers'] | length > 0"
+      - "inventory_hostname == groups['workStreamServers'][0]"
+      - "groups['all'] | unique | length == 1"
     tags:
       - carbonio-message-dispatcher-migration
 
