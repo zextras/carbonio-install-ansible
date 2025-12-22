@@ -17,3 +17,15 @@ zimbra_ldap_password={{ carbonio_ldap_password }}
 HOSTNAME={{ ansible_fqdn }}
 LDAPHOST={{ hostvars[groups['masterDirectoryServers'][0]].inventory_hostname }}
 ldap_host={{ hostvars[groups['masterDirectoryServers'][0]].inventory_hostname }}
+{% if default_domain is defined and default_domain | length > 0 %}
+CREATEDOMAIN={{ default_domain }}
+DOCREATEDOMAIN=yes
+CREATEADMIN=zextras@{{ default_domain }}
+AVUSER=zextras@{{ default_domain }}
+AVDOMAIN={{ default_domain }}
+SMTPSOURCE=zextras@{{ default_domain }}
+SMTPDEST=zextras@{{ default_domain }}
+TRAINSASPAM=spam.{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=10') }}@{{ default_domain }}
+TRAINSAHAM=ham.{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=10') }}@{{ default_domain }}
+VIRUSQUARANTINE=virus-quarantine.{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=10') }}@{{ default_domain }}
+{% endif %}
