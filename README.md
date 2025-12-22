@@ -78,7 +78,7 @@ srv4.example.com
 [syslogServer]  
 srv4.example.com
 ```
-# Custom Default Domain (Optional)
+#Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
 #default_domain=domain.com # Replace with your desired domain (e.g., domain.com)
 
