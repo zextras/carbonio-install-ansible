@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [26.3.0] (2026-03-10)
+
+
+### Bug Fixes
+* Removed message-dispatcher-migration steps (now handled by application)
+
+
 ### [25.12.0] (2025-11-18)
 
 
