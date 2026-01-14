@@ -96,12 +96,6 @@
     - carbonio-notification-push
     - carbonio-push-connector
 
-  postgres_clent_package_ubuntu:
-    - postgresql-client-16
-
-  postgres_clent_package_rhel:
-    - postgresql16
-
   sda_packages: 
     - service-discover-agent    
     
