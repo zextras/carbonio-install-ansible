@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### [26.3.0] (2026-03-10)
 
 
+### Features
+* Added support for defining a custom default domain in the inventory file under the [masterDirectoryServers:vars] group during installation.
+
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
 
