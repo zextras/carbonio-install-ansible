@@ -12,7 +12,7 @@
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (Ubuntu)
-  shell: "apt list 2>/dev/null | grep -w '^carbonio'"
+  shell: "apt-cache search '^carbonio'"
   when: ansible_os_family == "Debian"
   failed_when: false
   register: carbonio_packages
@@ -93,7 +93,7 @@
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (RHEL)
-  shell: "dnf list available | grep carbonio* "
+  shell: "dnf repoquery 'carbonio*'"
   when: ansible_os_family == "RedHat"
   failed_when: false
   register: carbonio_packages_rhel
