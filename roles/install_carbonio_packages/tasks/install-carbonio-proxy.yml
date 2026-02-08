@@ -12,6 +12,15 @@
     tags:
       - install-carbonio-proxy 
 
+  - name: Install Memcached on Server Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ memcached_packages }}"
+    when: ansible_os_family == "Debian" and inventory_hostname in groups["proxyServers"][0]
+    tags:
+      - install-carbonio-proxy
+
   - name: Install Carbonio files UI Ubuntu
     become: true
     apt: name={{ item }} state=present
@@ -48,6 +57,15 @@
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
     tags:
       - install-carbonio-proxy    
+
+  - name: Install Memcached on Server RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ memcached_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"][0]
+    tags:
+      - install-carbonio-proxy
 
   - name: Install Carbonio files UI RHEL
     become: true

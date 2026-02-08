@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
+* Memcached deployment changed to single-instance (first proxy only)
 
 
 ### [25.12.0] (2025-11-18)
