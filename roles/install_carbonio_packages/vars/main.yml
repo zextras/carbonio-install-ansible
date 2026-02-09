@@ -48,6 +48,9 @@
   ds_packages: 
     - carbonio-directory-server
 
+  memcached_packages:
+    - carbonio-memcached
+
   mta_packages: 
     - carbonio-mta
     
