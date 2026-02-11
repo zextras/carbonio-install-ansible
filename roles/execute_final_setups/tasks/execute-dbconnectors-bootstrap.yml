@@ -110,3 +110,18 @@
     tags:
       - db-connectors-bootstrap
       - install-carbonio-notification-push
+
+  - name: run carbonio-videorecorder-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: true
+    command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
+    when: 
+      - (
+          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
+        )
+      - groups['videoServers'] | length > 0
+    tags:
+      - db-connectors-bootstrap
+      - install-carbonio-videoserver

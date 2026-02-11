@@ -28,6 +28,9 @@
   task_dbconnectors_packages:
     - carbonio-tasks-db
 
+  videorecorder_dbconnectors_packages:
+    - carbonio-videorecorder-db
+
   message_dispatcher_dbconnectors_packages:
     - carbonio-message-dispatcher-db
 

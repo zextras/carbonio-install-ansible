@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 * Added support for defining a custom default domain in the inventory file under the [masterDirectoryServers:vars] group during installation.
+* Added new DBConnector - carbonio-videorecorder-db
 
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
