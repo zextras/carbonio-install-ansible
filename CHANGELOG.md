@@ -2,6 +2,7 @@
 
 All notable changes to this project will be documented in this file. 
 
+
 ### [26.3.0] (2026-03-10)
 
 
@@ -12,6 +13,13 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
 * Memcached deployment changed to single-instance (first proxy only)
+
+
+### [25.12.1] (2025-12-22)
+
+
+### Bug Fixes
+* Added one more pending-setups to finish WSC installation on Single Server
 
 
 ### [25.12.0] (2025-11-18)
