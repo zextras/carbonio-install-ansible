@@ -16,7 +16,7 @@
     become: true
     apt: name={{ item }} state=present
     with_items:
-      - "{{ docs_editor_packages }}"
+      - "{{ preview_dependencies_packages }}"
     when: ansible_os_family == "Debian"  and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
     tags:
       - install-carbonio-preview
@@ -34,7 +34,7 @@
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ docs_editor_packages }}"
+      - "{{ preview_dependencies_packages }}"
     when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
     tags:
       - install-carbonio-preview
