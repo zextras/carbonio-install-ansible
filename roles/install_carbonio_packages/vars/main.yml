@@ -66,6 +66,8 @@
 
   preview_packages: 
     - carbonio-preview
+  
+  preview_dependencies_packages:
     - carbonio-docs-editor
 
   task_packages:
@@ -85,8 +87,8 @@
     - carbonio-ws-collaboration-ui
 
   docs_packages: 
-    - carbonio-docs-editor
     - carbonio-docs-connector
+    - carbonio-docs-editor
   
   videoserver_packages: 
     - carbonio-videoserver-advanced

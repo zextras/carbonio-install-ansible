@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Features
 * Added support for defining a custom default domain in the inventory file under the [masterDirectoryServers:vars] group during installation.
 * Added new DBConnector - carbonio-videorecorder-db
+* Optimized docs-editor deployment: it is no longer installed on both servers simultaneously. It now installs on the doc server by default, or on the preview server if the doc server is absent
 
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
