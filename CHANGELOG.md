@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 * Removed message-dispatcher-migration steps (now handled by application)
 * Memcached deployment changed to single-instance (first proxy only)
+* Optimized docs-editor deployment: it is no longer installed on both servers simultaneously. It now installs on the doc server by default, or on the preview server if the doc server is absent
 
 
 ### [25.12.1] (2025-12-22)

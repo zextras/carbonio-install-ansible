@@ -11,8 +11,17 @@
     when: ansible_os_family == "Debian"  and inventory_hostname in groups["previewServers"] 
     tags:
       - install-carbonio-preview
-      
-  - name: Install Carbonio preview RH
+
+  - name: Install Carbonio Docs Editor Ubuntu 
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ docs_editor_packages }}"
+    when: ansible_os_family == "Debian"  and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
+    tags:
+      - install-carbonio-preview
+
+  - name: Install Carbonio preview RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
@@ -21,5 +30,12 @@
     tags:
       - install-carbonio-preview
 
-    
+  - name: Install Carbonio Docs Editor RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ docs_editor_packages }}"
+    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
+    tags:
+      - install-carbonio-preview
      
