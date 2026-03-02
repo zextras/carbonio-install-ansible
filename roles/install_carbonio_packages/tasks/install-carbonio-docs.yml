@@ -11,7 +11,7 @@
     when: ansible_os_family == "Debian"  and inventory_hostname in groups["docsServers"] 
     tags:
       - install-carbonio-docs
-            
+
   - name: Install Carbonio Docs RHEL
     become: true
     yum: name={{ item }} state=present
