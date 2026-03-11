@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. 
 
+
+### [26.3.0] (2026-03-11)
+
+
+### Features
+* Added support for defining a custom default domain in the inventory file under the [masterDirectoryServers:vars] group during installation.
+* Added new DBConnector - carbonio-videorecorder-db
+* Optimized docs-editor deployment: it is no longer installed on both servers simultaneously. It now installs on the doc server by default, or on the preview server if the doc server is absent
+* Updated the Ansible playbook to install the carbonio-memcached package only on the first proxy, since memcached runs behind the service mesh and currently supports a single instance.
+
+### Bug Fixes
+* Removed message-dispatcher-migration steps (now handled by application)
+
+
 ### [25.12.1] (2025-12-22)
 
 

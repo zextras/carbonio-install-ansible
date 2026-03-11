@@ -2,6 +2,10 @@
 
 [masterDirectoryServers]
 
+#Custom Default Domain (Optional)
+[masterDirectoryServers:vars]
+#default_domain=domain.com # Replace with your desired domain
+
 [replicaDirectoryServers]
 
 [serviceDiscoverServers]
@@ -33,8 +37,6 @@
 [prometheusServers]
 
 [syslogServer]
-
-
 
 
 

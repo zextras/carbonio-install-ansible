@@ -28,6 +28,9 @@
   task_dbconnectors_packages:
     - carbonio-tasks-db
 
+  videorecorder_dbconnectors_packages:
+    - carbonio-videorecorder-db
+
   message_dispatcher_dbconnectors_packages:
     - carbonio-message-dispatcher-db
 
@@ -48,6 +51,9 @@
   ds_packages: 
     - carbonio-directory-server
 
+  memcached_packages:
+    - carbonio-memcached
+
   mta_packages: 
     - carbonio-mta
     
@@ -60,6 +66,8 @@
 
   preview_packages: 
     - carbonio-preview
+  
+  preview_dependencies_packages:
     - carbonio-docs-editor
 
   task_packages:
@@ -79,8 +87,8 @@
     - carbonio-ws-collaboration-ui
 
   docs_packages: 
-    - carbonio-docs-editor
     - carbonio-docs-connector
+    - carbonio-docs-editor
   
   videoserver_packages: 
     - carbonio-videoserver-advanced
@@ -95,12 +103,6 @@
   notification_push_packages:
     - carbonio-notification-push
     - carbonio-push-connector
-
-  postgres_clent_package_ubuntu:
-    - postgresql-client-16
-
-  postgres_clent_package_rhel:
-    - postgresql16
 
   sda_packages: 
     - service-discover-agent    
