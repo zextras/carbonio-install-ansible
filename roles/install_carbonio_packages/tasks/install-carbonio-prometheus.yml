@@ -8,7 +8,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ prometheus_packages }}"
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
     tags:
       - install-carbonio-prometheus
       
@@ -17,7 +17,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ prometheus_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
     tags:
       - install-carbonio-prometheus
 
@@ -26,7 +26,7 @@
         #apt: name={{ item }} state=present
         #with_items:
         # - "{{ grafana_packages }}"
-        #when: ansible_os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
+        #when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
         #tags:
         #- install-carbonio-grafana
       
@@ -35,7 +35,7 @@
         # yum: name={{ item }} state=present
         # with_items:
         # - "{{ grafana_packages }}"
-        #when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
+        #when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
         #tags:
         #- install-carbonio-grafana
 

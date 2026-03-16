@@ -8,7 +8,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ proxy_packages }}"        
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] 
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] 
     tags:
       - install-carbonio-proxy 
 
@@ -17,7 +17,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["proxyServers"][0]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["proxyServers"][0]
     tags:
       - install-carbonio-proxy
 
@@ -26,7 +26,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ files_ui_packages }}"        
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
     tags:
       - install-carbonio-proxy
 
@@ -35,7 +35,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ task_ui_packages }}"        
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
 
@@ -44,7 +44,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ ws_ui_packages }}"        
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
   
@@ -54,7 +54,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ proxy_packages }}"        
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
     tags:
       - install-carbonio-proxy    
 
@@ -63,7 +63,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["proxyServers"][0]
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["proxyServers"][0]
     tags:
       - install-carbonio-proxy
 
@@ -72,7 +72,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ files_ui_packages }}"        
-    when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
 
@@ -81,7 +81,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ task_ui_packages }}"        
-    when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
     tags:
       - install-carbonio-proxy   
 
@@ -90,6 +90,6 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ ws_ui_packages }}"        
-    when: ansible_os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
+    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
