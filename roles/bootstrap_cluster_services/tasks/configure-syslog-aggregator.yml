@@ -19,6 +19,6 @@
         - regex: 'input\(type="imtcp" port="514"\)'
           line: 'input(type="imtcp" port="514")'
     notify: restart_rsyslog
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["syslogServer"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["syslogServer"]
     tags:
       - enable-log-aggregator

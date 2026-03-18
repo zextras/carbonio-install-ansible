@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.6.0] (2026-06-10)
+
+
+### Bug Fixes
+* Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
+
+
 ### [26.3.0] (2026-03-11)
 
 

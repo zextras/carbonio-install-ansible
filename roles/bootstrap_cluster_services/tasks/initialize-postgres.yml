@@ -6,7 +6,7 @@
   - name: "Set Postgres Service name RHEL"
     set_fact:
       postgresql_service_name: "{{ rhel_postgresql_service_name }}"
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
       
@@ -21,7 +21,7 @@
     become: true
     command: '{{ rhel_postgres_init_script }} initdb'
     notify: restart_postgres-rhel
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"] and not pgdata_dir_version.stat.exists
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"] and not pgdata_dir_version.stat.exists
     tags:
       - initialize-postgres
 
@@ -30,7 +30,7 @@
       name: "{{ rhel_postgresql_service_name }}"
       state: started
       enabled: true
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 
@@ -40,7 +40,7 @@
      value: md5
     become: yes
     become_user: postgres
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres
     tags:
       - initialize-postgres
@@ -51,7 +51,7 @@
      value: md5
     become: yes
     become_user: postgres
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres-rhel
     tags:
       - initialize-postgres
@@ -115,7 +115,7 @@
       cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
     become: yes
     become_user: postgres
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 
@@ -124,7 +124,7 @@
       cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
     become: yes
     become_user: postgres
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 
@@ -140,7 +140,7 @@
     become: yes
     become_user: postgres
     notify: restart_postgres
-    when: ansible_os_family == "Debian"  and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres 
 
@@ -156,7 +156,7 @@
     become: yes
     become_user: postgres
     notify: restart_postgres-rhel
-    when: ansible_os_family == "Redhat"  and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Redhat"  and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres 
 
@@ -168,7 +168,7 @@
       insertafter: '# \$inet_socket_port = \[10024,10026\];.*'
       line: "host    all             all             0.0.0.0/0               md5"
       regexp: host\s*all\s*all\s*0.0.0.0/0\s*md5
-    when: inventory_hostname in groups["postgresServers"] and ansible_os_family == "RedHat"
+    when: inventory_hostname in groups["postgresServers"] and ansible_facts.os_family == "RedHat"
     tags:
       - install-postgres
       
@@ -179,7 +179,7 @@
     become: yes
     become_user: postgres
     notify: restart_postgres
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
       
@@ -189,7 +189,7 @@
      value: 5432 
     become: yes
     become_user: postgres
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres
     tags:
       - initialize-postgres
@@ -200,15 +200,15 @@
      value: 500
     become: yes
     become_user: postgres
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres
     tags:
       - initialize-postgres 
       
   - name: Calculate 25% of RAM
     set_fact:
-      ram_size_mb: "{{ (ansible_memtotal_mb * 0.25) | int }}MB"
-    when: ansible_os_family == 'Debian' and inventory_hostname in groups['postgresServers']
+      ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
+    when: ansible_facts.os_family == 'Debian' and inventory_hostname in groups['postgresServers']
     tags:
       - initialize-postgres
 
@@ -218,7 +218,7 @@
       value: "{{ ram_size_mb }}"
     become: yes
     become_user: postgres
-    when: ansible_os_family == 'Debian' and inventory_hostname in groups['postgresServers']
+    when: ansible_facts.os_family == 'Debian' and inventory_hostname in groups['postgresServers']
     notify: restart_postgres
     tags:
       - initialize-postgres
@@ -230,7 +230,7 @@
     become: yes
     become_user: postgres
     notify: restart_postgres-rhel
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
       
@@ -240,7 +240,7 @@
      value: 5432 
     become: yes
     become_user: postgres
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres-rhel
     tags:
       - initialize-postgres
@@ -251,15 +251,15 @@
      value: 500
     become: yes
     become_user: postgres
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres-rhel
     tags:
       - initialize-postgres 
 
   - name: Calculate 25% of RAM
     set_fact:
-      ram_size_mb: "{{ (ansible_memtotal_mb * 0.25) | int }}MB"
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+      ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     tags:
       - initialize-postgres
 
@@ -269,7 +269,7 @@
       value: "{{ ram_size_mb }}"
     become: yes
     become_user: postgres
-    when: ansible_os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
     notify: restart_postgres-rhel
     tags:
       - initialize-postgres      
