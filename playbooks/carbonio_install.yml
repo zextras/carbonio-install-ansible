@@ -7,27 +7,41 @@
   gather_facts: no
   run_once: true
   tasks:
-    - name: Notify Single-Server Installation
-      debug:
-        msg: 
-          - "======================================================="
-          - " DETECTED: SINGLE-SERVER INSTALLATION"
-          - " Only one unique host found in the inventory."
-          - "======================================================="
-      when: groups['all'] | length == 1
+      - name: Multi-Server Status and 10s Pause
+        pause:
+          seconds: 10
+          prompt: |
+            =======================================================
+            DETECTED: MULTI-SERVER INSTALLATION
+            Proceeding with distributed components setup.
+            =======================================================
+            (Waiting 10 seconds before continuing. Press Ctrl+C and 'C' to skip wait)
+        when: groups['all'] | length > 1
 
-    - name: Notify Multi-Server Installation
-      debug:
-        msg: 
-          - "======================================================="
-          - " DETECTED: MULTI-SERVER INSTALLATION"
-          - " Multiple hosts found in the inventory."
-          - "======================================================="
-      when: groups['all'] | length > 1
+      - name: Single-Server Warning and Confirmation
+        pause:
+          prompt: |
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            WARNING: SINGLE-SERVER INSTALLATION DETECTED
+            
+            Please note that a single-server infrastructure is
+            significantly harder to scale out to a multi-server
+            cluster in the future.
+            
+            Make sure this matches your intended architecture.
+            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            Type 'YES' and press ENTER to proceed with SINGLE-SERVER: 
+        register: single_node_confirm
+        when: groups['all'] | length == 1
 
-    - name: Pause for 10 seconds to allow reading
-      pause:
-        seconds: 10
+      - name: Abort if confirmation is not YES
+            fail:
+              msg: >
+                Installation aborted. You must type 'YES' to proceed with SINGLE-SERVER 
+                or update your inventory to continue with a multi-master setup.
+            when: 
+              - groups['all'] | length == 1
+              - (single_node_confirm.user_input | default('') | upper) != 'YES'
 
 - hosts: all
   order: inventory
