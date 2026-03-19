@@ -38,7 +38,7 @@
         fail:
           msg: >
             Installation aborted. You must type 'YES' to proceed with SINGLE-SERVER 
-            or update your inventory to continue with a multi-master setup.
+            or update your inventory to continue with MULTI-SERVER INSTALLATION.
         when: 
           - groups['all'] | length == 1
           - (single_node_confirm.user_input | default('') | upper) != 'YES'
