@@ -1,0 +1,12 @@
+---
+# vars file for single_server_setup
+unnecessary_services:
+  - carbonio-clamav-sidecar.service
+  - carbonio-mta-sidecar.service
+
+hcl_paths:
+  - /etc/zextras/service-discover/carbonio-clamav.hcl
+  - /etc/zextras/service-discover/carbonio-mta.hcl
+
+postgresql_service_name: postgresql
+rhel_postgresql_service_name: postgresql-16

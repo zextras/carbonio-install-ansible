@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Stop and disable unnecessary servises
+    ansible.builtin.systemd:
+      name: "{{ item }}"
+      state: stopped 
+      enabled: false
+    with_items:
+      - "{{ unnecessary_services }}"
+    when: inventory_hostname in groups["mtaServers"]
+    tags:
+      - disable-unnecessary-services
+  
+  - name: Remove hcl files
+    ansible.builtin.file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+      - "{{ hcl_paths }}"
+    become: yes
+    when: inventory_hostname in groups["mtaServers"]
+    tags:
+      - disable-unnecessary-services
+
+  - name: Get list of carbonio-prometheus services
+    shell: "systemctl list-units --state=active | grep -o 'carbonio-prometheus.*.service'"
+    register: services_list
+    ignore_errors: true
+    changed_when: false
+    tags:
+      - disable-unnecessary-services
+
+  - name: Notify if no carbonio-prometheus services found
+    debug:
+      msg: "No carbonio-prometheus services found."
+    when: services_list.stdout_lines | length == 0
+    tags:
+      - disable-unnecessary-services
+      
+  - name: Stop and disable carbonio-prometheus services
+    ansible.builtin.systemd:
+      name: "{{ item }}"
+      state: stopped
+      enabled: false
+    loop: "{{ services_list.stdout_lines }}"
+    when: services_list.stdout_lines | length > 0
+    notify: restart_service_discover
+    tags:
+      - disable-unnecessary-services
+
+  # - name: Stop and disable carbonio-prometheus services
+  #   shell: "systemctl stop {{ item }} && systemctl mask {{ item }}"
+  #   loop: "{{ services_list.stdout_lines }}"
+  #   become: yes

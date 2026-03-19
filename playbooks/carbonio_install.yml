@@ -4,6 +4,32 @@
 
 ---
 - hosts: all
+  gather_facts: no
+  run_once: true
+  tasks:
+    - name: Notify Single-Server Installation
+      debug:
+        msg: 
+          - "======================================================="
+          - " DETECTED: SINGLE-SERVER INSTALLATION"
+          - " Only one unique host found in the inventory."
+          - "======================================================="
+      when: groups['all'] | length == 1
+
+    - name: Notify Multi-Server Installation
+      debug:
+        msg: 
+          - "======================================================="
+          - " DETECTED: MULTI-SERVER INSTALLATION"
+          - " Multiple hosts found in the inventory."
+          - "======================================================="
+      when: groups['all'] | length > 1
+
+    - name: Pause for 10 seconds to allow reading
+      pause:
+        seconds: 10
+
+- hosts: all
   order: inventory
   gather_facts: yes
   roles:
@@ -56,3 +82,10 @@
       become_method: su
       become_user: zextras
       command: '/opt/zextras/bin/zmupdateauthkeys'
+
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  roles:
+     - role: ../roles/single_server_setup
+       when: groups['all'] | length == 1
