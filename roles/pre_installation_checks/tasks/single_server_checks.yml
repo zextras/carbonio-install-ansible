@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Validate Prometheus is not defined for Single Server
+  fail:
+    msg: >
+      Single Server does not support Prometheus installation.
+      The 'prometheusServers' group must be empty.
+  when: groups['prometheusServers'] | length > 0
+  tags:
+    - check-single-server-inventory
+
+- name: Validate Replica Directory is not defined for single-server setup
+  fail:
+    msg: >
+      Single Server does not support Replica Directory installation.
+      The 'replicaDirectoryServers' group must be empty.
+  when: groups['replicaDirectoryServers'] | length > 0
+  tags:
+    - check-single-server-inventory
+
+- name: Validate Syslog is not defined for single-server setup
+  fail:
+    msg: >
+      Single Server does not support Syslog installation.
+      The 'syslogServer' group must be empty.
+  when: groups['syslogServer'] | length > 0
+  tags:
+    - check-single-server-inventory
