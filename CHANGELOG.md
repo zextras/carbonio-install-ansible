@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 ### [26.6.0] (2026-06-10)
 
 
+### Features
+* Integrated Single Server installation into carbonio-install-ansible playbook 
+* Added automatic installation mode detection based on inventory
+* Added confirmation step for Single Server
+* Introduced validation for unsupported groups in Single Server mode
+
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
 
