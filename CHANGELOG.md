@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 
 ### [26.6.0] (2026-06-10)
 
+### Features
+* Added pre-check task to detect minimized Ubuntu installation, Fail with descriptive message instructing user to run unminimize
+  command if minimized installation is detected
+
 
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
