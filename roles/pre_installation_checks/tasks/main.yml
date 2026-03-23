@@ -10,3 +10,4 @@
   - import_tasks: postgres_checks.yml
   - import_tasks: directory_server_checks.yml
   - import_tasks: hosts_check.yml
+  - import_tasks: validate_ubuntu_installation.yml
