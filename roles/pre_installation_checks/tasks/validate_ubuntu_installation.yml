@@ -6,7 +6,7 @@
   stat:
     path: /etc/update-motd.d/60-unminimize
   register: unminimize_file
-  when: ansible_facts['distribution'] == "Ubuntu"
+  when: ansible_facts.distribution == "Ubuntu"
   tags:
     - check-ubuntu-minimized
 
@@ -14,7 +14,7 @@
   fail:
     msg: "This server is running a minimized Ubuntu installation. To continue, please upgrade to standard installation first by running the 'unminimize' command on this node."
   when:
-    - ansible_facts['distribution'] == "Ubuntu"
+    - ansible_facts.distribution == "Ubuntu"
     - unminimize_file.stat is defined
     - unminimize_file.stat.exists
   tags:
