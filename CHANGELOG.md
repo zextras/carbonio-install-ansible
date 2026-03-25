@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.3.1] (2026-03-24)
+
+
+### Bug Fixes
+* Fixed an issue where inline comments in inventory variable examples were propagated as part of the value into generated configuration files, causing invalid Postfix configuration
+
+
 ### [26.3.0] (2026-03-11)
 
 
