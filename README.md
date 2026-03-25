@@ -30,8 +30,8 @@ srv1.example.com
 
 #Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
-# Replace example.com with your desired domain
-#default_domain=example.com
+# Replace domain.com with your desired domain
+#default_domain=domain.com
 
 [replicaDirectoryServers]  
 srv2.example.com
