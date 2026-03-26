@@ -102,6 +102,7 @@ srv1.example.com
 
 # Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
+# Replace domain.com with your desired domain
 #default_domain=domain.com
 
 [replicaDirectoryServers]
@@ -163,6 +164,7 @@ srv1.example.com
 
 # Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
+# Replace domain.com with your desired domain
 #default_domain=domain.com
 
 [serviceDiscoverServers]
