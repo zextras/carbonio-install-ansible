@@ -8,7 +8,11 @@ namespace: zxbot
 name: carbonio_install
 
 # The version of the collection. Must be compatible with semantic versioning
+<<<<<<< HEAD
 version: 26.3.0
+=======
+version: 26.3.1
+>>>>>>> origin/main
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
