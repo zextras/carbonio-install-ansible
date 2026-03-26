@@ -7,41 +7,59 @@
   gather_facts: no
   run_once: true
   tasks:
-      - name: Multi-Server Status and 10s Pause
-        pause:
-          seconds: 10
-          prompt: |
-            =======================================================
-            DETECTED: MULTI-SERVER INSTALLATION
-            Proceeding with distributed components setup.
-            =======================================================
-            (Waiting 10 seconds before continuing. Press Ctrl+C and 'C' to skip wait)
-        when: groups['all'] | length > 1
+    - name: EULA Acceptance
+      pause:
+        prompt: |
+          ============================================================
+          IMPORTANT - LICENSE AGREEMENT
+          ============================================================
 
-      - name: Single-Server Warning and Confirmation
-        pause:
-          prompt: |
-            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            WARNING: SINGLE-SERVER INSTALLATION DETECTED
-            
-            Please note that a single-server infrastructure is
-            significantly harder to scale out to a multi-server
-            cluster in the future.
-            
-            Make sure this matches your intended architecture.
-            !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Type 'YES' and press ENTER to proceed with SINGLE-SERVER: 
-        register: single_node_confirm
-        when: groups['all'] | length == 1
+          The system is going to start configuring all the packages.
 
-      - name: Abort if confirmation is not YES
-        fail:
-          msg: >
-            Installation aborted. You must type 'YES' to proceed with SINGLE-SERVER 
-            or update your inventory to continue with MULTI-SERVER INSTALLATION.
-        when: 
-          - groups['all'] | length == 1
-          - (single_node_confirm.user_input | default('') | upper) != 'YES'
+          If you are installing Carbonio CE please refer to every
+          single package license and to the Github repo for more
+          informations on open source licenses:
+            https://github.com/Zextras
+
+          If you are also installing Carbonio please refer to every
+          single package license, to the Github repo for more
+          informations on open source licenses:
+            https://github.com/Zextras
+          and to the Zextras EULA for the proprietary software:
+            https://zextras.com/licenses#zextras-carbonio-eula
+
+          ============================================================
+          Type 'YES' and press ENTER to accept and continue: 
+      register: eula_acceptance
+
+    - name: Abort if EULA not accepted
+      fail:
+        msg: >
+          Installation aborted. You must type 'YES' to accept the
+          license terms and proceed with the installation.
+      when: (eula_acceptance.user_input | default('') | upper) != 'YES'
+
+    - name: Multi-Server Status
+      pause:
+        seconds: 10
+        prompt: |
+          =======================================================
+          DETECTED: MULTI-SERVER INSTALLATION
+          Proceeding with distributed components setup.
+          =======================================================
+          (Waiting 10 seconds...)
+      when: groups['all'] | length > 1
+
+    - name: Single-Server Status
+      pause:
+        seconds: 10
+        prompt: |
+          -------------------------------------------------------
+          DETECTED: SINGLE-SERVER INSTALLATION
+          Proceeding with all-in-one components setup.
+          -------------------------------------------------------
+          (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
+      when: groups['all'] | length == 1
 
 - hosts: all
   order: inventory
@@ -100,6 +118,33 @@
 - hosts: all
   order: inventory
   gather_facts: yes
-  roles:
-     - role: ../roles/single_server_setup
-       when: groups['all'] | length == 1
+  tasks:
+    - name: Single-Server Optimization Confirmation
+      pause:
+        prompt: |
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          CONFIRMATION: SINGLE-SERVER OPTIMIZATION
+          
+          You are about to apply Single-Server specific settings.
+          
+          WARNING: After these optimizations are applied, it will 
+          be IMPOSSIBLE to scale this infrastructure out to a 
+          multi-server in the future.
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          Type 'YES' to apply optimizations, or press ENTER to skip:
+      register: ss_final_confirm
+      when: groups['all'] | length == 1
+
+    - name: Optimization Skipped Message
+      debug:
+        msg: "Optimization skipped. Single-server installation completed successfully without optimization."
+      when: 
+        - groups['all'] | length == 1
+        - (ss_final_confirm.user_input | default('') | upper) != 'YES'
+
+    - name: Include Single-Server Setup Role
+      include_role:
+        name: ../roles/single_server_setup
+      when: 
+        - groups['all'] | length == 1
+        - (ss_final_confirm.user_input | default('') | upper) == 'YES'
