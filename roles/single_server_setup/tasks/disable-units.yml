@@ -62,3 +62,15 @@
   #   shell: "systemctl stop {{ item }} && systemctl mask {{ item }}"
   #   loop: "{{ services_list.stdout_lines }}"
   #   become: yes
+
+  - name: Disable carbonio-stats service on Ubuntu 24 and RHEL 9
+    become: true
+    ansible.builtin.systemd:
+      name: carbonio-stats.service
+      enabled: false
+      state: stopped
+    when:
+      - >
+        (ansible_facts.distribution == "Ubuntu" and ansible_facts.distribution_major_version == "24")
+        or
+        (ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "9")
