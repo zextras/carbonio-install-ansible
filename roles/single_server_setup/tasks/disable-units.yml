@@ -26,17 +26,21 @@
       - disable-unnecessary-services
 
   - name: Get list of carbonio-prometheus services
-    shell: "systemctl list-units --state=active | grep -o 'carbonio-prometheus.*.service'"
+    shell: "systemctl list-units --state=active 'carbonio-prometheus*' --no-legend | awk '{print $1}'"
     register: services_list
     ignore_errors: true
     changed_when: false
+    when: groups['prometheusServers'] | length == 0
     tags:
       - disable-unnecessary-services
 
   - name: Notify if no carbonio-prometheus services found
     debug:
       msg: "No carbonio-prometheus services found."
-    when: services_list.stdout_lines | length == 0
+    when: 
+      - groups['prometheusServers'] | length == 0 
+      - services_list is defined
+      - services_list.stdout_lines | length == 0
     tags:
       - disable-unnecessary-services
       
@@ -46,7 +50,10 @@
       state: stopped
       enabled: false
     loop: "{{ services_list.stdout_lines }}"
-    when: services_list.stdout_lines | length > 0
+    when: 
+      - groups['prometheusServers'] | length == 0
+      - services_list is defined
+      - services_list.stdout_lines | length > 0
     notify: restart_service_discover
     tags:
       - disable-unnecessary-services
