@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 
 ### [26.6.0] (2026-06-10)
 
-### Features
-* Added pre-check task to detect minimized Ubuntu installation, Fail with descriptive message instructing user to run unminimize
-  command if minimized installation is detected
-* Added EULA acceptance prompt as first step of Carbonio installation playbook
 
+### Features
+* Added pre-check task to detect minimized Ubuntu installations and fail with a descriptive message instructing the user to run `unminimize` if needed
+* Added EULA acceptance prompt as the first step of the Carbonio installation playbook
+* Integrated Single Server installation support into the `carbonio-install-ansible` playbook
+* Added automatic installation mode detection based on the inventory
+* Added support for Single Server standard and optimized installation flows
+* Added explicit confirmation step for Single Server optimization
+* Introduced validation for unsupported groups in Single Server mode
+* Marked `prometheusServers` as an optional component in Single Server mode
+* Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
 
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
