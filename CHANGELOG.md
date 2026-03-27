@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Added explicit confirmation step for Single Server optimization
 * Introduced validation for unsupported groups in Single Server mode
 * Marked `prometheusServers` as an optional component in Single Server mode
+* Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
 
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
