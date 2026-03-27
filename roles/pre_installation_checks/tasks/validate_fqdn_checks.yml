@@ -1,0 +1,85 @@
+---
+# =============================================================================
+# File  : roles/__pre_installation_checks/tasks/validate_hostname_fqdn.yml
+# Purpose: Validates that the VM's actual FQDN (as reported by the OS) matches
+#          the FQDN declared in the Ansible inventory.
+#          Fails immediately with a clear remediation message on mismatch.
+#
+# Prerequisites:
+#   - gather_facts: true must be set on the calling play (it already is).
+#     This task relies on:
+#       ansible_fqdn          → OS-reported FQDN  (from gather_facts)
+#       inventory_hostname    → host key in inventory file
+#       ansible_host_fqdn     → optional per-host override (host_vars or
+#                               inline in inventory)
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1. Resolve expected and actual FQDNs
+# -----------------------------------------------------------------------------
+- name: "FQDN CHECK | Resolve expected and actual FQDNs"
+  ansible.builtin.set_fact:
+    _fqdn_expected: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
+    _fqdn_actual:   "{{ ansible_fqdn }}"
+  tags:
+    - check-hostname-fqdn
+
+# -----------------------------------------------------------------------------
+# 2. Show identity summary (always visible in the run log)
+# -----------------------------------------------------------------------------
+- name: "FQDN CHECK | Display identity summary"
+  ansible.builtin.debug:
+    msg:
+      - "------------------------------------------------------"
+      - " Hostname / FQDN Validation"
+      - "------------------------------------------------------"
+      - "  Inventory entry  : {{ inventory_hostname }}"
+      - "  Expected FQDN    : {{ _fqdn_expected }}"
+      - "  Actual FQDN (OS) : {{ _fqdn_actual }}"
+      - "  Short hostname   : {{ ansible_hostname }}"
+      - "------------------------------------------------------"
+  tags:
+    - check-hostname-fqdn
+
+# -----------------------------------------------------------------------------
+# 3. Core check — fail immediately on mismatch
+# -----------------------------------------------------------------------------
+- name: "FQDN CHECK | Fail if actual FQDN does not match inventory"
+  fail:
+    msg: >-
+      Hostname/FQDN mismatch detected on '{{ inventory_hostname }}'.
+      Expected FQDN: '{{ _fqdn_expected }}' but the actual FQDN reported
+      by the OS is '{{ _fqdn_actual }}'.
+      To continue, please correct the hostname on this node by running:
+      'sudo hostnamectl set-hostname {{ _fqdn_expected }}'
+      and ensure /etc/hosts contains:
+      '127.0.1.1  {{ _fqdn_expected }}  {{ _fqdn_expected.split(".")[0] }}'
+      Alternatively, update the inventory entry to match the actual FQDN:
+      '{{ _fqdn_actual }}'
+  when:
+    - _fqdn_actual is defined
+    - _fqdn_expected is defined
+    - _fqdn_actual != _fqdn_expected
+  tags:
+    - check-hostname-fqdn
+
+# -----------------------------------------------------------------------------
+# 5. Audit log — write result to remote host (non-fatal)
+# -----------------------------------------------------------------------------
+- name: "FQDN CHECK | Write audit log on remote host"
+  ansible.builtin.lineinfile:
+    path:   /var/log/ansible_fqdn_check.log
+    line: >-
+      {{ ansible_date_time.iso8601 }} |
+      PASS |
+      expected={{ _fqdn_expected }} |
+      actual={{ _fqdn_actual }} |
+      user={{ ansible_user_id }}
+    create: true
+    mode:   "0640"
+  when:
+    - _fqdn_actual is defined
+    - _fqdn_expected is defined
+  ignore_errors: true
+  tags:
+    - check-hostname-fqdn
