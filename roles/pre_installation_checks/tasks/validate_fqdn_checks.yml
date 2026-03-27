@@ -13,7 +13,7 @@
 - name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
   ansible.builtin.set_fact:
     _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
-    _fqdn_dns:       "{{ ansible_fqdn }}"
+    _fqdn_dns:       "{{ ansible_facts.fqdn }}"
     _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
   tags:
     - check-hostname-fqdn
@@ -25,7 +25,7 @@
       - " Hostname / FQDN Three-Way Validation"
       - "------------------------------------------------------"
       - "  [1] OS hostname   (hostname -f) : {{ _fqdn_os }}"
-      - "  [2] Gather facts  (ansible_fqdn): {{ _fqdn_dns }}"
+      - "  [2] Gather facts  (ansible_facts.fqdn): {{ _fqdn_dns }}"
       - "  [3] Inventory FQDN             : {{ _fqdn_inventory }}"
       - "------------------------------------------------------"
       - "  OS == Inventory : {{ _fqdn_os == _fqdn_inventory }}"
