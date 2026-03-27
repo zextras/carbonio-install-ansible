@@ -47,9 +47,7 @@
       - "------------------------------------------------------"
       - "  Inventory entry        : {{ inventory_hostname }}"
       - "  Expected FQDN          : {{ _fqdn_expected }}"
-      - "  Actual FQDN (hostname -f) : {{ _fqdn_actual }}"
-      - "  ansible_fqdn (DNS)     : {{ ansible_fqdn }}"
-      - "  Short hostname         : {{ ansible_hostname }}"
+      - "  Actual FQDN  : {{ _fqdn_actual }}"
       - "------------------------------------------------------"
   tags:
     - check-hostname-fqdn
@@ -62,39 +60,16 @@
     msg: >-
       Hostname/FQDN mismatch detected on '{{ inventory_hostname }}'.
       Expected FQDN : '{{ _fqdn_expected }}'
-      Actual FQDN   : '{{ _fqdn_actual }}' (from 'hostname -f')
+      Actual FQDN   : '{{ _fqdn_actual }}'
       To continue, please correct the hostname on this node by running:
         sudo hostnamectl set-hostname {{ _fqdn_expected }}
       Then verify with:
         hostname -f
-      Also ensure /etc/hosts contains:
-        127.0.1.1  {{ _fqdn_expected }}  {{ _fqdn_expected.split(".")[0] }}
       Alternatively, update the inventory entry to match the actual FQDN:
         {{ _fqdn_actual }}
   when:
     - _fqdn_actual is defined
     - _fqdn_expected is defined
     - _fqdn_actual != _fqdn_expected
-  tags:
-    - check-hostname-fqdn
-
-# -----------------------------------------------------------------------------
-# 5. Audit log — write result to remote host (non-fatal)
-# -----------------------------------------------------------------------------
-- name: "FQDN CHECK | Write audit log on remote host"
-  ansible.builtin.lineinfile:
-    path:   /var/log/ansible_fqdn_check.log
-    line: >-
-      {{ ansible_date_time.iso8601 }} |
-      PASS |
-      expected={{ _fqdn_expected }} |
-      actual={{ _fqdn_actual }} |
-      user={{ ansible_user_id }}
-    create: true
-    mode:   "0640"
-  when:
-    - _fqdn_actual is defined
-    - _fqdn_expected is defined
-  ignore_errors: true
   tags:
     - check-hostname-fqdn
