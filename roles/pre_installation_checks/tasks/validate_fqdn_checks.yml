@@ -53,22 +53,8 @@
   when:
     - _fqdn_os is defined
     - _fqdn_inventory is defined
-    - _fqdn_os != _fqdn_inventory
-  tags:
-    - check-hostname-fqdn
-
-- name: "FQDN CHECK | Warn if DNS FQDN differs from OS hostname"
-  ansible.builtin.debug:
-    msg:
-      - "WARNING: DNS FQDN differs from OS hostname!"
-      - "  OS hostname  (hostname -f) : {{ _fqdn_os }}"
-      - "  DNS hostname (ansible_fqdn): {{ _fqdn_dns }}"
-      - "  This indicates a DNS or /etc/hosts misconfiguration."
-      - "  Review your DNS records and /etc/hosts on this node."
-  when:
-    - _fqdn_os is defined
     - _fqdn_dns is defined
-    - _fqdn_os != _fqdn_dns
+    - (_fqdn_os != _fqdn_inventory) or (_fqdn_dns != _fqdn_inventory)
   tags:
     - check-hostname-fqdn
 
