@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 * Added pre-check task to detect minimized Ubuntu installation, Fail with descriptive message instructing user to run unminimize
   command if minimized installation is detected
 * Added EULA acceptance prompt as first step of Carbonio installation playbook
+* Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`), DNS-resolved FQDN (`ansible_facts.fqdn`), and inventory hostname. Playbook now fails early if any mismatch is detected.
 
 
 ### Bug Fixes
