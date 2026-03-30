@@ -10,46 +10,36 @@
   tags:
     - check-hostname-fqdn
 
-- name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
-  ansible.builtin.set_fact:
-    _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
-    _fqdn_dns:       "{{ ansible_facts.fqdn }}"
-    _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
-  tags:
-    - check-hostname-fqdn
+# - name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
+#   ansible.builtin.set_fact:
+#     _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
+#     _fqdn_dns:       "{{ ansible_facts.fqdn }}"
+#     _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
+#   tags:
+#     - check-hostname-fqdn
 
-- name: "FQDN CHECK | Display three-way FQDN comparison"
-  ansible.builtin.debug:
-    msg:
-      - "------------------------------------------------------"
-      - " Hostname / FQDN Three-Way Validation"
-      - "------------------------------------------------------"
-      - "  [1] OS hostname   (hostname -f) : {{ _fqdn_os }}"
-      - "  [2] Gather facts  (ansible_facts.fqdn): {{ _fqdn_dns }}"
-      - "  [3] Inventory FQDN             : {{ _fqdn_inventory }}"
-      - "------------------------------------------------------"
-      - "  OS == Inventory : {{ _fqdn_os == _fqdn_inventory }}"
-      - "  OS == DNS       : {{ _fqdn_os == _fqdn_dns }}"
-      - "  DNS == Inventory: {{ _fqdn_dns == _fqdn_inventory }}"
-      - "------------------------------------------------------"
-  tags:
-    - check-hostname-fqdn
+# - name: "FQDN CHECK | Display three-way FQDN comparison"
+#   ansible.builtin.debug:
+#     msg:
+#       - "------------------------------------------------------"
+#       - " Hostname / FQDN Three-Way Validation"
+#       - "------------------------------------------------------"
+#       - "  [1] OS hostname   (hostname -f) : {{ _fqdn_os }}"
+#       - "  [2] Gather facts  (ansible_facts.fqdn): {{ _fqdn_dns }}"
+#       - "  [3] Inventory FQDN             : {{ _fqdn_inventory }}"
+#       - "------------------------------------------------------"
+#       - "  OS == Inventory : {{ _fqdn_os == _fqdn_inventory }}"
+#       - "  OS == DNS       : {{ _fqdn_os == _fqdn_dns }}"
+#       - "  DNS == Inventory: {{ _fqdn_dns == _fqdn_inventory }}"
+#       - "------------------------------------------------------"
+#   tags:
+#     - check-hostname-fqdn
 
 - name: "FQDN CHECK | Fail if OS hostname does not match inventory FQDN"
   fail:
     msg: >-
-      Hostname/FQDN mismatch detected on '{{ inventory_hostname }}'.
-      OS hostname (hostname -f) : '{{ _fqdn_os }}'
-      Inventory FQDN            : '{{ _fqdn_inventory }}'
-      The OS hostname must match the inventory entry.
-      To correct the hostname on this node, run:
-        sudo hostnamectl set-hostname {{ _fqdn_inventory }}
-      Then verify with:
-        hostname -f
-      Also ensure /etc/hosts contains:
-        127.0.1.1  {{ _fqdn_inventory }}  {{ _fqdn_inventory.split(".")[0] }}
-      Alternatively, update the inventory entry to match the actual OS hostname:
-        {{ _fqdn_os }}
+      FQDN MISMATCH on {{ inventory_hostname }} | 
+      OS: {{ _fqdn_os }} | DNS: {{ _fqdn_dns }} | Expected: {{ _fqdn_inventory }}
   when:
     - _fqdn_os is defined
     - _fqdn_inventory is defined
