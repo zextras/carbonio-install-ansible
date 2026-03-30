@@ -10,13 +10,13 @@
   tags:
     - check-hostname-fqdn
 
-# - name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
-#   ansible.builtin.set_fact:
-#     _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
-#     _fqdn_dns:       "{{ ansible_facts.fqdn }}"
-#     _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
-#   tags:
-#     - check-hostname-fqdn
+- name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
+  ansible.builtin.set_fact:
+    _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
+    _fqdn_dns:       "{{ ansible_facts.fqdn }}"
+    _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
+  tags:
+    - check-hostname-fqdn
 
 # - name: "FQDN CHECK | Display three-way FQDN comparison"
 #   ansible.builtin.debug:
