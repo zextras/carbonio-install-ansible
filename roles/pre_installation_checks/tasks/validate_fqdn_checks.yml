@@ -1,0 +1,33 @@
+---
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+- name: "FQDN CHECK | Retrieve actual FQDN from OS via 'hostname -f'"
+  ansible.builtin.command: hostname -f
+  register: hostname_f_result
+  changed_when: false
+  tags:
+    - check-hostname-fqdn
+
+- name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
+  ansible.builtin.set_fact:
+    fqdn_os:        "{{ hostname_f_result.stdout | trim }}"
+    fqdn_dns:       "{{ ansible_facts.fqdn }}"
+    ansible_host_fqdn: "{{ inventory_hostname }}"
+  tags:
+    - check-hostname-fqdn
+
+- name: "FQDN CHECK | Fail if OS hostname does not match inventory FQDN"
+  fail:
+    msg: >-
+      FQDN MISMATCH on {{ inventory_hostname }} | 
+      OS: {{ fqdn_os }} | DNS: {{ fqdn_dns }} | Expected: {{ ansible_host_fqdn }}
+  when:
+    - fqdn_os is defined
+    - ansible_host_fqdn is defined
+    - fqdn_dns is defined
+    - (fqdn_os != ansible_host_fqdn) or (fqdn_dns != ansible_host_fqdn)
+  tags:
+    - check-hostname-fqdn
+
