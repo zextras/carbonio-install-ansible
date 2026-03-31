@@ -14,7 +14,7 @@
   ansible.builtin.set_fact:
     _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
     _fqdn_dns:       "{{ ansible_facts.fqdn }}"
-    _fqdn_inventory: "{{ ansible_host_fqdn | default(inventory_hostname) }}"
+    ansible_host_fqdn: "{{ inventory_hostname }}"
   tags:
     - check-hostname-fqdn
 
@@ -22,12 +22,12 @@
   fail:
     msg: >-
       FQDN MISMATCH on {{ inventory_hostname }} | 
-      OS: {{ _fqdn_os }} | DNS: {{ _fqdn_dns }} | Expected: {{ _fqdn_inventory }}
+      OS: {{ _fqdn_os }} | DNS: {{ _fqdn_dns }} | Expected: {{ ansible_host_fqdn }}
   when:
     - _fqdn_os is defined
-    - _fqdn_inventory is defined
+    - ansible_host_fqdn is defined
     - _fqdn_dns is defined
-    - (_fqdn_os != _fqdn_inventory) or (_fqdn_dns != _fqdn_inventory)
+    - (_fqdn_os != ansible_host_fqdn) or (_fqdn_dns != ansible_host_fqdn)
   tags:
     - check-hostname-fqdn
 
