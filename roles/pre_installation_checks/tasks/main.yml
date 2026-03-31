@@ -9,6 +9,8 @@
   - import_tasks: consul_checks.yml
   - import_tasks: postgres_checks.yml
   - import_tasks: directory_server_checks.yml
+  - import_tasks: single_server_checks.yml
+    when: "groups['all'] | length == 1"
   - import_tasks: validate_ubuntu_installation.yml
   - import_tasks: validate_fqdn_checks.yml
   - import_tasks: hosts_check.yml

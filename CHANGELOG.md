@@ -17,6 +17,16 @@ All notable changes to this project will be documented in this file.
 * Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
 * Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`), DNS-resolved FQDN (`ansible_facts.fqdn`), and inventory hostname. Playbook now fails early if any mismatch is detected.
 
+### Features
+* Added pre-check task to detect minimized Ubuntu installations and fail with a descriptive message instructing the user to run `unminimize` if needed
+* Added EULA acceptance prompt as the first step of the Carbonio installation playbook
+* Integrated Single Server installation support into the `carbonio-install-ansible` playbook
+* Added automatic installation mode detection based on the inventory
+* Added support for Single Server standard and optimized installation flows
+* Added explicit confirmation step for Single Server optimization
+* Introduced validation for unsupported groups in Single Server mode
+* Marked `prometheusServers` as an optional component in Single Server mode
+* Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
 
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24

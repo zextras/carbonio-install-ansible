@@ -39,6 +39,28 @@
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
 
+    - name: Multi-Server Status
+      pause:
+        seconds: 10
+        prompt: |
+          =======================================================
+          DETECTED: MULTI-SERVER INSTALLATION
+          Proceeding with distributed components setup.
+          =======================================================
+          (Waiting 10 seconds...)
+      when: groups['all'] | length > 1
+
+    - name: Single-Server Status
+      pause:
+        seconds: 10
+        prompt: |
+          -------------------------------------------------------
+          DETECTED: SINGLE-SERVER INSTALLATION
+          Proceeding with all-in-one components setup.
+          -------------------------------------------------------
+          (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
+      when: groups['all'] | length == 1
+
 - hosts: all
   order: inventory
   gather_facts: yes
@@ -92,3 +114,37 @@
       become_method: su
       become_user: zextras
       command: '/opt/zextras/bin/zmupdateauthkeys'
+
+- hosts: all
+  order: inventory
+  gather_facts: yes
+  tasks:
+    - name: Single-Server Optimization Confirmation
+      pause:
+        prompt: |
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          CONFIRMATION: SINGLE-SERVER OPTIMIZATION
+          
+          You are about to apply Single-Server specific settings.
+          
+          WARNING: After these optimizations are applied, it will 
+          be IMPOSSIBLE to scale this infrastructure out to a 
+          multi-server in the future.
+          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          Type 'YES' to apply optimizations, or press ENTER to skip:
+      register: ss_final_confirm
+      when: groups['all'] | length == 1
+
+    - name: Optimization Skipped Message
+      debug:
+        msg: "Optimization skipped. Single-server installation completed successfully without optimization."
+      when: 
+        - groups['all'] | length == 1
+        - (ss_final_confirm.user_input | default('') | upper) != 'YES'
+
+    - name: Include Single-Server Setup Role
+      include_role:
+        name: ../roles/single_server_setup
+      when: 
+        - groups['all'] | length == 1
+        - (ss_final_confirm.user_input | default('') | upper) == 'YES'
