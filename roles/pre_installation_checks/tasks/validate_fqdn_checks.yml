@@ -5,15 +5,15 @@
 
 - name: "FQDN CHECK | Retrieve actual FQDN from OS via 'hostname -f'"
   ansible.builtin.command: hostname -f
-  register: _hostname_f_result
+  register: hostname_f_result
   changed_when: false
   tags:
     - check-hostname-fqdn
 
 - name: "FQDN CHECK | Set OS, DNS and inventory FQDN facts"
   ansible.builtin.set_fact:
-    _fqdn_os:        "{{ _hostname_f_result.stdout | trim }}"
-    _fqdn_dns:       "{{ ansible_facts.fqdn }}"
+    fqdn_os:        "{{ hostname_f_result.stdout | trim }}"
+    fqdn_dns:       "{{ ansible_facts.fqdn }}"
     ansible_host_fqdn: "{{ inventory_hostname }}"
   tags:
     - check-hostname-fqdn
@@ -22,12 +22,12 @@
   fail:
     msg: >-
       FQDN MISMATCH on {{ inventory_hostname }} | 
-      OS: {{ _fqdn_os }} | DNS: {{ _fqdn_dns }} | Expected: {{ ansible_host_fqdn }}
+      OS: {{ fqdn_os }} | DNS: {{ fqdn_dns }} | Expected: {{ ansible_host_fqdn }}
   when:
-    - _fqdn_os is defined
+    - fqdn_os is defined
     - ansible_host_fqdn is defined
-    - _fqdn_dns is defined
-    - (_fqdn_os != ansible_host_fqdn) or (_fqdn_dns != ansible_host_fqdn)
+    - fqdn_dns is defined
+    - (fqdn_os != ansible_host_fqdn) or (fqdn_dns != ansible_host_fqdn)
   tags:
     - check-hostname-fqdn
 
