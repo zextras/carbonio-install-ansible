@@ -18,23 +18,6 @@
   tags:
     - check-hostname-fqdn
 
-# - name: "FQDN CHECK | Display three-way FQDN comparison"
-#   ansible.builtin.debug:
-#     msg:
-#       - "------------------------------------------------------"
-#       - " Hostname / FQDN Three-Way Validation"
-#       - "------------------------------------------------------"
-#       - "  [1] OS hostname   (hostname -f) : {{ _fqdn_os }}"
-#       - "  [2] Gather facts  (ansible_facts.fqdn): {{ _fqdn_dns }}"
-#       - "  [3] Inventory FQDN             : {{ _fqdn_inventory }}"
-#       - "------------------------------------------------------"
-#       - "  OS == Inventory : {{ _fqdn_os == _fqdn_inventory }}"
-#       - "  OS == DNS       : {{ _fqdn_os == _fqdn_dns }}"
-#       - "  DNS == Inventory: {{ _fqdn_dns == _fqdn_inventory }}"
-#       - "------------------------------------------------------"
-#   tags:
-#     - check-hostname-fqdn
-
 - name: "FQDN CHECK | Fail if OS hostname does not match inventory FQDN"
   fail:
     msg: >-
