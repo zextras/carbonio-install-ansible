@@ -4,7 +4,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ message_broker_packages }}"
-    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups['serviceDiscoverServers'] and ((groups['serviceDiscoverServers'] | length >= 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length < 2 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
+    when: ansible_facts.os_family == "Debian" and ((groups['serviceDiscoverServers'] | length = 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length = 1 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
     tags:
       - install-carbonio-message-broker
       
@@ -13,6 +13,6 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ message_broker_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups['serviceDiscoverServers'] and ((groups['serviceDiscoverServers'] | length >= 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length < 2 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and ((groups['serviceDiscoverServers'] | length = 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length = 1 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
     tags:
       - install-carbonio-message-broker
