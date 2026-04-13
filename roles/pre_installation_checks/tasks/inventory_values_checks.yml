@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Validate inventory hostname
+  ansible.builtin.assert:
+    that:
+      - inventory_hostname is community.general.fqdn_valid
+    fail_msg: >-
+      Invalid syntax for inventory hostname '{{ inventory_hostname }}'.
+      Inventory must contain valid FQDN values only.
+
+- name: Validate default_domain
+  ansible.builtin.assert:
+    that:
+      - default_domain is not defined or default_domain is community.general.fqdn_valid
+    fail_msg: >-
+      Invalid syntax for 'default_domain': '{{ default_domain }}'.
+      This variable must contain the default mail domain.
+      Example: domain.com
+
+- name: Validate webmailHostname
+  ansible.builtin.assert:
+    that:
+      - webmailHostname is not defined or webmailHostname is community.general.fqdn_valid
+    fail_msg: >-
+      Invalid syntax for 'webmailHostname': '{{ webmailHostname }}'.
+      This variable must contain the hostname used to access webmail.
+      Example: webmail.example.com
+
+- name: Validate public_ip_address for video servers
+  ansible.builtin.assert:
+    that:
+      - public_ip_address is defined
+      - public_ip_address | ansible.utils.ipaddr
+    fail_msg: >-
+      Invalid syntax for 'public_ip_address': '{{ public_ip_address | default("") }}'.
+      Video servers must define a valid IP address.
+      Example: 192.0.2.10
+  when: inventory_hostname in groups['videoServers']
