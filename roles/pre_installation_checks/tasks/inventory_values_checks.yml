@@ -42,7 +42,7 @@
   ansible.builtin.assert:
     that:
       - public_ip_address is defined
-      - public_ip_address | ansible.utils.ipaddr
+      - public_ip_address | ansible.utils.ipaddr('address')
     fail_msg: >-
       Invalid syntax for 'public_ip_address': '{{ public_ip_address | default("") }}'.
       Video servers must define a valid IP address.
