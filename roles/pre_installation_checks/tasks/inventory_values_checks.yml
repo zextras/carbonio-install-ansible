@@ -6,17 +6,18 @@
 - name: Validate inventory hostname
   ansible.builtin.assert:
     that:
-      - inventory_hostname is community.general.fqdn_valid
+      - inventory_hostname is community.general.fqdn_valid(min_labels=2)
     fail_msg: >-
       Invalid syntax for inventory hostname '{{ inventory_hostname }}'.
       Inventory must contain valid FQDN values only.
+      Example: host.example.com
   tags:
     - check-inventory-values
 
 - name: Validate default_domain
   ansible.builtin.assert:
     that:
-      - default_domain is community.general.fqdn_valid
+      - default_domain is community.general.fqdn_valid(min_labels=2)
     fail_msg: >-
       Invalid syntax for 'default_domain': '{{ default_domain | default("UNDEFINED") }}'.
       This variable must contain the default mail domain.
@@ -28,7 +29,7 @@
 - name: Validate webmailHostname
   ansible.builtin.assert:
     that:
-      - webmailHostname is community.general.fqdn_valid
+      - webmailHostname is community.general.fqdn_valid(min_labels=2)
     fail_msg: >-
       Invalid syntax for 'webmailHostname': '{{ webmailHostname | default("UNDEFINED") }}'.
       This variable must contain the hostname used to access webmail.
@@ -46,6 +47,6 @@
       Invalid syntax for 'public_ip_address': '{{ public_ip_address | default("") }}'.
       Video servers must define a valid IP address.
       Example: 192.0.2.10
-  when: inventory_hostname in groups['videoServers']
+  when: inventory_hostname in (groups['videoServers'] | default([]))
   tags:
     - check-inventory-values
