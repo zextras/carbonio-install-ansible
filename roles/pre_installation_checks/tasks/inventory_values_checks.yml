@@ -16,22 +16,24 @@
 - name: Validate default_domain
   ansible.builtin.assert:
     that:
-      - default_domain is not defined or default_domain is community.general.fqdn_valid
+      - default_domain is community.general.fqdn_valid
     fail_msg: >-
-      Invalid syntax for 'default_domain': '{{ default_domain }}'.
+      Invalid syntax for 'default_domain': '{{ default_domain | default("UNDEFINED") }}'.
       This variable must contain the default mail domain.
       Example: domain.com
+  when: default_domain is defined
   tags:
     - check-inventory-values
 
 - name: Validate webmailHostname
   ansible.builtin.assert:
     that:
-      - webmailHostname is not defined or webmailHostname is community.general.fqdn_valid
+      - webmailHostname is community.general.fqdn_valid
     fail_msg: >-
-      Invalid syntax for 'webmailHostname': '{{ webmailHostname }}'.
+      Invalid syntax for 'webmailHostname': '{{ webmailHostname | default("UNDEFINED") }}'.
       This variable must contain the hostname used to access webmail.
       Example: webmail.example.com
+  when: webmailHostname is defined
   tags:
     - check-inventory-values
 
