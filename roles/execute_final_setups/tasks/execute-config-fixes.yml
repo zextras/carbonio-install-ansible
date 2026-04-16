@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{ ansible_facts.fqdn }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
+    command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
     when: inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - fix-config  
@@ -25,7 +25,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{ ansible_facts.fqdn }} zimbraSmtpHostname localhost zimbraSmtpPort 25'
+    command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} zimbraSmtpHostname localhost zimbraSmtpPort 25'
     when: inventory_hostname in groups["mtaServers"]
     tags:
       - fix-config    
