@@ -65,5 +65,5 @@ def fqdn_strict(value: Any) -> bool:
 class TestModule:
     def tests(self) -> dict[str, Any]:
         return {
-            "fqdn_strict": fqdn_strict,
+            "fqdn_check": fqdn_check,
         }
