@@ -17,7 +17,7 @@ def _is_ascii_alpha(value: str) -> bool:
     return True
 
 
-def fqdn_strict(value: Any) -> bool:
+def fqdn_check(value: Any) -> bool:
     if not isinstance(value, str):
         return False
 
