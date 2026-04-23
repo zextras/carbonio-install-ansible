@@ -15,12 +15,13 @@ All notable changes to this project will be documented in this file.
 * Introduced validation for unsupported groups in Single Server mode
 * Marked `prometheusServers` as an optional component in Single Server mode
 * Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
-* Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`), DNS-resolved FQDN (`ansible_facts.fqdn`), and inventory hostname. Playbook now fails early if any mismatch is detected.
+* Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`) and inventory hostname. Playbook now fails early if any mismatch is detected.
 * Changed Message Broker installation target from `masterDirectoryServers` to `serviceDiscoverServers[2]` when 3 or more servers are specified, with fallback to `serviceDiscoverServers[0]` when less than 2 servers are defined
 
 
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
+* Replaced ansible_facts.fqdn with inventory_hostname to avoid incorrect hostname resolution when hosts file entries are misconfigured
 
 
 ### [26.3.1] (2026-03-24)
