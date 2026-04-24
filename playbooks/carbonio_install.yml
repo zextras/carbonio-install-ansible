@@ -33,18 +33,18 @@
       register: eula_acceptance
       when: carbonio_auto_accept_eula is not defined or carbonio_auto_accept_eula == false
 
+    - name: Auto-accept EULA
+      set_fact:
+          eula_acceptance:
+            user_input: 'YES'
+      when: carbonio_auto_accept_eula is defined and carbonio_auto_accept_eula == true
+
     - name: Abort if EULA not accepted
       fail:
         msg: >
           Installation aborted. You must type 'YES' to accept the
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
-
-    - name: Auto-accept EULA
-      set_fact:
-          eula_acceptance:
-            user_input: 'YES'
-      when: carbonio_auto_accept_eula is defined and carbonio_auto_accept_eula == true
 
     - name: Multi-Server Status
       pause:
