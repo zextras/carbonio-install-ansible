@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
 * Replaced ansible_facts.fqdn with inventory_hostname to avoid incorrect hostname resolution when hosts file entries are misconfigured
+* Fixed RHEL syslog configuration to enable and start the rsyslog service by default
+
 
 
 ### [26.3.1] (2026-03-24)
