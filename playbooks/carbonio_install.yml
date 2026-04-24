@@ -143,7 +143,7 @@
       register: ss_final_confirm
       when: 
         - groups['all'] | length == 1
-        - autoapply_ss_optimization is not defined or autoapply_ss_optimization == null
+        - autoapply_ss_optimization is not defined or autoapply_ss_optimization is none
 
     - name: Auto-apply Single-Server Optimization
       set_fact:
@@ -152,6 +152,7 @@
       when: 
         - groups['all'] | length == 1
         - autoapply_ss_optimization is defined
+        - autoapply_ss_optimization is not none
         - (autoapply_ss_optimization | bool)
 
     - name: Auto-skip Single-Server Optimization
@@ -161,6 +162,7 @@
       when: 
         - groups['all'] | length == 1
         - autoapply_ss_optimization is defined
+        - autoapply_ss_optimization is not none
         - not (autoapply_ss_optimization | bool)
 
     - name: Optimization Skipped Message
