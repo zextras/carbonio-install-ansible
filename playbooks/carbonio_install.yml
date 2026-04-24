@@ -31,13 +31,13 @@
           ============================================================
           Type 'YES' and press ENTER to accept and continue: 
       register: eula_acceptance
-      when: carbonio_auto_accept_eula is not defined or carbonio_auto_accept_eula == false
+      when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
 
     - name: Auto-accept EULA
       set_fact:
           eula_acceptance:
             user_input: 'YES'
-      when: carbonio_auto_accept_eula is defined and carbonio_auto_accept_eula == true
+      when: carbonio_auto_accept_eula is defined and (carbonio_auto_accept_eula | bool)
 
     - name: Abort if EULA not accepted
       fail:
@@ -152,7 +152,7 @@
       when: 
         - groups['all'] | length == 1
         - autoapply_ss_optimization is defined
-        - autoapply_ss_optimization == true
+        - (autoapply_ss_optimization | bool)
 
     - name: Auto-skip Single-Server Optimization
       set_fact:
@@ -161,7 +161,7 @@
       when: 
         - groups['all'] | length == 1
         - autoapply_ss_optimization is defined
-        - autoapply_ss_optimization == false
+        - not (autoapply_ss_optimization | bool)
 
     - name: Optimization Skipped Message
       debug:
