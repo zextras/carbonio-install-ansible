@@ -31,6 +31,7 @@
           ============================================================
           Type 'YES' and press ENTER to accept and continue: 
       register: eula_acceptance
+      when: carbonio_auto_accept_eula is not defined or carbonio_auto_accept_eula == false
 
     - name: Abort if EULA not accepted
       fail:
@@ -38,6 +39,12 @@
           Installation aborted. You must type 'YES' to accept the
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
+
+    - name: Auto-accept EULA
+      set_fact:
+          eula_acceptance:
+            user_input: 'YES'
+      when: carbonio_auto_accept_eula is defined and carbonio_auto_accept_eula == true
 
     - name: Multi-Server Status
       pause:
@@ -59,7 +66,8 @@
           Proceeding with all-in-one components setup.
           -------------------------------------------------------
           (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
-      when: groups['all'] | length == 1
+      when: 
+        - groups['all'] | length == 1
 
 - hosts: all
   order: inventory
@@ -133,7 +141,27 @@
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           Type 'YES' to apply optimizations, or press ENTER to skip:
       register: ss_final_confirm
-      when: groups['all'] | length == 1
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization is not defined or autoapply_ss_optimization == null
+
+    - name: Auto-apply Single-Server Optimization
+      set_fact:
+          ss_final_confirm:
+            user_input: 'YES'
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization is defined
+        - autoapply_ss_optimization == true
+
+    - name: Auto-skip Single-Server Optimization
+      set_fact:
+          ss_final_confirm:
+            user_input: ''
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization is defined
+        - autoapply_ss_optimization == false
 
     - name: Optimization Skipped Message
       debug:
