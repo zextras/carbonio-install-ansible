@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 * Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
 * Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`) and inventory hostname. Playbook now fails early if any mismatch is detected.
 * Changed Message Broker installation target from `masterDirectoryServers` to `serviceDiscoverServers[2]` when 3 or more servers are specified, with fallback to `serviceDiscoverServers[0]` when less than 2 servers are defined
+* Added validation for inventory values (hostnames, domains, and IP addresses) to prevent misconfigurations caused by INI parsing
 
 
 ### Bug Fixes
