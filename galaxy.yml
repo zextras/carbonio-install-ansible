@@ -43,6 +43,7 @@ tags: [zextras, carbonio]
 dependencies: 
   "community.postgresql": ">=3.13.0"
   "ansible.posix": ">=1.5.4"
+  "zxbot.sps_ansible_addons": ">=1.0.0"
 
 # The URL of the originating SCM repository
 repository: https://github.com/zextras/carbonio-install-ansible

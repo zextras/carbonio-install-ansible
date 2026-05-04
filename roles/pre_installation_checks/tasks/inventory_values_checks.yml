@@ -6,7 +6,7 @@
 - name: Validate inventory hostname
   ansible.builtin.assert:
     that:
-      - inventory_hostname is fqdn_check
+      - inventory_hostname is zxbot.sps_ansible_addons.fqdn_check
     fail_msg: >-
       Invalid syntax for inventory hostname '{{ inventory_hostname }}'.
       Inventory must contain valid FQDN values only.
@@ -17,7 +17,7 @@
 - name: Validate default_domain
   ansible.builtin.assert:
     that:
-      - default_domain is fqdn_check
+      - default_domain is zxbot.sps_ansible_addons.fqdn_check
     fail_msg: >-
       Invalid syntax for 'default_domain': '{{ default_domain | default("UNDEFINED") }}'.
       This variable must contain the default mail domain.
@@ -29,7 +29,7 @@
 - name: Validate webmailHostname
   ansible.builtin.assert:
     that:
-      - webmailHostname is fqdn_check
+      - webmailHostname is zxbot.sps_ansible_addons.fqdn_check
     fail_msg: >-
       Invalid syntax for 'webmailHostname': '{{ webmailHostname | default("UNDEFINED") }}'.
       This variable must contain the hostname used to access webmail.
@@ -41,7 +41,7 @@
 - name: Validate public_ip_address for video servers
   ansible.builtin.assert:
     that:
-      - public_ip_address is check
+      - public_ip_address is defined
       - public_ip_address | ansible.utils.ipaddr('address')
     fail_msg: >-
       Invalid syntax for 'public_ip_address': '{{ public_ip_address | default("") }}'.
