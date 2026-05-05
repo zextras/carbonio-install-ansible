@@ -31,6 +31,13 @@
           ============================================================
           Type 'YES' and press ENTER to accept and continue: 
       register: eula_acceptance
+      when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
+
+    - name: Auto-accept EULA
+      set_fact:
+          eula_acceptance:
+            user_input: 'YES'
+      when: carbonio_auto_accept_eula is defined and (carbonio_auto_accept_eula | bool)
 
     - name: Abort if EULA not accepted
       fail:
@@ -59,7 +66,8 @@
           Proceeding with all-in-one components setup.
           -------------------------------------------------------
           (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
-      when: groups['all'] | length == 1
+      when: 
+        - groups['all'] | length == 1
 
 - hosts: all
   order: inventory
@@ -133,7 +141,25 @@
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           Type 'YES' to apply optimizations, or press ENTER to skip:
       register: ss_final_confirm
-      when: groups['all'] | length == 1
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization | default('') | lower not in ['true', 'false', 'yes', 'no', '1', '0']
+
+    - name: Auto-apply Single-Server Optimization
+      set_fact:
+          ss_final_confirm:
+            user_input: 'YES'
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization | default('') | lower in ['true', 'yes', '1']
+
+    - name: Auto-skip Single-Server Optimization
+      set_fact:
+          ss_final_confirm:
+            user_input: ''
+      when: 
+        - groups['all'] | length == 1
+        - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
 
     - name: Optimization Skipped Message
       debug:
