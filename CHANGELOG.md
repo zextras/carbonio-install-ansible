@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 * Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`) and inventory hostname. Playbook now fails early if any mismatch is detected.
 * Changed Message Broker installation target from `masterDirectoryServers` to `serviceDiscoverServers[2]` when 3 or more servers are specified, with fallback to `serviceDiscoverServers[0]` when less than 2 servers are defined
 * Introduced --extra-vars support for carbonio_auto_accept_eula and autoapply_ss_optimization to enable non-interactive QA automation with a manual fallback for invalid inputs.
+* Added new pacakge carbonio-storage-ui for installation
 
 
 ### Bug Fixes
