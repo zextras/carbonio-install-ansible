@@ -86,6 +86,9 @@
   ws_ui_packages:
     - carbonio-ws-collaboration-ui
 
+  storage_ui_packages:
+    - carbonio-storages-ui
+
   docs_packages: 
     - carbonio-docs-connector
     - carbonio-docs-editor
