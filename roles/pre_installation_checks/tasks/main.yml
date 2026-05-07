@@ -9,6 +9,7 @@
   - import_tasks: consul_checks.yml
   - import_tasks: postgres_checks.yml
   - import_tasks: directory_server_checks.yml
+  - import_tasks: ansible_controller_dependencies.yml
   - import_tasks: inventory_values_checks.yml
   - import_tasks: single_server_checks.yml
     when: "groups['all'] | length == 1"

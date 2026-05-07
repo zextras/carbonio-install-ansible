@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 * Changed Message Broker installation target from `masterDirectoryServers` to `serviceDiscoverServers[2]` when 3 or more servers are specified, with fallback to `serviceDiscoverServers[0]` when less than 2 servers are defined
 * Added validation for inventory values (hostnames, domains, and IP addresses) to prevent misconfigurations caused by INI parsing
 * Introduced --extra-vars support for carbonio_auto_accept_eula and autoapply_ss_optimization to enable non-interactive QA automation with a manual fallback for invalid inputs.
+* Added netaddr dependency handling for inventory IP address validation
 
 
 ### Bug Fixes
