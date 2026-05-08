@@ -46,8 +46,17 @@
       - "{{ ws_ui_packages }}"        
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
-      - install-carbonio-proxy  
-  
+      - install-carbonio-proxy
+
+  - name: Install Carbonio storage UI Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ storage_ui_packages }}"        
+    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0
+    tags:
+      - install-carbonio-proxy
+    
 ######## RHEL
   - name: Install Carbonio Proxy an UIs RHEL
     become: true
@@ -93,3 +102,12 @@
     when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
+
+  - name: Install Carbonio storage UI RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ storage_ui_packages }}"        
+    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0
+    tags:
+      - install-carbonio-proxy

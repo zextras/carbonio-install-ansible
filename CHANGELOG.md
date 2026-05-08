@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 * Added validation for inventory values (hostnames, domains, and IP addresses) to prevent misconfigurations caused by INI parsing
 * Introduced --extra-vars support for carbonio_auto_accept_eula and autoapply_ss_optimization to enable non-interactive QA automation with a manual fallback for invalid inputs.
 * Added netaddr dependency handling for inventory IP address validation
+* Added new pacakge carbonio-storage-ui for installation
 
 
 ### Bug Fixes
