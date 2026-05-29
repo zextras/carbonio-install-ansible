@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file.
 * Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
 * Replaced ansible_facts.fqdn with inventory_hostname to avoid incorrect hostname resolution when hosts file entries are misconfigured
 * Fixed RHEL syslog configuration to enable and start the rsyslog service by default
-
+* Updated the `ansible.posix` dependency to version `2.2.0` to remove deprecation warnings related to the deprecated `to_native` import path in newer `ansible-core` versions.
 
 
 ### [26.3.1] (2026-03-24)
