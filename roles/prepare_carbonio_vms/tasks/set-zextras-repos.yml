@@ -5,10 +5,11 @@
 # Set Zextras repository
 ---
 - name: Update repositories (Ubuntu)
-  shell: "apt update"
+  become: true
+  ansible.builtin.shell: "apt update"
   when: ansible_facts.os_family == "Debian"
   register: update_result
-  tags: 
+  tags:
     - set-zextras-repos
 
 - name: Check for carbonio-* packages in repositories (Ubuntu)
@@ -49,29 +50,34 @@
   tags: 
     - set-zextras-repos
 
+- name: Ensure apt keyrings directory exists on Ubuntu
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
+- name: Download Zextras repository key on Ubuntu
+  become: true
+  ansible.builtin.get_url:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21"
+    dest: /etc/apt/keyrings/zextras.asc
+    mode: "0644"
+  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
 - name: Copy Zextras repository for Ubuntu
   become: true
   ansible.builtin.template:
     src: zextras.list.j2
     dest: /etc/apt/sources.list.d/zextras.list
+    mode: "0644"
   when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
-  tags: 
-    - set-zextras-repos
-
-- name: Add apt key by id from a keyserver [Ubuntu 20]
-  become: true
-  ansible.builtin.apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: '{{ repo_key }}'
-  when: ansible_facts.os_family == "Debian" and ansible_facts.distribution_major_version == "20" and carbonio_packages.rc == 1
-  tags: 
-    - set-zextras-repos
-
-- name: Add apt gpg key [Ubuntu 22] or [Ubuntu 24]
-  become: true
-  shell: "wget -O- 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21' | gpg --dearmor | sudo tee /usr/share/keyrings/zextras.gpg > /dev/null"
-  when: ansible_facts.os_family == "Debian" and (ansible_facts.distribution_major_version == "22" or ansible_facts.distribution_major_version == "24") and carbonio_packages.rc == 1
-  tags: 
+  tags:
     - set-zextras-repos
 
 - name: Update repos Ubuntu  
