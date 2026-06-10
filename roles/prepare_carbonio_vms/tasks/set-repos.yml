@@ -3,27 +3,40 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Create Postgres repo on Ubuntu
-    template:
-      src: postgres.list.j2
-      dest: /etc/apt/sources.list.d/pgdg.list
+  - name: Ensure apt keyrings directory exists on Ubuntu
+    become: true
+    ansible.builtin.file:
+      path: /etc/apt/keyrings
+      state: directory
+      mode: "0755"
     when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
     tags:
       - set-repos
- 
-  - name: Add apt key Postgres repo on Ubuntu
+
+  - name: Download PostgreSQL repository key on Ubuntu
     become: true
-    ansible.builtin.apt_key:
+    ansible.builtin.get_url:
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
-      state: present
+      dest: /etc/apt/keyrings/postgresql.asc
+      mode: "0644"
+    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
+    tags:
+      - set-repos
+      
+  - name: Create Postgres repo on Ubuntu
+    become: true
+    ansible.builtin.template:
+      src: postgres.list.j2
+      dest: /etc/apt/sources.list.d/pgdg.list
+      mode: "0644"
     when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"] or inventory_hostname in groups["workStreamServers"])
     tags:
       - set-repos
        
-  - name: Update repos   
+  - name: Update repos
     become: true
-    apt:
-      update_cache: yes
+    ansible.builtin.apt:
+      update_cache: true
     when: ansible_facts.os_family == "Debian"
     tags:
       - set-repos

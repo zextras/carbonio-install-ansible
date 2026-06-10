@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 * Replaced ansible_facts.fqdn with inventory_hostname to avoid incorrect hostname resolution when hosts file entries are misconfigured
 * Fixed RHEL syslog configuration to enable and start the rsyslog service by default
 * Updated the `ansible.posix` dependency to version `2.2.0` to remove deprecation warnings related to the deprecated `to_native` import path in newer `ansible-core` versions.
+* Replaced deprecated apt_key usage with keyring-based APT repository configuration for PostgreSQL and Zextras repositories.
 
 
 ### [26.3.1] (2026-03-24)
