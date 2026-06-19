@@ -9,7 +9,7 @@
       - "{{ chats_packages }}"
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
 
   - name: Install Message Dispatcher on Server [Ubuntu]
     become: true
@@ -18,7 +18,7 @@
       - "{{ message_dispatcher_packages }}"
     when: ansible_facts.os_family == "Debian" and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0]
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
 
 ### RHEL
   - name: Install Chats on Server [RHEL]
@@ -28,7 +28,7 @@
       - "{{ chats_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
 
   - name: Install Message Dispatcher on Server [RHEL]
     become: true
@@ -37,4 +37,4 @@
       - "{{ message_dispatcher_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0] 
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
