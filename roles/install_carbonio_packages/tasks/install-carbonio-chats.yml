@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-  - name: Install WorkStream on Server [Ubuntu]
+  - name: Install Chats on Server [Ubuntu]
     become: true
     apt: name={{ item }} state=present
     with_items:
-      - "{{ workstream_packages }}"
+      - "{{ chats_packages }}"
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
     tags:
       - install-carbonio-ws
@@ -21,11 +21,11 @@
       - install-carbonio-ws
 
 ### RHEL
-  - name: Install WorkStream on Server [RHEL]
+  - name: Install Chats on Server [RHEL]
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ workstream_packages }}"
+      - "{{ chats_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
     tags:
       - install-carbonio-ws

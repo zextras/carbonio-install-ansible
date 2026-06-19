@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-  - name: Install Notification Push on WSC Server [Ubuntu]
+  - name: Install Notification Push on Chats Server [Ubuntu]
     become: true
     apt: name={{ item }} state=present
     with_items:
@@ -15,7 +15,7 @@
       
 
 ### RHEL
-  - name: Install Notification Push on WSC Server [RHEL]
+  - name: Install Notification Push on Chats Server [RHEL]
     become: true
     yum: name={{ item }} state=present
     with_items:
