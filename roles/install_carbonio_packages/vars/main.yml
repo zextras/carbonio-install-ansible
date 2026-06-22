@@ -34,7 +34,7 @@
   message_dispatcher_dbconnectors_packages:
     - carbonio-message-dispatcher-db
 
-  chats_collaboration_dbconnectors_packages:
+  ws_collaboration_dbconnectors_packages:
     - carbonio-ws-collaboration-db
 
   notification_push_dbconnectors_packages:
@@ -83,7 +83,7 @@
   task_ui_packages:
       - carbonio-tasks-ui
   
-  chats_ui_packages:
+  ws_ui_packages:
     - carbonio-ws-collaboration-ui
 
   storage_ui_packages:
@@ -97,7 +97,7 @@
     - carbonio-videoserver-advanced
     - carbonio-videorecorder
 
-  chats_packages:
+  workstream_packages:
     - carbonio-ws-collaboration
 
   message_dispatcher_packages:

@@ -39,11 +39,11 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio chats UI Ubuntu
+  - name: Install Carbonio WSC UI Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
-      - "{{ chats_ui_packages }}"        
+      - "{{ ws_ui_packages }}"        
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy
@@ -94,11 +94,11 @@
     tags:
       - install-carbonio-proxy   
 
-  - name: Install Carbonio chats UI RHEL
+  - name: Install Carbonio WSC UI RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
-      - "{{ chats_ui_packages }}"        
+      - "{{ ws_ui_packages }}"        
     when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
