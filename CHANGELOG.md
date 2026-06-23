@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 * Updated the `ansible.posix` dependency to version `2.2.0` to remove deprecation warnings related to the deprecated `to_native` import path in newer `ansible-core` versions.
 * Replaced deprecated apt_key usage with keyring-based APT repository configuration for PostgreSQL and Zextras repositories.
 * Remove Postgres repository setup for WSC server, as the Postgres client is no longer required.
+* Replaced the word "WSC" with "Chats" in the names of some tasks where necessary to avoid inconsistencies
 
 
 ### [26.3.1] (2026-03-24)

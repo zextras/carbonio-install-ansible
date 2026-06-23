@@ -39,7 +39,7 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio ws UI Ubuntu
+  - name: Install Carbonio WSC UI Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
@@ -94,7 +94,7 @@
     tags:
       - install-carbonio-proxy   
 
-  - name: Install Carbonio ws UI RHEL
+  - name: Install Carbonio WSC UI RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
