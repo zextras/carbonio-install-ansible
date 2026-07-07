@@ -1,6 +1,6 @@
 # Zextras Carbonio Installation Ansible Collection
 
-This collection provides Ansible roles and playbooks to install and optimize Zextras Carbonio infrastructures.
+This collection provides Ansible roles and playbooks to install and optimize **Zextras Carbonio infrastructures**.
 It features an intelligent detection system that automatically adapts the installation flow based on your inventory.
 
 **Supported installation scenarios:**
