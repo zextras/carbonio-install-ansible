@@ -26,7 +26,7 @@ Supported installation scenarios:
 - **FQDN only:** All hosts must be defined using their fully qualified domain name (FQDN). The OS hostname (hostname -f) must match the inventory hostname exactly, or the early pre-check validation will fail.
 - All VMs must be preconfigured and reachable via SSH
 - Zextras repository must already be configured
-- If using a minimized Ubuntu installation, you must run ```bash unminimize ``` prior to executing the playbook.
+- If using a minimized Ubuntu installation, you must run ``` unminimize ``` prior to executing the playbook.
 
 
 ## Installation
