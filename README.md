@@ -24,9 +24,9 @@ It features an intelligent detection system that automatically adapts the instal
 - **FQDN only:** all hosts must be defined using FQDN in the inventory.
 - **Hostname consistency:** the OS hostname (`hostname -f`) must match the inventory hostname for each host. The playbook runs an early pre-check and fails on any mismatch.
 - All VMs must be preconfigured and reachable via SSH.
-- The Zextras repository must already be configured on all target hosts.
+- The playbook automatically configures the required Zextras repository on the target hosts if they are not already present. If repository have been manually configured, the playbook will use the existing configuration.
 - **Minimized Ubuntu installations are not supported as-is.** If a host is a minimized Ubuntu install, run `unminimize` on it before executing the playbook — the playbook detects this and fails with a descriptive message if it isn't done.
-- The `netaddr` Python module must be available on the control node (used to validate inventory hostnames, domains, and IP addresses).
+- The netaddr Python module (installed automatically by Ansible on the control node — if you're running Ansible from a Python virtual environment, install it manually with pip install netaddr inside that venv). Used to validate inventory hostnames, domains, and IP addresses
 
 ## Installation
 
@@ -90,7 +90,7 @@ This is an optional step available at the end of a single-server installation.
 both interactive prompts can be pre-answered via `--extra-vars`:
 
 ```
-ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install \
+ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
   -e carbonio_auto_accept_eula=true \
   -e autoapply_ss_optimization=true
 ```
@@ -111,8 +111,9 @@ srv1.example.com
 [masterDirectoryServers]
 srv1.example.com
 
+# Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
-# Custom default domain (optional) — replace domain.com with your desired domain
+# Replace domain.com with your desired domain
 #default_domain=domain.com
 
 [replicaDirectoryServers]
@@ -172,8 +173,9 @@ srv1.example.com
 [masterDirectoryServers]
 srv1.example.com
 
+# Custom Default Domain (Optional)
 [masterDirectoryServers:vars]
-# Custom default domain (optional) — replace domain.com with your desired domain
+# Replace domain.com with your desired domain
 #default_domain=domain.com
 
 [serviceDiscoverServers]
@@ -261,20 +263,20 @@ Extra-var. When `true`, skips the interactive single-server optimization confirm
 Standard interactive run:
 
 ```
-ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install
+ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install
 ```
 
 Non-interactive run:
 
 ```
-ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install \
+ansible-playbook -i -u root inventory zxbot.carbonio_install.carbonio_install \
   -e carbonio_auto_accept_eula=true \
   -e autoapply_ss_optimization=true
 ```
 
 ## License
 
-See `COPYING`.
+See [COPYING](COPYING.md)
 
-SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+SPDX-FileCopyrightText: 2024 Zextras https://www.zextras.com
 SPDX-License-Identifier: GPL-3.0-only
