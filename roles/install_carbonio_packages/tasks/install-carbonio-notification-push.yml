@@ -2,25 +2,25 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-  - name: Install Notification Push on WSC Server [Ubuntu]
+  - name: Install Notification Push [Ubuntu]
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ notification_push_packages }}"
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
       - install-carbonio-notification-push
 
       
 
 ### RHEL
-  - name: Install Notification Push on WSC Server [RHEL]
+  - name: Install Notification Push [RHEL]
     become: true
     yum: name={{ item }} state=present
     with_items:
       - "{{ notification_push_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
     tags:
-      - install-carbonio-ws
+      - install-carbonio-chats
       - install-carbonio-notification-push

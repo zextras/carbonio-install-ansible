@@ -65,7 +65,7 @@
     tags:
       - install-carbonio-dbconnectors
 
-  - name: Install ws collaboration db connector Ubuntu
+  - name: Install WSC db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
@@ -176,7 +176,7 @@
     tags:
       - install-carbonio-dbconnectors
 
-  - name: Install ws collaboration db connector RHEL
+  - name: Install WSC db connector RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
