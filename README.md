@@ -13,10 +13,10 @@ It features an intelligent detection system that automatically adapts the instal
 - [Installation](#installation)
 - [EULA Acceptance](#eula-acceptance)
 - [Deployment Modes](#deployment-modes)
-- [Non-Interactive / Automation Usage](#non-interactive--automation-usage)
 - [Inventory Configuration](#inventory-configuration)
 - [Important Variables](#important-variables)
 - [Usage](#usage)
+- [Non-Interactive / Automation Usage](#non-interactive--automation-usage)
 - [License](#license)
 
 ## Prerequisites
@@ -84,21 +84,6 @@ This is an optional step available at the end of a single-server installation.
 - If the inventory contains only one host → **Single-server mode**.
 - If the inventory contains multiple hosts → **Multi-server mode**.
 - Single-server optimization is never applied automatically and always requires explicit user confirmation (unless overridden — see below).
-
-## Non-Interactive / Automation Usage
-
-both interactive prompts can be pre-answered via `--extra-vars`:
-
-```
-ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
-  -e carbonio_auto_accept_eula=true \
-  -e autoapply_ss_optimization=true
-```
-
-- `carbonio_auto_accept_eula` — skips the EULA prompt when set to `true`.
-- `autoapply_ss_optimization` — skips the single-server optimization confirmation prompt when set to `true` (single-server mode only).
-
-If either value is invalid (not a recognized boolean), the playbook falls back to the manual/interactive prompt for that step.
 
 ## Inventory Configuration
 
@@ -273,6 +258,21 @@ ansible-playbook -i -u root inventory zxbot.carbonio_install.carbonio_install \
   -e carbonio_auto_accept_eula=true \
   -e autoapply_ss_optimization=true
 ```
+
+## Non-Interactive / Automation Usage
+
+both interactive prompts can be pre-answered via `--extra-vars`:
+
+```
+ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
+  -e carbonio_auto_accept_eula=true \
+  -e autoapply_ss_optimization=true
+```
+
+- `carbonio_auto_accept_eula` — skips the EULA prompt when set to `true`.
+- `autoapply_ss_optimization` — skips the single-server optimization confirmation prompt when set to `true` (single-server mode only).
+
+If either value is invalid (not a recognized boolean), the playbook falls back to the manual/interactive prompt for that step.
 
 ## License
 
