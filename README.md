@@ -27,7 +27,6 @@ It features an intelligent detection system that automatically adapts the instal
 - The Zextras repository must already be configured on all target hosts.
 - **Minimized Ubuntu installations are not supported as-is.** If a host is a minimized Ubuntu install, run `unminimize` on it before executing the playbook — the playbook detects this and fails with a descriptive message if it isn't done.
 - The `netaddr` Python module must be available on the control node (used to validate inventory hostnames, domains, and IP addresses).
-- Requires `ansible-core >= 2.24` and `ansible.posix >= 2.2.0` (see `requirements.yml`).
 
 ## Installation
 
