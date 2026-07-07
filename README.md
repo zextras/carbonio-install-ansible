@@ -35,7 +35,6 @@ It features an intelligent detection system that automatically adapts the instal
 ansible-galaxy collection install zxbot.carbonio_install
 ```
 
-> Verify this FQCN against the collection's `galaxy.yml` (`namespace.name`) before relying on it — confirm it hasn't changed across recent releases.
 
 ### Install from source
 
