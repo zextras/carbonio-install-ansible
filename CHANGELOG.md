@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. 
 
 
-### [26.6.0] (2026-06-10)
+### [26.6.0] (2026-07-07)
 
 ### Features
 * Added pre-check task to detect minimized Ubuntu installations and fail with a descriptive message instructing the user to run `unminimize` if needed
