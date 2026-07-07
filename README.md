@@ -27,6 +27,7 @@ Supported installation scenarios:
 - All VMs must be preconfigured and reachable via SSH
 - Zextras repository must already be configured
 - If using a minimized Ubuntu installation, you must run ``` unminimize ``` prior to executing the playbook.
+- If the videoServers group is declared in your inventory, the workStreamServers group must also be defined.
 
 
 ## Installation
