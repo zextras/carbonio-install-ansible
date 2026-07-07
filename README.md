@@ -76,8 +76,6 @@ This is an optional step available at the end of a single-server installation.
 
 - A confirmation prompt is shown.
 - The user must explicitly type `YES` to proceed.
-- The `single_server_setup` role is executed.
-- On Ubuntu 24 and RHEL 9, `carbonio-stats.service` is disabled as part of this optimization.
 
 **Important:** once single-server optimization is applied, it is **not possible** to scale this installation into multi-server in the future. Proceed with this option only if you are certain the system will remain single-server.
 
