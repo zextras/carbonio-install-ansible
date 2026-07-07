@@ -16,7 +16,7 @@
        - sysstat
        - jq
        - python3-psycopg2
-     when: ansible_os_family == "Debian"
+     when: ansible_facts.os_family == "Debian"
      tags:
         - set-os  
         
@@ -33,7 +33,7 @@
        - sysstat
        - jq
        - python3-psycopg2
-     when: ansible_os_family == "RedHat"
+     when: ansible_facts.os_family == "RedHat"
      tags:
         - set-os 
        

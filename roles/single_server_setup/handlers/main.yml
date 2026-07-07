@@ -1,0 +1,12 @@
+---
+# handlers file for single_server_setup
+  - name: restart_service_discover
+    ansible.builtin.service:
+      name: service-discover
+      state: restarted
+
+  - name: restart_postgres
+    service: name={{ postgresql_service_name }} state=restarted
+
+  - name: restart_postgres_rhel
+    service: name={{ rhel_postgresql_service_name }} state=restarted

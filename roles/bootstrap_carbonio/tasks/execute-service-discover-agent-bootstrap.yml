@@ -20,7 +20,7 @@
     
   - name: run Service Discover Agents Bootstrap
     become: true
-    command: /usr/bin/service-discover setup {{ ansible_default_ipv4.address }} --password {{ carbonio_mesh_password }}
+    command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
     when: inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists 
     tags:
       - service-discover-agent-bootstrap

@@ -8,7 +8,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ syslog_packages }}"    
-    when: ansible_os_family == "Debian" and inventory_hostname in groups["syslogServer"]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["syslogServer"]
     tags:
       - install-carbonio-syslog
       
@@ -16,6 +16,6 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ syslog_packages }}"    
-    when: (ansible_os_family == "RedHat" or ansible_os_family == "CentOS") and inventory_hostname in groups["syslogServer"]
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["syslogServer"]
     tags:
       - install-carbonio-syslog

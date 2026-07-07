@@ -3,6 +3,37 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.6.0] (2026-07-07)
+
+### Features
+* Added pre-check task to detect minimized Ubuntu installations and fail with a descriptive message instructing the user to run `unminimize` if needed
+* Added EULA acceptance prompt as the first step of the Carbonio installation playbook
+* Integrated Single Server installation support into the `carbonio-install-ansible` playbook
+* Added automatic installation mode detection based on the inventory
+* Added support for Single Server standard and optimized installation flows
+* Added explicit confirmation step for Single Server optimization
+* Introduced validation for unsupported groups in Single Server mode
+* Marked `prometheusServers` as an optional component in Single Server mode
+* Added disabling of carbonio-stats.service during single-server optimization on Ubuntu 24 and RHEL 9.
+* Added FQDN pre-check task to validate consistency between OS hostname (`hostname -f`) and inventory hostname. Playbook now fails early if any mismatch is detected.
+* Changed Message Broker installation target from `masterDirectoryServers` to `serviceDiscoverServers[2]` when 3 or more servers are specified, with fallback to `serviceDiscoverServers[0]` when less than 2 servers are defined
+* Added validation for inventory values (hostnames, domains, and IP addresses) to prevent misconfigurations caused by INI parsing
+* Introduced --extra-vars support for carbonio_auto_accept_eula and autoapply_ss_optimization to enable non-interactive QA automation with a manual fallback for invalid inputs.
+* Added netaddr dependency handling for inventory IP address validation
+* Added new pacakge carbonio-storage-ui for installation
+
+
+### Bug Fixes
+* Fixed deprecated ansible_* facts usage by migrating to ansible_facts for compatibility with ansible-core 2.24
+* Replaced ansible_facts.fqdn with inventory_hostname to avoid incorrect hostname resolution when hosts file entries are misconfigured
+* Fixed RHEL syslog configuration to enable and start the rsyslog service by default
+* Updated the `ansible.posix` dependency to version `2.2.0` to remove deprecation warnings related to the deprecated `to_native` import path in newer `ansible-core` versions.
+* Replaced deprecated apt_key usage with keyring-based APT repository configuration for PostgreSQL and Zextras repositories.
+* Remove Postgres repository setup for WSC server, as the Postgres client is no longer required.
+* Replaced the word "WSC" with "Chats" in the names of some tasks where necessary to avoid inconsistencies
+* Added a workaround to restart AppServer after configuring `zimbraPublicServiceHostname`, preventing incorrect redirects
+
+
 ### [26.3.1] (2026-03-24)
 
 

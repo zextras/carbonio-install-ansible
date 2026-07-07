@@ -1,0 +1,10 @@
+
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+# tasks file for single_server_setup
+
+  - import_tasks: execute-carbonio-reconfig.yml
+  - import_tasks: disable-units.yml

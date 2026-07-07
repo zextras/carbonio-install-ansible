@@ -1,0 +1,138 @@
+# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+
+- name: Check if Ansible is running from a Python virtual environment
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - "-c"
+      - "import sys; print(sys.prefix != sys.base_prefix)"
+  register: ansible_venv_check
+  changed_when: false
+  failed_when: false
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Check netaddr Python dependency on Ansible controller
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - "-c"
+      - "import netaddr"
+  register: netaddr_check
+  changed_when: false
+  failed_when: false
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Fail when netaddr is missing in Python virtual environment
+  ansible.builtin.fail:
+    msg: >-
+      The Python library 'netaddr' is required on the Ansible controller
+      for inventory IP address validation. Ansible is currently executed from
+      a Python virtual environment, so the dependency must be installed manually
+      in the same virtual environment before running the playbook.
+
+      Current Ansible Python interpreter:
+      {{ ansible_playbook_python }}
+
+      Install it with:
+      {{ ansible_playbook_python }} -m pip install netaddr
+  when:
+    - netaddr_check.rc != 0
+    - ansible_venv_check.stdout | trim == 'True'
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Warn that netaddr dependency will be installed on Ansible controller
+  ansible.builtin.debug:
+    msg: >-
+      The Python library 'netaddr' is required on the Ansible controller
+      for inventory IP address validation. It is missing and will be installed
+      before running inventory checks.
+  when:
+    - netaddr_check.rc != 0
+    - ansible_venv_check.stdout | trim != 'True'
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Gather facts from Ansible controller
+  ansible.builtin.setup:
+    gather_subset:
+      - "!all"
+      - "min"
+  when:
+    - netaddr_check.rc != 0
+    - ansible_venv_check.stdout | trim != 'True'
+  run_once: true
+  delegate_to: localhost
+  delegate_facts: true
+  become: false
+
+- name: Install netaddr dependency on Ubuntu Ansible controller
+  ansible.builtin.apt:
+    name: python3-netaddr
+    state: present
+    update_cache: true
+  when:
+    - netaddr_check.rc != 0
+    - ansible_venv_check.stdout | trim != 'True'
+    - hostvars['localhost'].ansible_facts['os_family'] == 'Debian'
+  run_once: true
+  delegate_to: localhost
+  become: true
+
+- name: Install netaddr dependency on RHEL Ansible controller
+  ansible.builtin.dnf:
+    name: python3-netaddr
+    state: present
+  when:
+    - netaddr_check.rc != 0
+    - ansible_venv_check.stdout | trim != 'True'
+    - hostvars['localhost'].ansible_facts['os_family'] == 'RedHat'
+  run_once: true
+  delegate_to: localhost
+  become: true
+
+- name: Re-check netaddr Python dependency on Ansible controller
+  ansible.builtin.command:
+    argv:
+      - "{{ ansible_playbook_python }}"
+      - "-c"
+      - "import netaddr"
+  register: netaddr_recheck
+  changed_when: false
+  failed_when: false
+  when: netaddr_check.rc != 0
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Fail if netaddr is still missing
+  ansible.builtin.fail:
+    msg: >-
+      Failed to import the required Python library 'netaddr' using the current
+      Ansible Python interpreter: {{ ansible_playbook_python }}.
+
+      Please install it manually for the same interpreter.
+
+      For system Ansible:
+      apt install -y python3-netaddr
+      or
+      dnf install -y python3-netaddr
+
+      For virtualenv-based Ansible:
+      {{ ansible_playbook_python }} -m pip install netaddr
+  when:
+    - netaddr_check.rc != 0
+    - netaddr_recheck.rc != 0
+  run_once: true
+  delegate_to: localhost
+  become: false
