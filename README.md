@@ -87,7 +87,7 @@ This is an optional step available at the end of a single-server installation.
 
 ## Non-Interactive / Automation Usage
 
-For CI/QA pipelines, both interactive prompts can be pre-answered via `--extra-vars`:
+both interactive prompts can be pre-answered via `--extra-vars`:
 
 ```
 ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install \
@@ -264,7 +264,7 @@ Standard interactive run:
 ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install
 ```
 
-Non-interactive/CI run:
+Non-interactive run:
 
 ```
 ansible-playbook -i inventory zxbot.carbonio_install.carbonio_install \
