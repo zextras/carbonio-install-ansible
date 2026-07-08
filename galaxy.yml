@@ -42,7 +42,7 @@ tags: [zextras, carbonio]
 # range specifiers can be set and are separated by ','
 dependencies: 
   "community.postgresql": ">=3.13.0"
-  "ansible.posix": ">=1.5.4"
+  "ansible.posix": ">=2.2.0"
   "zxbot.sps_ansible_addons": ">=1.0.0"
 
 # The URL of the originating SCM repository
