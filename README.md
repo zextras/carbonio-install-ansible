@@ -30,17 +30,6 @@ It features an intelligent detection system that automatically adapts the instal
 
 ## Installation
 
-## Prerequisites
-
-- **FQDN only:** All hosts must be defined using FQDN
-- All VMs must be preconfigured and reachable via SSH
-- Zextras repository must already be configured
-
-
-## Installation
-
-```bash
-ansible-galaxy collection install zxbot.carbonio_install
 ```
 ansible-galaxy collection install zxbot.carbonio_install
 ```
