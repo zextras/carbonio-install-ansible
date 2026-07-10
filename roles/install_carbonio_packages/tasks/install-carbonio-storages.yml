@@ -10,7 +10,7 @@
     state: present
   when:
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups['filesServers'] or (groups['filesServers'] | length == 0 and inventory_hostname in groups['applicationServers'])
+    - inventory_hostname in groups['mtaServers'] or inventory_hostname in groups['filesServers']
   tags:
     - install-carbonio-storages
 
@@ -22,7 +22,7 @@
     name: "{{ carbonio_storages_packages }}"
     state: present
   when:
-    - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups['filesServers'] or ( groups['filesServers'] | length == 0 and inventory_hostname in groups['applicationServers'])
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups['mtaServers'] or inventory_hostname in groups['filesServers']
   tags:
     - install-carbonio-storages

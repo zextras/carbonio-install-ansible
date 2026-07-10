@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 
 ### Bug Fixes
-* Updated the carbonio-storages installation logic to install the package on application servers when the filesServers inventory group is empty. This ensures that the mandatory carbonio-storages service is always installed in deployments without dedicated Files nodes
+* Updated the carbonio-storages installation logic to install the package on all MTA nodes and, when configured, on dedicated Files nodes. This ensures that carbonio-storages is installed on MTA servers even when the filesServers inventory group is empty
 
 
 ### [26.6.0] (2026-07-07)
