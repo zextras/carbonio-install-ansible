@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.6.1] (2026-07-10)
+
+
+### Bug Fixes
+* Updated the carbonio-storages installation logic to install the package on all MTA nodes and, when configured, on dedicated Files nodes. This ensures that carbonio-storages is installed on MTA servers even when the filesServers inventory group is empty
+
+
 ### [26.6.0] (2026-07-07)
+
 
 ### Features
 * Added pre-check task to detect minimized Ubuntu installations and fail with a descriptive message instructing the user to run `unminimize` if needed
