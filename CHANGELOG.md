@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.9.0] (2026-09-01)
+
+
+### Features
+* Added installation and database bootstrap support for the new carbonio-preview-db package.
+
+
 ### [26.6.1] (2026-07-10)
 
 

@@ -56,7 +56,18 @@
       - groups['docsServers'] | length > 0 
     tags:
       - db-connectors-bootstrap
-     
+
+  - name: run preview-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: true
+    command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['previewServers'] | length > 0
+    tags:
+      - db-connectors-bootstrap
+      
   - name: run tasks-connector-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
