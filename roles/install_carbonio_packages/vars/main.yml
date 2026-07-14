@@ -25,6 +25,9 @@
   docs_dbconnectors_packages: 
     - carbonio-docs-connector-db
 
+  preview_dbconnectors_packages:
+    - carbonio-preview-db
+
   task_dbconnectors_packages:
     - carbonio-tasks-db
 

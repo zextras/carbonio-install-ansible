@@ -2,39 +2,51 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
----        
+---
   - name: Install mailbox db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ mailbox_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups['postgresServers'][0] 
+      - inventory_hostname in groups['postgresServers'][0]
     tags:
       - install-carbonio-dbconnectors
-     
+
   - name: Install files db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ files_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
       - inventory_hostname in groups['postgresServers'][0]
       - groups['filesServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
-      
+
   - name: Install docs db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
       - inventory_hostname in groups['postgresServers'][0]
-      - groups['docsServers'] | length > 0 
+      - groups['docsServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors
+
+  - name: Install preview db connector Ubuntu
+    become: true
+    apt: name={{ item }} state=present
+    with_items:
+      - "{{ preview_dbconnectors_packages }}"
+    when:
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['previewServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
@@ -43,25 +55,22 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
       - inventory_hostname in groups['postgresServers'][0]
       - groups['taskServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
-      
+
   - name: Install message dispatcher db connector Ubuntu
     become: true
     apt: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
@@ -70,13 +79,10 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ ws_collaboration_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
@@ -85,13 +91,10 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ notification_push_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       - install-carbonio-notification-push
@@ -101,19 +104,17 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ videorecorder_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "Debian"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['videoServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['videoServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       - install-carbonio-videoserver
 
-      
+
 ##### RHEL
+
   - name: Install mailbox db connector RHEL
     become: true
     yum: name={{ item }} state=present
@@ -124,7 +125,7 @@
       - inventory_hostname in groups['postgresServers'][0]
     tags:
       - install-carbonio-dbconnectors
-     
+
   - name: Install files db connector RHEL
     become: true
     yum: name={{ item }} state=present
@@ -133,28 +134,40 @@
     when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
       - inventory_hostname in groups['postgresServers'][0]
-      - groups['filesServers'] | length > 0 
+      - groups['filesServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
-      
+
   - name: Install docs db connector RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
       - inventory_hostname in groups['postgresServers'][0]
       - groups['docsServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
-      
+
+  - name: Install preview db connector RHEL
+    become: true
+    yum: name={{ item }} state=present
+    with_items:
+      - "{{ preview_dbconnectors_packages }}"
+    when:
+      - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['previewServers'] | length > 0
+    tags:
+      - install-carbonio-dbconnectors
+
   - name: Install tasks db connector RHEL
     become: true
     yum: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
       - inventory_hostname in groups['postgresServers'][0]
       - groups['taskServers'] | length > 0
@@ -166,13 +179,10 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        ) 
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
@@ -181,13 +191,10 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ ws_collaboration_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        ) 
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
 
@@ -196,13 +203,10 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ notification_push_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        ) 
-      - groups['workStreamServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['workStreamServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       - install-carbonio-notification-push
@@ -212,13 +216,10 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ videorecorder_dbconnectors_packages }}"
-    when: 
+    when:
       - ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS"
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        ) 
-      - groups['videoServers'] | length > 0 
+      - inventory_hostname in groups['postgresServers'][0]
+      - groups['videoServers'] | length > 0
     tags:
       - install-carbonio-dbconnectors
       - install-carbonio-videoserver
