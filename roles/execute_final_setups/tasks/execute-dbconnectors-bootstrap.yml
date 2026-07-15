@@ -13,7 +13,7 @@
     retries: 20
     delay: 3
     when:
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
     tags:
       - db-connectors-bootstrap
       
@@ -21,7 +21,7 @@
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when: 
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
     tags:
       - db-connectors-bootstrap
 
@@ -31,7 +31,7 @@
     command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
     become: true
     when: 
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
     tags:
       - db-connectors-bootstrap
       
@@ -41,7 +41,7 @@
     command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
     become: true
     when: 
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
       - groups['filesServers'] | length > 0
     tags:
       - db-connectors-bootstrap
@@ -52,7 +52,7 @@
     become: true
     command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
     when: 
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
       - groups['docsServers'] | length > 0 
     tags:
       - db-connectors-bootstrap
@@ -63,7 +63,7 @@
     become: true
     command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
     when:
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
       - groups['previewServers'] | length > 0
     tags:
       - db-connectors-bootstrap
@@ -74,7 +74,7 @@
     become: true
     command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
     when: 
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups['postgresServers'][0]
       - groups['taskServers'] | length > 0
     tags:
       - db-connectors-bootstrap
@@ -86,7 +86,7 @@
     command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (inventory_hostname == groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
           (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
         )
       - groups['workStreamServers'] | length > 0
@@ -100,7 +100,7 @@
     command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (inventory_hostname == groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
           (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
         )
       - groups['workStreamServers'] | length > 0
@@ -114,7 +114,7 @@
     command: /usr/bin/carbonio-notification-push-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (inventory_hostname == groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
           (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
         )
       - groups['workStreamServers'] | length > 0
@@ -129,7 +129,7 @@
     command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
+          (inventory_hostname == groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
           (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
         )
       - groups['videoServers'] | length > 0

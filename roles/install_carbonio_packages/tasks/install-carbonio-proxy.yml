@@ -17,7 +17,7 @@
     apt: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["proxyServers"][0]
+    when: ansible_facts.os_family == "Debian" and inventory_hostname == groups['proxyServers'][0]
     tags:
       - install-carbonio-proxy
 
@@ -72,7 +72,7 @@
     yum: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["proxyServers"][0]
+    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname == groups['proxyServers'][0]
     tags:
       - install-carbonio-proxy
 
