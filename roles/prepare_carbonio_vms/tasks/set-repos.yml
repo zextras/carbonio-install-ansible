@@ -9,7 +9,9 @@
       path: /etc/apt/keyrings
       state: directory
       mode: "0755"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when:
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
 
@@ -19,7 +21,7 @@
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
       dest: /etc/apt/keyrings/postgresql.asc
       mode: "0644"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
       
@@ -29,7 +31,7 @@
       src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
       mode: "0644"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
        
@@ -356,14 +358,14 @@
       name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_facts.distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
       state: present
       disable_gpg_check : true
-    when: ansible_facts.os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
 
   - name: Disable the postgresql stream module in AppStream
     become: true
     command: '/usr/bin/dnf -qy module disable postgresql'
-    when: ansible_facts.os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
        
