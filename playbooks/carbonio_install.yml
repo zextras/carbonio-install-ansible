@@ -69,6 +69,13 @@
       when: 
         - groups['all'] | length == 1
 
+- name: Prepare Ansible controller
+  hosts: localhost
+  connection: local
+  gather_facts: true
+  roles:
+    - ../roles/prepare_ansible_controller
+    
 - hosts: all
   order: inventory
   gather_facts: yes
