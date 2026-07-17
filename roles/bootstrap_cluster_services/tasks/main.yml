@@ -8,4 +8,5 @@
   - import_tasks: execute-master-directory-bootstrap.yml
   - import_tasks: execute-replica-directory-bootstrap.yml
   - import_tasks: initialize-postgres.yml
+  - import_tasks: configure-postgres.yml
   - import_tasks: execute-service-discover-bootstrap.yml
