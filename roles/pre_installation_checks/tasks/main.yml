@@ -5,7 +5,7 @@
 ---
 - ansible.builtin.import_tasks: validate_inventory_chats.yml
 - ansible.builtin.import_tasks: validate_inventory_db_connectors.yml
-- ansible.builtin.import_tasks: validate_inventory_service_discovery.yml
+- ansible.builtin.import_tasks: validate_inventory_consul.yml
 - ansible.builtin.import_tasks: validate_inventory_postgresql.yml
 - ansible.builtin.import_tasks: validate_inventory_directory.yml
 - ansible.builtin.import_tasks: validate_inventory_values.yml

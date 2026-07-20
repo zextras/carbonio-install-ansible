@@ -49,7 +49,7 @@
   become: yes
   become_user: postgres
   notify: restart_postgres-rhel
-  when: ansible_facts.os_family == "Redhat" and inventory_hostname in groups["postgresServers"]
+  when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
