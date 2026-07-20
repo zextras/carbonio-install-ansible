@@ -83,7 +83,7 @@
 - name: Update repos Ubuntu  
   become: true
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   when: ansible_facts.os_family == "Debian"
   tags: 
     - set-zextras-repos
@@ -93,7 +93,7 @@
 - name: Update repos RHEL  
   become: true
   ansible.builtin.yum:
-    update_cache: yes
+    update_cache: true
   when: ansible_facts.os_family == "RedHat"
   tags: 
     - set-zextras-repos
@@ -155,7 +155,7 @@
 - name: Update repos RHEL  
   become: true
   ansible.builtin.yum:
-    update_cache: yes
+    update_cache: true
   when: ansible_facts.os_family == "RedHat"
   tags: 
     - set-zextras-repos

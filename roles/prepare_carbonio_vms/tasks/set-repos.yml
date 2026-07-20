@@ -179,7 +179,7 @@
     ansible.builtin.yum:
       name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
       state: present
-      update_cache: yes
+      update_cache: true
       disable_gpg_check: true
     when:
       - ansible_facts.os_family == "RedHat"
@@ -328,7 +328,7 @@
     ansible.builtin.yum:
       name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
       state: present
-      update_cache: yes
+      update_cache: true
       disable_gpg_check: true
     when:
       - ansible_facts.os_family == "RedHat"

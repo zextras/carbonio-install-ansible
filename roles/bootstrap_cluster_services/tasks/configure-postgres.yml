@@ -6,7 +6,7 @@
 - name: "Change scram-sha-256 to md5"
   ansible.builtin.shell:
     cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   tags:
@@ -15,7 +15,7 @@
 - name: "Change scram-sha-256 to md5 RHEL"
   ansible.builtin.shell:
     cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   tags:
@@ -30,7 +30,7 @@
     users: "all"
     source: "0.0.0.0/0"
     create: true
-  become: yes
+  become: true
   become_user: postgres
   notify: restart_postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
@@ -46,7 +46,7 @@
     users: "all"
     source: "0.0.0.0/0"
     create: true
-  become: yes
+  become: true
   become_user: postgres
   notify: restart_postgres-rhel
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
@@ -69,7 +69,7 @@
   community.postgresql.postgresql_alter_system:
     param: listen_addresses
     value: "*"
-  become: yes
+  become: true
   become_user: postgres
   notify: restart_postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
@@ -80,7 +80,7 @@
   community.postgresql.postgresql_alter_system:
     param: port
     value: 5432
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
@@ -91,7 +91,7 @@
   community.postgresql.postgresql_alter_system:
     param: max_connections
     value: 500
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
@@ -109,7 +109,7 @@
   community.postgresql.postgresql_alter_system:
     param: shared_buffers
     value: "{{ ram_size_mb }}"
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
@@ -120,7 +120,7 @@
   community.postgresql.postgresql_alter_system:
     param: listen_addresses
     value: "*"
-  become: yes
+  become: true
   become_user: postgres
   notify: restart_postgres-rhel
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
@@ -131,7 +131,7 @@
   community.postgresql.postgresql_alter_system:
     param: port
     value: 5432
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
@@ -142,7 +142,7 @@
   community.postgresql.postgresql_alter_system:
     param: max_connections
     value: 500
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
@@ -160,7 +160,7 @@
   community.postgresql.postgresql_alter_system:
     param: shared_buffers
     value: "{{ ram_size_mb }}"
-  become: yes
+  become: true
   become_user: postgres
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel

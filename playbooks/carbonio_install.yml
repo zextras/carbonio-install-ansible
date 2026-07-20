@@ -4,7 +4,7 @@
 
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: false
   run_once: true
   tasks:
     - name: EULA Acceptance
@@ -78,7 +78,7 @@
     
 - hosts: all
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/pre_installation_checks
      - ../roles/prepare_carbonio_vms
@@ -87,27 +87,27 @@
 - hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/bootstrap_cluster_services
 
 - hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/bootstrap_cluster_services
 
 - hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/bootstrap_carbonio
      - ../roles/execute_final_setups
 
 - hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers, !videoServers
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/bootstrap_carbonio
      - ../roles/execute_final_setups
@@ -115,14 +115,14 @@
 - hosts: videoServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
      - ../roles/bootstrap_carbonio
      - ../roles/execute_final_setups
 
 - hosts: all
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   tasks: 
     - name: Update auth keys
       become: true
@@ -132,7 +132,7 @@
 
 - hosts: all
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   tasks:
     - name: Single-Server Optimization Confirmation
       ansible.builtin.pause:

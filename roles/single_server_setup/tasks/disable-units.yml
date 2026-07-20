@@ -20,7 +20,7 @@
       state: absent
     with_items:
       - "{{ hcl_paths }}"
-    become: yes
+    become: true
     when: inventory_hostname in groups["mtaServers"]
     tags:
       - disable-unnecessary-services
@@ -61,7 +61,7 @@
   # - name: Stop and disable carbonio-prometheus services
   #   shell: "systemctl stop {{ item }} && systemctl mask {{ item }}"
   #   loop: "{{ services_list.stdout_lines }}"
-  #   become: yes
+  #   become: true
 
   - name: Disable carbonio-stats service on Ubuntu 24 and RHEL 9
     become: true
