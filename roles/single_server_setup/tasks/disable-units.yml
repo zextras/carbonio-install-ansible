@@ -37,7 +37,7 @@
   - name: Notify if no carbonio-prometheus services found
     ansible.builtin.debug:
       msg: "No carbonio-prometheus services found."
-    when: 
+    when:
       - groups['prometheusServers'] | length == 0 
       - services_list is defined
       - services_list.stdout_lines | length == 0
@@ -50,7 +50,7 @@
       state: stopped
       enabled: false
     loop: "{{ services_list.stdout_lines }}"
-    when: 
+    when:
       - groups['prometheusServers'] | length == 0
       - services_list is defined
       - services_list.stdout_lines | length > 0
