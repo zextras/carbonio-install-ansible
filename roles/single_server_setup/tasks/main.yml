@@ -6,5 +6,5 @@
 ---
 # tasks file for single_server_setup
 
-  - import_tasks: execute-carbonio-reconfig.yml
-  - import_tasks: disable-units.yml
+  - ansible.builtin.import_tasks: execute-carbonio-reconfig.yml
+  - ansible.builtin.import_tasks: disable-units.yml

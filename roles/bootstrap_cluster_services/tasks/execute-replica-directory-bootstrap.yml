@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
     register: glc  
     when: inventory_hostname in groups["replicaDirectoryServers"] and inventory_hostname not in groups["masterDirectoryServers"]
     tags:
@@ -20,14 +20,14 @@
     tags:
       - replica-directory-bootstrap
       
-  - debug:
+  - ansible.builtin.debug:
       msg: "Carbonio bootstrap never performed" 
     when: glc is search("localhost") and inventory_hostname in groups["replicaDirectoryServers"] and inventory_hostname not in groups["masterDirectoryServers"]
     tags:
       - replica-directory-bootstrap
     
   - name: Create config file
-    template:
+    ansible.builtin.template:
       src: carbonio-config.txt.j2
       dest: /tmp/carbonio-config.txt
     when: glc is search("localhost") and inventory_hostname in groups["replicaDirectoryServers"] and inventory_hostname not in groups["masterDirectoryServers"]
@@ -36,7 +36,7 @@
       
   - name: run Carbonio Replica Directory Bootstrap
     become: true
-    command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
+    ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when: glc is search("localhost") and inventory_hostname in groups["replicaDirectoryServers"] and inventory_hostname not in groups["masterDirectoryServers"]
     tags:
       - replica-directory-bootstrap

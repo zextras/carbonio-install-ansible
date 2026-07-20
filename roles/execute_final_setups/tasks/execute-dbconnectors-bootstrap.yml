@@ -28,7 +28,7 @@
   - name: run mailbox db-connectors Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
+    ansible.builtin.command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
     become: true
     when: 
       - inventory_hostname == groups['postgresServers'][0]
@@ -38,7 +38,7 @@
   - name: run files-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
+    ansible.builtin.command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
     become: true
     when: 
       - inventory_hostname == groups['postgresServers'][0]
@@ -50,7 +50,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['docsServers'] | length > 0 
@@ -61,7 +61,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
     when:
       - inventory_hostname == groups['postgresServers'][0]
       - groups['previewServers'] | length > 0
@@ -72,7 +72,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['taskServers'] | length > 0
@@ -83,7 +83,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['workStreamServers'] | length > 0
@@ -94,7 +94,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['workStreamServers'] | length > 0
@@ -105,7 +105,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-notification-push-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-notification-push-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['workStreamServers'] | length > 0
@@ -117,7 +117,7 @@
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
+    ansible.builtin.command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
     when: 
       - inventory_hostname == groups['postgresServers'][0]
       - groups['videoServers'] | length > 0

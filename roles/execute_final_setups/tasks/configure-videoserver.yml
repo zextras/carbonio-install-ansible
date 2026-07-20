@@ -4,7 +4,7 @@
 
 ---
   - name: Configure nat_1_1_mapping on janus.jcfg
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/janus/janus.jcfg
       regexp: '^\s*nat_1_1_mapping\s*='
       line: '        nat_1_1_mapping = "{{ hostvars[inventory_hostname].public_ip_address }}"'

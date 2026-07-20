@@ -18,7 +18,7 @@
     - check-hostname-fqdn
 
 - name: "FQDN CHECK | Fail if OS hostname does not match inventory FQDN"
-  fail:
+  ansible.builtin.fail:
     msg: >-
       FQDN MISMATCH on {{ inventory_hostname }} | 
       OS: {{ fqdn_os }} | Expected: {{ ansible_host_fqdn }}

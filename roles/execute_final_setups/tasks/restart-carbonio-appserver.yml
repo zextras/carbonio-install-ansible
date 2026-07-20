@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/zmmailboxdctl restart'
+    ansible.builtin.command: '/opt/zextras/bin/zmmailboxdctl restart'
     when: inventory_hostname in groups["applicationServers"] and ansible_facts.distribution_major_version != "9" and ansible_facts.distribution_major_version != "24"
     register: appserver_status
     changed_when: appserver_status.rc == 0
@@ -16,7 +16,7 @@
 
   - name: Restart application services [Sysd]
     become: true
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       name: carbonio-appserver.target
       state: restarted
     when: inventory_hostname in groups["applicationServers"] and (ansible_facts.distribution_major_version == "9" or ansible_facts.distribution_major_version == "24")
@@ -27,7 +27,7 @@
 
   - name: Debug restart application service
     when: inventory_hostname in groups["applicationServers"] and ansible_facts.distribution_major_version != "9" and ansible_facts.distribution_major_version != "24"
-    debug:
+    ansible.builtin.debug:
       msg: "{{ appserver_status.stdout }}"
 
 

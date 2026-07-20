@@ -4,7 +4,7 @@
 
 ---
   - name: Get cluster-credentials.tar.gpg to check if already boostraped
-    stat:
+    ansible.builtin.stat:
       path: /etc/zextras/service-discover/cluster-credentials.tar.gpg
     register: sdb  
     when: inventory_hostname not in groups["serviceDiscoverServers"]
@@ -20,7 +20,7 @@
     
   - name: run Service Discover Agents Bootstrap
     become: true
-    command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
+    ansible.builtin.command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
     when: inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists 
     tags:
       - service-discover-agent-bootstrap

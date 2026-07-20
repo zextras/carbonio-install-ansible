@@ -47,7 +47,7 @@
 
   - name: Enable powertools or crb 
     become: true
-    command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_facts.distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
+    ansible.builtin.command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_facts.distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
     when: ansible_facts.distribution == "Rocky"
     tags:
       - set-repos 
@@ -364,7 +364,7 @@
 
   - name: Disable the postgresql stream module in AppStream
     become: true
-    command: '/usr/bin/dnf -qy module disable postgresql'
+    ansible.builtin.command: '/usr/bin/dnf -qy module disable postgresql'
     when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups['postgresServers']
     tags:
       - set-repos

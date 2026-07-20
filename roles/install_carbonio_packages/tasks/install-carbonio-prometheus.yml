@@ -5,7 +5,7 @@
 ---
   - name: Install Carbonio Prometheus Server Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ prometheus_packages }}"
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
@@ -14,7 +14,7 @@
       
   - name: Install Carbonio Prometheus Server RH
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ prometheus_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 
@@ -23,7 +23,7 @@
 
         #  - name: Install Carbonio Grafana Server Ubuntu
         # become: true
-        #apt: name={{ item }} state=present
+        #ansible.builtin.apt: name={{ item }} state=present
         #with_items:
         # - "{{ grafana_packages }}"
         #when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["prometheusServers"] 
@@ -32,7 +32,7 @@
       
         # - name: Install Carbonio Grafana Server RH
         #become: true
-        # yum: name={{ item }} state=present
+        # ansible.builtin.yum: name={{ item }} state=present
         # with_items:
         # - "{{ grafana_packages }}"
         #when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["prometheusServers"] 

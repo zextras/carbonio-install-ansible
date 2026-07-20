@@ -6,7 +6,7 @@
       state: restarted
 
   - name: restart_postgres
-    service: name={{ postgresql_service_name }} state=restarted
+    ansible.builtin.service: name={{ postgresql_service_name }} state=restarted
 
   - name: restart_postgres_rhel
-    service: name={{ rhel_postgresql_service_name }} state=restarted
+    ansible.builtin.service: name={{ rhel_postgresql_service_name }} state=restarted

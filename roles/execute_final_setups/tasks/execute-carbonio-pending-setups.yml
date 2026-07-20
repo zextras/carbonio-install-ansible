@@ -11,7 +11,7 @@
       
   - name: Copy scripts to remote host
     become: true
-    template:
+    ansible.builtin.template:
       src: apply-pending-setups.sh.j2
       dest: /tmp/apply-pending-setups.sh
       mode: '0755'
@@ -20,7 +20,7 @@
       
   - name: Run Carbonio pending-setups
     become: true
-    command: /tmp/apply-pending-setups.sh {{ carbonio_mesh_password }}
+    ansible.builtin.command: /tmp/apply-pending-setups.sh {{ carbonio_mesh_password }}
     register: pso
     tags:
       - execute-pending-setups

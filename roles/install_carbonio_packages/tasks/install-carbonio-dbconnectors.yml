@@ -5,7 +5,7 @@
 ---
   - name: Install mailbox db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ mailbox_dbconnectors_packages }}"
     when:
@@ -16,7 +16,7 @@
 
   - name: Install files db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ files_dbconnectors_packages }}"
     when:
@@ -28,7 +28,7 @@
 
   - name: Install docs db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
     when:
@@ -40,7 +40,7 @@
 
   - name: Install preview db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ preview_dbconnectors_packages }}"
     when:
@@ -52,7 +52,7 @@
 
   - name: Install tasks db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
     when:
@@ -64,7 +64,7 @@
 
   - name: Install message dispatcher db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_dbconnectors_packages }}"
     when:
@@ -76,7 +76,7 @@
 
   - name: Install WSC db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ ws_collaboration_dbconnectors_packages }}"
     when:
@@ -88,7 +88,7 @@
 
   - name: Install notification push db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ notification_push_dbconnectors_packages }}"
     when:
@@ -101,7 +101,7 @@
 
   - name: Install videorecorder db connector Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ videorecorder_dbconnectors_packages }}"
     when:
@@ -117,7 +117,7 @@
 
   - name: Install mailbox db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ mailbox_dbconnectors_packages }}"
     when:
@@ -128,7 +128,7 @@
 
   - name: Install files db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ files_dbconnectors_packages }}"
     when:
@@ -140,7 +140,7 @@
 
   - name: Install docs db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ docs_dbconnectors_packages }}"
     when:
@@ -152,7 +152,7 @@
 
   - name: Install preview db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ preview_dbconnectors_packages }}"
     when:
@@ -164,7 +164,7 @@
 
   - name: Install tasks db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ task_dbconnectors_packages }}"
     when:
@@ -176,7 +176,7 @@
 
   - name: Install message dispatcher db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_dbconnectors_packages }}"
     when:
@@ -188,7 +188,7 @@
 
   - name: Install WSC db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ ws_collaboration_dbconnectors_packages }}"
     when:
@@ -200,7 +200,7 @@
 
   - name: Install notification push db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ notification_push_dbconnectors_packages }}"
     when:
@@ -213,7 +213,7 @@
 
   - name: Install videorecorder db connector RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ videorecorder_dbconnectors_packages }}"
     when:

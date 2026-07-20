@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover'
     when: inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - fix-config  
@@ -16,7 +16,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l mcf +zimbraMailTrustedIP {{ansible_facts.default_ipv4.address}}'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l mcf +zimbraMailTrustedIP {{ansible_facts.default_ipv4.address}}'
     when: inventory_hostname in groups["proxyServers"]
     tags:
       - fix-config   
@@ -25,7 +25,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} zimbraSmtpHostname localhost zimbraSmtpPort 25'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} zimbraSmtpHostname localhost zimbraSmtpPort 25'
     when: inventory_hostname in groups["mtaServers"]
     tags:
       - fix-config    
@@ -34,7 +34,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l mcf zimbraPublicServiceHostname {{ hostvars[groups["proxyServers"][0]].webmailHostname }}'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l mcf zimbraPublicServiceHostname {{ hostvars[groups["proxyServers"][0]].webmailHostname }}'
     when:
       - inventory_hostname == groups["masterDirectoryServers"][0]
       - hostvars[groups["proxyServers"][0]].webmailHostname is defined

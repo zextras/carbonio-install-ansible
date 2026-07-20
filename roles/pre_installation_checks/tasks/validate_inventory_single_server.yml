@@ -4,7 +4,7 @@
 
 ---
 - name: Validate Replica Directory is not defined for single-server setup
-  fail:
+  ansible.builtin.fail:
     msg: >
       Single Server does not support Replica Directory installation.
       The 'replicaDirectoryServers' group must be empty.
@@ -13,7 +13,7 @@
     - check-single-server-inventory
 
 - name: Validate Syslog is not defined for single-server setup
-  fail:
+  ansible.builtin.fail:
     msg: >
       Single Server does not support Syslog installation.
       The 'syslogServer' group must be empty.

@@ -4,7 +4,7 @@
 
 ---
   - name: Enable remote syslog
-    lineinfile:
+    ansible.builtin.lineinfile:
         # firstmatch: true
         dest: /etc/rsyslog.conf
         regex: '^#\s*{{ item.regex }}(.*)$'

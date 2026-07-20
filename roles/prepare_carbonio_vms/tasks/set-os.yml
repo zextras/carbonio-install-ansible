@@ -39,7 +39,7 @@
        
    - name: Create alias for z
      become: true
-     lineinfile:
+     ansible.builtin.lineinfile:
       path: /root/.bashrc
       line: alias z='su - zextras'
      tags:

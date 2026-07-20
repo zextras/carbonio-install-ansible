@@ -22,7 +22,7 @@
     - initialize-postgres
 
 - name: "Allow md5 connection for the carbonio_adm user Ubuntu"
-  postgresql_pg_hba:
+  community.postgresql.postgresql_pg_hba:
     dest: "{{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
     contype: host
     databases: all
@@ -38,7 +38,7 @@
     - initialize-postgres
 
 - name: "Allow md5 connection for the carbonio_adm user RHEL"
-  postgresql_pg_hba:
+  community.postgresql.postgresql_pg_hba:
     dest: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
     contype: host
     databases: all
@@ -99,7 +99,7 @@
     - initialize-postgres
 
 - name: Calculate 25% of RAM
-  set_fact:
+  ansible.builtin.set_fact:
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   tags:
@@ -150,7 +150,7 @@
     - initialize-postgres
 
 - name: Calculate 25% of RAM
-  set_fact:
+  ansible.builtin.set_fact:
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   tags:

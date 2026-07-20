@@ -5,14 +5,14 @@
 ---
 # handlers file for execute-final-setups
     - name: restart_preview
-      service:
+      ansible.builtin.service:
         name: carbonio-preview.service
         state: restarted
 
     - name: restart_videoserver
-      service:
+      ansible.builtin.service:
         name: carbonio-videoserver.service
         state: restarted
 
     - name: restart_postgres-rhel
-      service: name={{ postgresql_service_name }} state=restarted
+      ansible.builtin.service: name={{ postgresql_service_name }} state=restarted

@@ -5,7 +5,7 @@
 ---
   - name: Install Carbonio Master Directoryserver Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ ds_packages }}"
     when: ansible_facts.os_family == "Debian"  and (inventory_hostname in groups["masterDirectoryServers"] or inventory_hostname in groups["replicaDirectoryServers"])
@@ -14,7 +14,7 @@
 
   - name: Install Carbonio Master Directoryserver RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ ds_packages }}"
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and (inventory_hostname in groups["masterDirectoryServers"] or inventory_hostname in groups["replicaDirectoryServers"])

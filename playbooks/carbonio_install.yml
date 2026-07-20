@@ -8,7 +8,7 @@
   run_once: true
   tasks:
     - name: EULA Acceptance
-      pause:
+      ansible.builtin.pause:
         prompt: |
           ============================================================
           IMPORTANT - LICENSE AGREEMENT
@@ -34,20 +34,20 @@
       when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
 
     - name: Auto-accept EULA
-      set_fact:
+      ansible.builtin.set_fact:
           eula_acceptance:
             user_input: 'YES'
       when: carbonio_auto_accept_eula is defined and (carbonio_auto_accept_eula | bool)
 
     - name: Abort if EULA not accepted
-      fail:
+      ansible.builtin.fail:
         msg: >
           Installation aborted. You must type 'YES' to accept the
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
 
     - name: Multi-Server Status
-      pause:
+      ansible.builtin.pause:
         seconds: 10
         prompt: |
           =======================================================
@@ -58,7 +58,7 @@
       when: groups['all'] | length > 1
 
     - name: Single-Server Status
-      pause:
+      ansible.builtin.pause:
         seconds: 10
         prompt: |
           -------------------------------------------------------
@@ -128,14 +128,14 @@
       become: true
       become_method: su
       become_user: zextras
-      command: '/opt/zextras/bin/zmupdateauthkeys'
+      ansible.builtin.command: '/opt/zextras/bin/zmupdateauthkeys'
 
 - hosts: all
   order: inventory
   gather_facts: yes
   tasks:
     - name: Single-Server Optimization Confirmation
-      pause:
+      ansible.builtin.pause:
         prompt: |
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           CONFIRMATION: SINGLE-SERVER OPTIMIZATION
@@ -153,7 +153,7 @@
         - autoapply_ss_optimization | default('') | lower not in ['true', 'false', 'yes', 'no', '1', '0']
 
     - name: Auto-apply Single-Server Optimization
-      set_fact:
+      ansible.builtin.set_fact:
           ss_final_confirm:
             user_input: 'YES'
       when: 
@@ -161,7 +161,7 @@
         - autoapply_ss_optimization | default('') | lower in ['true', 'yes', '1']
 
     - name: Auto-skip Single-Server Optimization
-      set_fact:
+      ansible.builtin.set_fact:
           ss_final_confirm:
             user_input: ''
       when: 
@@ -169,14 +169,14 @@
         - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
 
     - name: Optimization Skipped Message
-      debug:
+      ansible.builtin.debug:
         msg: "Optimization skipped. Single-server installation completed successfully without optimization."
       when: 
         - groups['all'] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) != 'YES'
 
     - name: Include Single-Server Setup Role
-      include_role:
+      ansible.builtin.include_role:
         name: ../roles/single_server_setup
       when: 
         - groups['all'] | length == 1

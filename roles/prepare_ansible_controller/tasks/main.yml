@@ -4,5 +4,5 @@
 
 ---
 # tasks file for prepare_ansible_controller
-  - import_tasks: ensure_python_dependencies.yml
+  - ansible.builtin.import_tasks: ensure_python_dependencies.yml
   

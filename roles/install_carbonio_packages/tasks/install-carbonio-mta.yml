@@ -5,7 +5,7 @@
 ---
   - name: Install Carbonio MTA Ubuntu
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ mta_packages }}" 
     when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["mtaServers"] 
@@ -14,7 +14,7 @@
       
   - name: Install Carbonio MTA RHEL
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ mta_packages }}" 
     when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["mtaServers"] 
