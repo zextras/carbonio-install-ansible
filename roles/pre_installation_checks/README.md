@@ -48,5 +48,5 @@ GPL-3.0-only
 
 ## Author Information
 
-Zextras Mobius  
+Zextras 
 <https://www.zextras.com>
