@@ -1,38 +1,29 @@
-Role Name
-=========
+# Prepare Ansible Controller
 
-A brief description of the role goes here.
+This role prepares the Ansible controller before the Carbonio installation starts.
 
-Requirements
-------------
+It verifies that the Python interpreter used by Ansible has the `netaddr` dependency required for inventory IP address validation.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- detects whether Ansible is running inside a Python virtual environment;
+- checks whether the `netaddr` Python module is available;
+- fails with installation instructions when `netaddr` is missing from a virtual environment;
+- installs the `python3-netaddr` system package when Ansible uses the system Python interpreter;
+- re-checks the dependency after installation;
+- stops the playbook if the dependency is still unavailable.
 
-Dependencies
-------------
+The role does not configure any Carbonio server and is used only on the Ansible controller.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role is executed before remote host validation and package installation in the main Carbonio installation playbook.
 
-Example Playbook
-----------------
+## License
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+GPL-3.0-only
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Author Information
 
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Zextras Mobius  
+<https://www.zextras.com>

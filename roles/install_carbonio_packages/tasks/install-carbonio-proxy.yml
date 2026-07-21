@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Proxy an UIs [Ubuntu]
+  - name: Install Carbonio Proxy and UIs [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -74,7 +74,7 @@
       - install-carbonio-proxy
     
 ######## RHEL
-  - name: Install Carbonio Proxy an UIs [RHEL]
+  - name: Install Carbonio Proxy and UIs [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

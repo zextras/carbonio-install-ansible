@@ -1,38 +1,27 @@
-Role Name
-=========
+# Prepare Carbonio VMs
 
-A brief description of the role goes here.
+This role prepares target hosts for Carbonio package installation.
 
-Requirements
-------------
+It configures operating system repositories, installs base dependencies, updates operating system packages, and applies host-level settings required by the installation.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- configures PostgreSQL repositories on PostgreSQL nodes;
+- enables the required RHEL repositories;
+- configures EPEL where required;
+- configures the Zextras repository when Carbonio packages are not already available;
+- installs operating system dependencies;
+- updates installed packages;
+- reduces the `vm.swappiness` value;
+- creates the `z` shell alias for switching to the `zextras` user.
 
-Dependencies
-------------
+## License
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+GPL-3.0-only
 
-Example Playbook
-----------------
+## Author Information
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Zextras Mobius  
+<https://www.zextras.com>

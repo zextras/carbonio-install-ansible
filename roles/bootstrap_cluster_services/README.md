@@ -1,38 +1,41 @@
-Role Name
-=========
+# Bootstrap Cluster Services
 
-A brief description of the role goes here.
+This role initializes and configures the primary services required by the Carbonio cluster.
 
-Requirements
-------------
+It handles Directory Server bootstrap, PostgreSQL initialization and configuration, Service Discover server bootstrap, and optional syslog aggregation setup.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- configures the syslog aggregator;
+- bootstraps the Master Directory server;
+- enables Directory replication when Replica Directory nodes are configured;
+- bootstraps Replica Directory servers;
+- initializes PostgreSQL;
+- creates the Carbonio PostgreSQL administrator database and role;
+- configures PostgreSQL authentication and connection settings;
+- bootstraps Service Discover server nodes;
+- stores Service Discover bootstrap output on the Ansible controller.
 
-Dependencies
-------------
+## Execution Order
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+In the main installation playbook, this role is first executed serially on:
 
-Example Playbook
-----------------
+```
+hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+serial: 1
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+It is then executed serially on the remaining Carbonio nodes.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Individual tasks are restricted through inventory-group conditions, so each host runs only the bootstrap operations relevant to its assigned components.
 
-License
--------
+## License
 
-BSD
+GPL-3.0-only
 
-Author Information
-------------------
+## Author Information
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Zextras Mobius  
+<https://www.zextras.com>
