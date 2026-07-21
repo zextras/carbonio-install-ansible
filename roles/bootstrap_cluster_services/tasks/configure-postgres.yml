@@ -12,7 +12,7 @@
     - ansible_facts.os_family == "Debian"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Replace scram-sha-256 authentication with md5 [RHEL]
   ansible.builtin.shell:
@@ -23,7 +23,7 @@
     - ansible_facts.os_family == "RedHat"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Allow md5 connections to PostgreSQL [Ubuntu]
   community.postgresql.postgresql_pg_hba:
@@ -41,7 +41,7 @@
     - ansible_facts.os_family == "Debian" 
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Allow md5 connections to PostgreSQL [RHEL]
   community.postgresql.postgresql_pg_hba:
@@ -59,7 +59,7 @@
     - ansible_facts.os_family == "RedHat"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Add md5 host access rule to pg_hba.conf [RHEL]
   become: true
@@ -73,7 +73,7 @@
     - ansible_facts.os_family == "RedHat"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - install-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL listen addresses [Ubuntu]
   community.postgresql.postgresql_alter_system:
@@ -86,7 +86,7 @@
     - ansible_facts.os_family == "Debian"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL port [Ubuntu]
   community.postgresql.postgresql_alter_system:
@@ -99,7 +99,7 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL maximum connections [Ubuntu]
   community.postgresql.postgresql_alter_system:
@@ -112,7 +112,7 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Calculate PostgreSQL shared memory allocation (25% of RAM) [Ubuntu]
   ansible.builtin.set_fact:
@@ -121,7 +121,7 @@
     - ansible_facts.os_family == "Debian"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set shared_buffers [Ubuntu]
   community.postgresql.postgresql_alter_system:
@@ -134,7 +134,7 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL listen addresses [RHEL]
   community.postgresql.postgresql_alter_system:
@@ -147,7 +147,7 @@
     - ansible_facts.os_family == "RedHat"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL port [RHEL]
   community.postgresql.postgresql_alter_system:
@@ -160,7 +160,7 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set PostgreSQL maximum connections [RHEL]
   community.postgresql.postgresql_alter_system:
@@ -173,7 +173,7 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Calculate PostgreSQL shared memory allocation (25% of RAM) [RHEL]
   ansible.builtin.set_fact:
@@ -182,7 +182,7 @@
     - ansible_facts.os_family == "RedHat"
     - inventory_hostname in groups["postgresServers"]
   tags:
-    - initialize-postgres
+    - configure-postgres
 
 - name: Set shared_buffers [RHEL]
   community.postgresql.postgresql_alter_system:
@@ -195,4 +195,4 @@
     - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
   tags:
-    - initialize-postgres
+    - configure-postgres
