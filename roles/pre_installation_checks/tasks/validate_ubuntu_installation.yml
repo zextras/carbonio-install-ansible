@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-- name: Check if unminimize file exists on Ubuntu
+- name: Check if unminimize file exists [Ubuntu]
   ansible.builtin.stat:
     path: /etc/update-motd.d/60-unminimize
   register: unminimize_file

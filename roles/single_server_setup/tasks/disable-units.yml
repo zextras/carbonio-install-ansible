@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Stop and disable unnecessary servises
+  - name: Stop and disable unnecessary services
     ansible.builtin.systemd_service:
       name: "{{ item }}"
       state: stopped 

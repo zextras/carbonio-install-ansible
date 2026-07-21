@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio task Ubuntu
+  - name: Install Carbonio task [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:

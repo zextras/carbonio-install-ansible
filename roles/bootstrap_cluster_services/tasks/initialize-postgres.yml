@@ -3,21 +3,24 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-- name: "Set Postgres Service name RHEL"
+- name: Set Postgres Service name [RHEL]
   ansible.builtin.set_fact:
     postgresql_service_name: "{{ rhel_postgresql_service_name }}"
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
-- name: Check if PostgreSQL database is initialized.
+- name: Check whether PostgreSQL is initialized [RHEL]
   ansible.builtin.stat:
     path: "{{ rhel_postgresql_data_dir }}/PG_VERSION"
   register: pgdata_dir_version
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
-- name: Initialize Postgres on RHEL
+- name: Initialize Postgres [RHEL]
   become: true
   ansible.builtin.command: "{{ rhel_postgres_init_script }} initdb"
   notify: restart_postgres-rhel
@@ -25,7 +28,7 @@
   tags:
     - initialize-postgres
 
-- name: Enable Postgres service RHEL
+- name: Enable Postgres service [RHEL]
   ansible.builtin.systemd_service:
     name: "{{ rhel_postgresql_service_name }}"
     state: started
@@ -34,7 +37,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set md5"
+- name: Set PostgreSQL password encryption to md5 [Ubuntu]
   community.postgresql.postgresql_alter_system:
     param: password_encryption
     value: md5
@@ -45,7 +48,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set md5"
+- name: Set PostgreSQL password encryption to md5 [RHEL]
   community.postgresql.postgresql_alter_system:
     param: password_encryption
     value: md5
@@ -56,7 +59,14 @@
   tags:
     - initialize-postgres
 
-- name: "Create carbonio_adm database"
+- name: Load or generate PostgreSQL administrator password
+  ansible.builtin.set_fact:
+    carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
+  when: inventory_hostname in groups["postgresServers"]
+  tags:
+    - initialize-postgres
+
+- name: Create carbonio_adm PostgreSQL database
   community.postgresql.postgresql_db:
     state: present
     name: "carbonio_adm"
@@ -66,14 +76,7 @@
   tags:
     - initialize-postgres
 
-- name: Manage Postgres password
-  ansible.builtin.set_fact:
-    carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
-  when: inventory_hostname in groups["postgresServers"]
-  tags:
-    - initialize-postgres
-
-- name: "Create carbonio_adm role"
+- name: Create carbonio_adm PostgreSQL role
   community.postgresql.postgresql_user:
     state: present
     name: "carbonio_adm"
@@ -85,7 +88,7 @@
   tags:
     - initialize-postgres
 
-- name: "Grant carbonio_adm db access"
+- name: Grant database privileges to carbonio_adm
   community.postgresql.postgresql_privs:
     login_db: postgres
     type: database

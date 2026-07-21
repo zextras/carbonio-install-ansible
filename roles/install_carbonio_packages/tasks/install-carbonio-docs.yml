@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Docs Ubuntu 
+  - name: Install Carbonio Docs [Ubuntu] 
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -12,7 +12,7 @@
     tags:
       - install-carbonio-docs
 
-  - name: Install Carbonio Docs RHEL
+  - name: Install Carbonio Docs [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

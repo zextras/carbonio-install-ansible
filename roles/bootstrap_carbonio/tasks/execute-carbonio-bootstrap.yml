@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Get local config zimbra_server_hostname to check if already boostraped
+  - name: Get local config zimbra_server_hostname to check if already bootstrapped
     become: true
     become_method: su
     become_user: zextras
@@ -18,9 +18,10 @@
     when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
     tags:
       - execute-carbonio-bootstrap
-      
-  - ansible.builtin.debug:
-      msg: "Carbonio bootstrap never performed" 
+
+  - name: Report that Carbonio bootstrap never performed
+    ansible.builtin.debug:
+    msg: "Carbonio bootstrap never performed"
     when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]
     tags:
       - execute-carbonio-bootstrap
@@ -33,7 +34,7 @@
     tags:
       - execute-carbonio-bootstrap
       
-  - name: run Carbonio Bootstrap
+  - name: Run Carbonio Bootstrap
     become: true
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when: glc is search("localhost") and inventory_hostname not in groups["masterDirectoryServers"]

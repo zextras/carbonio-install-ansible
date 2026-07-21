@@ -4,7 +4,7 @@
 
 ---
 # tasks file to prepare
-   - name: Install dependencies Ubuntu
+   - name: Install dependencies [Ubuntu]
      become: true
      ansible.builtin.apt:
       pkg:
@@ -20,7 +20,7 @@
      tags:
         - set-os  
         
-   - name: Install dependencies RHEL
+   - name: Install dependencies [RHEL]
      become: true
      ansible.builtin.yum:
       pkg:

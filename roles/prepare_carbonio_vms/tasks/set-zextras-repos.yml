@@ -4,7 +4,7 @@
 
 # Set Zextras repository
 ---
-- name: Update repositories (Ubuntu)
+- name: Update repositories [Ubuntu]
   become: true
   ansible.builtin.shell: "apt update"
   when: ansible_facts.os_family == "Debian"
@@ -12,7 +12,7 @@
   tags:
     - set-zextras-repos
 
-- name: Check for carbonio-* packages in repositories (Ubuntu)
+- name: Check for carbonio-* packages in repositories [Ubuntu]
   ansible.builtin.shell: "apt list 2>/dev/null | grep '^carbonio'"
   when: ansible_facts.os_family == "Debian"
   failed_when: false
@@ -20,7 +20,7 @@
   tags: 
     - set-zextras-repos
 
-- name: Display notice if Zextras repository is prepared (Ubuntu)
+- name: Display notice if Zextras repository is prepared [Ubuntu]
   block:
     - name: Display Zextras repository notice
       ansible.builtin.debug:
@@ -33,7 +33,7 @@
   tags: 
     - set-zextras-repos
 
-- name: Display notice if Zextras repository is not prepared (Ubuntu)
+- name: Display notice if Zextras repository is not prepared [Ubuntu]
   block:
     - name: Display Zextras repository notice
       ansible.builtin.debug:
@@ -50,7 +50,7 @@
   tags: 
     - set-zextras-repos
 
-- name: Ensure apt keyrings directory exists on Ubuntu
+- name: Ensure apt keyrings directory exists [Ubuntu]
   become: true
   ansible.builtin.file:
     path: /etc/apt/keyrings
@@ -60,7 +60,7 @@
   tags:
     - set-zextras-repos
 
-- name: Download Zextras repository key on Ubuntu
+- name: Download Zextras repository key [Ubuntu]
   become: true
   ansible.builtin.get_url:
     url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21"
@@ -70,7 +70,7 @@
   tags:
     - set-zextras-repos
 
-- name: Copy Zextras repository for Ubuntu
+- name: Copy Zextras repository [Ubuntu]
   become: true
   ansible.builtin.template:
     src: zextras.list.j2
@@ -80,7 +80,7 @@
   tags:
     - set-zextras-repos
 
-- name: Update repos Ubuntu  
+- name: Update repos [Ubuntu]  
   become: true
   ansible.builtin.apt:
     update_cache: true
@@ -90,7 +90,7 @@
 
 ############ RHEL ############
 
-- name: Update repos RHEL  
+- name: Update repos [RHEL]  
   become: true
   ansible.builtin.yum:
     update_cache: true
@@ -98,7 +98,7 @@
   tags: 
     - set-zextras-repos
 
-- name: Check for carbonio packages in repositories (RHEL)
+- name: Check for carbonio packages in repositories [RHEL]
   ansible.builtin.shell: "dnf list available 2>/dev/null | grep '^carbonio'"
   when: ansible_facts.os_family == "RedHat"
   failed_when: false
@@ -106,14 +106,14 @@
   tags: 
     - set-zextras-repos
 
-- name: Check list of repositories (RHEL)
+- name: Check list of repositories [RHEL]
   ansible.builtin.shell: "dnf repolist "
   when: ansible_facts.os_family == "RedHat"
   register: update_result_rhel
   tags: 
     - set-zextras-repos
 
-- name: Verify repositories (RHEL)
+- name: Verify repositories [RHEL]
   block:
     - name: Display list of repositories
       ansible.builtin.debug:
@@ -126,7 +126,7 @@
   tags: 
     - set-zextras-repos
     
-- name: Display notice if Zextras repository is not prepared (RHEL)
+- name: Display notice if Zextras repository is not prepared [RHEL]
   block:
     - name: Display Zextras repository notice
       ansible.builtin.debug:
@@ -143,7 +143,7 @@
   tags: 
     - set-zextras-repos
     
-- name: Copy Zextras repository for RHEL
+- name: Copy Zextras repository [RHEL]
   become: true
   ansible.builtin.template:
     src: zextras.repo.j2
@@ -152,7 +152,7 @@
   tags: 
     - set-zextras-repos
     
-- name: Update repos RHEL  
+- name: Update repos [RHEL]  
   become: true
   ansible.builtin.yum:
     update_cache: true

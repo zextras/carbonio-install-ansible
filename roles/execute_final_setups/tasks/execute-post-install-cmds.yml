@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Syslog setup
+  - name: Configure Carbonio syslog
     become: true
     ansible.builtin.command: '/opt/zextras/libexec/zmsyslogsetup'
     tags:

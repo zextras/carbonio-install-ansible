@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install carbonio user management Ubuntu
+  - name: Install carbonio user management [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -14,7 +14,7 @@
 
 ##### RHEL
 
-  - name: Install carbonio user management RHEL
+  - name: Install carbonio user management [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

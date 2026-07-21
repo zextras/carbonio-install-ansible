@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Prometheus Server Ubuntu
+  - name: Install Carbonio Prometheus Server [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -21,7 +21,7 @@
     tags:
       - install-carbonio-prometheus
 
-        #  - name: Install Carbonio Grafana Server Ubuntu
+        #  - name: Install Carbonio Grafana Server [Ubuntu]
         # become: true
         #ansible.builtin.apt: name={{ item }} state=present
         #with_items:

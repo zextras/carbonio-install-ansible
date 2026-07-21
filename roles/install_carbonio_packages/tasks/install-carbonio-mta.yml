@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio MTA Ubuntu
+  - name: Install Carbonio MTA [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -12,7 +12,7 @@
     tags:
       - install-carbonio-mta
       
-  - name: Install Carbonio MTA RHEL
+  - name: Install Carbonio MTA [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

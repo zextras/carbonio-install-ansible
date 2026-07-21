@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-- name: "Change scram-sha-256 to md5"
+- name: Replace scram-sha-256 authentication with md5 [Ubuntu]
   ansible.builtin.shell:
     cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
   become: true
@@ -12,7 +12,7 @@
   tags:
     - initialize-postgres
 
-- name: "Change scram-sha-256 to md5 RHEL"
+- name: Replace scram-sha-256 authentication with md5 [RHEL]
   ansible.builtin.shell:
     cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
   become: true
@@ -21,7 +21,7 @@
   tags:
     - initialize-postgres
 
-- name: "Allow md5 connection for the carbonio_adm user Ubuntu"
+- name: Allow md5 connections to PostgreSQL [Ubuntu]
   community.postgresql.postgresql_pg_hba:
     dest: "{{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
     contype: host
@@ -37,7 +37,7 @@
   tags:
     - initialize-postgres
 
-- name: "Allow md5 connection for the carbonio_adm user RHEL"
+- name: Allow md5 connections to PostgreSQL [RHEL]
   community.postgresql.postgresql_pg_hba:
     dest: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
     contype: host
@@ -53,7 +53,7 @@
   tags:
     - initialize-postgres
 
-- name: Add Postgres config(RedHat)
+- name: Add md5 host access rule to pg_hba.conf [RHEL]
   become: true
   notify: restart_postgres-rhel
   ansible.builtin.lineinfile:
@@ -65,7 +65,7 @@
   tags:
     - install-postgres
 
-- name: "Set listen_addresses"
+- name: Set PostgreSQL listen addresses [Ubuntu]
   community.postgresql.postgresql_alter_system:
     param: listen_addresses
     value: "*"
@@ -76,7 +76,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set port"
+- name: Set PostgreSQL port [Ubuntu]
   community.postgresql.postgresql_alter_system:
     param: port
     value: 5432
@@ -87,7 +87,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set max_connections"
+- name: Set PostgreSQL maximum connections [Ubuntu]
   community.postgresql.postgresql_alter_system:
     param: max_connections
     value: 500
@@ -98,14 +98,14 @@
   tags:
     - initialize-postgres
 
-- name: Calculate 25% of RAM
+- name: Calculate PostgreSQL shared memory allocation (25% of RAM) [Ubuntu]
   ansible.builtin.set_fact:
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
-- name: Set shared_buffers
+- name: Set shared_buffers [Ubuntu]
   community.postgresql.postgresql_alter_system:
     param: shared_buffers
     value: "{{ ram_size_mb }}"
@@ -116,7 +116,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set listen_addresses"
+- name: Set PostgreSQL listen addresses [RHEL]
   community.postgresql.postgresql_alter_system:
     param: listen_addresses
     value: "*"
@@ -127,7 +127,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set port"
+- name: Set PostgreSQL port [RHEL]
   community.postgresql.postgresql_alter_system:
     param: port
     value: 5432
@@ -138,7 +138,7 @@
   tags:
     - initialize-postgres
 
-- name: "Set max_connections"
+- name: Set PostgreSQL maximum connections [RHEL]
   community.postgresql.postgresql_alter_system:
     param: max_connections
     value: 500
@@ -149,14 +149,14 @@
   tags:
     - initialize-postgres
 
-- name: Calculate 25% of RAM
+- name: Calculate PostgreSQL shared memory allocation (25% of RAM) [RHEL]
   ansible.builtin.set_fact:
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
-- name: Set shared_buffers
+- name: Set shared_buffers [RHEL]
   community.postgresql.postgresql_alter_system:
     param: shared_buffers
     value: "{{ ram_size_mb }}"

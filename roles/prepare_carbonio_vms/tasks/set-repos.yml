@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Ensure apt keyrings directory exists on Ubuntu
+  - name: Ensure apt keyrings directory exists [Ubuntu]
     become: true
     ansible.builtin.file:
       path: /etc/apt/keyrings
@@ -15,7 +15,7 @@
     tags:
       - set-repos
 
-  - name: Download PostgreSQL repository key on Ubuntu
+  - name: Download PostgreSQL repository key [Ubuntu]
     become: true
     ansible.builtin.get_url:
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
@@ -25,7 +25,7 @@
     tags:
       - set-repos
       
-  - name: Create Postgres repo on Ubuntu
+  - name: Create Postgres repo [Ubuntu]
     become: true
     ansible.builtin.template:
       src: postgres.list.j2

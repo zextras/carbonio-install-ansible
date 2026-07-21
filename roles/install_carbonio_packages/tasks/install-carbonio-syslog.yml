@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Syslog Server Ubuntu
+  - name: Install Syslog Server [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -12,7 +12,7 @@
     tags:
       - install-carbonio-syslog
       
-  - name: Install Syslog Server RHEL
+  - name: Install Syslog Server [RHEL]
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ syslog_packages }}"    

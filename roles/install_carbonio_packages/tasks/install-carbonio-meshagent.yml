@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Service discover agent Ubuntu
+  - name: Install Carbonio Service discover agent [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -12,7 +12,7 @@
     tags:
       - install-service-discover-agent
       
-  - name: Install Carbonio Service discover agent RHEL
+  - name: Install Carbonio Service discover agent [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

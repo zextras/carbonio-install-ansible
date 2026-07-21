@@ -4,7 +4,7 @@
 
 ---
 
-  - name: Calculate 10% of RAM
+  - name: Calculate application server heap allocation (10% of RAM)
     ansible.builtin.set_fact:
       ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}"
     when: inventory_hostname in groups["applicationServers"]
@@ -55,7 +55,7 @@
     tags:
       - singleserver-reconfig-cmds     
  
-  - name: Calculate 10% of RAM
+  - name: Calculate MariaDB buffer pool allocation (10% of RAM)
     ansible.builtin.set_fact:
       mysql_ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}M"
     when: inventory_hostname in groups["postgresServers"]
@@ -78,7 +78,7 @@
     tags:
       - singleserver-reconfig-cmds
       
-  - name: Set shared_buffers
+  - name: Set shared_buffers [Ubuntu]
     community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb_psql }}"
@@ -89,7 +89,7 @@
     tags:
       - singleserver-reconfig-cmds
 
-  - name: Set shared_buffers
+  - name: Set shared_buffers [RHEL]
     community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb_psql }}"

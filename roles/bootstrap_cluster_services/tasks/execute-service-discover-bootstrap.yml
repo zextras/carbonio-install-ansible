@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Get local config zimbra_server_hostname to check if already boostraped
+  - name: Get local config zimbra_server_hostname to check if already bootstrapped
     become: true
     become_method: su
     become_user: zextras
@@ -13,7 +13,8 @@
     tags:
       - service-discover-bootstrap
       
-  - ansible.builtin.debug:
+  - name: Report existing Carbonio bootstrap
+    ansible.builtin.debug:
       msg: "Carbonio bootstrap already performed" 
     when: glc is search("localhost")
     tags:
@@ -34,14 +35,14 @@
     tags:
       - service-discover-bootstrap
       
-  - name: run Carbonio Bootstrap needed by Service Discover
+  - name: Run Carbonio Bootstrap needed by Service Discover
     become: true
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when: glc is search("localhost") and inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - service-discover-bootstrap
 
-  - name: Get cluster-credentials.tar.gpg to check if already boostraped
+  - name: Get cluster-credentials.tar.gpg to check if already bootstrapped
     ansible.builtin.stat:
       path: /etc/zextras/service-discover/cluster-credentials.tar.gpg
     register: sdb  
@@ -50,26 +51,28 @@
       - service-discover-bootstrap
 
       
-  - ansible.builtin.debug:
+  - name: Display Service Discover cluster credentials status
+    ansible.builtin.debug:
       msg: "cluster-credentials {{ sdb }}" 
     tags:
       - service-discover-bootstrap
       
-  - name: Manage Consul password
+  - name: Load or generate Service Discover password
     ansible.builtin.set_fact:
        carbonio_mesh_password: "{{ lookup('ansible.builtin.password',  inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when: inventory_hostname in groups["serviceDiscoverServers"] and not sdb.stat.exists
     tags:
       - service-discover-bootstrap 
     
-  - name: run Service Discover Bootstrap
+  - name: Run Service Discover Bootstrap
     ansible.builtin.command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
     when: inventory_hostname in groups["serviceDiscoverServers"] and not sdb.stat.exists
     register: sdbo
     tags:
       - service-discover-bootstrap
 
-  - local_action: copy content={{ sdbo.stdout }} dest=/tmp/sdbo_{{ inventory_hostname }}
+  - name: Save Service Discover bootstrap output locally
+    local_action: copy content={{ sdbo.stdout }} dest=/tmp/sdbo_{{ inventory_hostname }}
     when: inventory_hostname in groups["serviceDiscoverServers"] and not sdb.stat.exists
     tags:
       - service-discover-bootstrap

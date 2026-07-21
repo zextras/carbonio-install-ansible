@@ -1,5 +1,5 @@
 ---
-  - name: Install Message Broker on Server Ubuntu
+  - name: Install Message Broker on Server [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:

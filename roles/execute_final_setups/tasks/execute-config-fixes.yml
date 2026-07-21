@@ -12,7 +12,7 @@
     tags:
       - fix-config  
 
-  - name: Add TrustedIp
+  - name: Add proxy address to Carbonio trusted IPs
     become: true
     become_method: su
     become_user: zextras
@@ -21,7 +21,7 @@
     tags:
       - fix-config   
 
-  - name: Set smtp hostname for MTA servers
+  - name: Set SMTP hostname for MTA servers
     become: true
     become_method: su
     become_user: zextras

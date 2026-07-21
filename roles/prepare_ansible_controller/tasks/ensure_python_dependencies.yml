@@ -64,7 +64,7 @@
     - ansible_venv_check.stdout | trim != 'True'
   become: false
 
-- name: Install netaddr dependency on Ubuntu Ansible controller
+- name: Install netaddr dependency Ansible controller [Ubuntu]
   ansible.builtin.apt:
     name: python3-netaddr
     state: present
@@ -75,7 +75,7 @@
     - ansible_facts.os_family == 'Debian'
   become: true
 
-- name: Install netaddr dependency on RHEL Ansible controller
+- name: Install netaddr dependency Ansible controller [RHEL]
   ansible.builtin.dnf:
     name: python3-netaddr
     state: present

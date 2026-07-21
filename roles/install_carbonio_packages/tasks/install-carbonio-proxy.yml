@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Proxy an UIs Ubuntu
+  - name: Install Carbonio Proxy an UIs [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -12,7 +12,7 @@
     tags:
       - install-carbonio-proxy 
 
-  - name: Install Memcached on Server Ubuntu
+  - name: Install Memcached on Server [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -21,7 +21,7 @@
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio files UI Ubuntu
+  - name: Install Carbonio files UI [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -30,7 +30,7 @@
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio task UI Ubuntu
+  - name: Install Carbonio task UI [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -39,7 +39,7 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio WSC UI Ubuntu
+  - name: Install Carbonio WSC UI [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -48,7 +48,7 @@
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio storage UI Ubuntu
+  - name: Install Carbonio storage UI [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -58,7 +58,7 @@
       - install-carbonio-proxy
     
 ######## RHEL
-  - name: Install Carbonio Proxy an UIs RHEL
+  - name: Install Carbonio Proxy an UIs [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
@@ -67,7 +67,7 @@
     tags:
       - install-carbonio-proxy    
 
-  - name: Install Memcached on Server RHEL
+  - name: Install Memcached on Server [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
@@ -76,7 +76,7 @@
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio files UI RHEL
+  - name: Install Carbonio files UI [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
@@ -85,7 +85,7 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio task UI RHEL
+  - name: Install Carbonio task UI [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
@@ -94,7 +94,7 @@
     tags:
       - install-carbonio-proxy   
 
-  - name: Install Carbonio WSC UI RHEL
+  - name: Install Carbonio WSC UI [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
@@ -103,7 +103,7 @@
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio storage UI RHEL
+  - name: Install Carbonio storage UI [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

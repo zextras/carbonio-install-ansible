@@ -17,7 +17,7 @@
     tags:
       - db-connectors-bootstrap
       
-  - name: Manage Postgres password
+  - name: Load or generate PostgreSQL password
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when:
@@ -25,7 +25,7 @@
     tags:
       - db-connectors-bootstrap
 
-  - name: run mailbox db-connectors Bootstrap
+  - name: Run mailbox db-connectors Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     ansible.builtin.command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
@@ -35,7 +35,7 @@
     tags:
       - db-connectors-bootstrap
       
-  - name: run files-db Bootstrap
+  - name: Run files-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     ansible.builtin.command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
@@ -46,7 +46,7 @@
     tags:
       - db-connectors-bootstrap
       
-  - name: run docs-connector-db Bootstrap
+  - name: Run docs-connector-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -57,7 +57,7 @@
     tags:
       - db-connectors-bootstrap
 
-  - name: run preview-db Bootstrap
+  - name: Run preview-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -68,7 +68,7 @@
     tags:
       - db-connectors-bootstrap
       
-  - name: run tasks-connector-db Bootstrap
+  - name: Run tasks-connector-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -79,7 +79,7 @@
     tags:
       - db-connectors-bootstrap
 
-  - name: run message-dispatcher-db Bootstrap
+  - name: Run message-dispatcher-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -90,7 +90,7 @@
     tags:
       - db-connectors-bootstrap
 
-  - name: run carbonio-ws-collaboration-db Bootstrap
+  - name: Run carbonio-ws-collaboration-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -101,7 +101,7 @@
     tags:
       - db-connectors-bootstrap
 
-  - name: run carbonio-notification-push-db Bootstrap
+  - name: Run carbonio-notification-push-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
@@ -113,7 +113,7 @@
       - db-connectors-bootstrap
       - install-carbonio-notification-push
 
-  - name: run carbonio-videorecorder-db Bootstrap
+  - name: Run carbonio-videorecorder-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true

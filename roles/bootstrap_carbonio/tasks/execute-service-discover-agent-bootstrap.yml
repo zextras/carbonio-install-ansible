@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Get cluster-credentials.tar.gpg to check if already boostraped
+  - name: Get cluster-credentials.tar.gpg to check if already bootstrapped
     ansible.builtin.stat:
       path: /etc/zextras/service-discover/cluster-credentials.tar.gpg
     register: sdb  
@@ -11,14 +11,14 @@
     tags:
       - service-discover-agent-bootstrap 
     
-  - name: Manage Consul password
+  - name: Load or generate Service Discover password
     ansible.builtin.set_fact:
        carbonio_mesh_password: "{{ lookup('ansible.builtin.password', inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when:  inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists
     tags:
       - service-discover-agent-bootstrap 
     
-  - name: run Service Discover Agents Bootstrap
+  - name: Run Service Discover Agents Bootstrap
     become: true
     ansible.builtin.command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
     when: inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists 
