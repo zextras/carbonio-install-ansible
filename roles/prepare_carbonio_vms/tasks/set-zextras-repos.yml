@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 # Set Zextras repository
 ---
-- name: Update repositories (Ubuntu)
+- name: Update repositories [Ubuntu]
   become: true
   ansible.builtin.shell: "apt update"
   when: ansible_facts.os_family == "Debian"
@@ -12,31 +12,33 @@
   tags:
     - set-zextras-repos
 
-- name: Check for carbonio-* packages in repositories (Ubuntu)
-  shell: "apt list 2>/dev/null | grep '^carbonio'"
+- name: Check for carbonio-* packages in repositories [Ubuntu]
+  ansible.builtin.shell: "apt list 2>/dev/null | grep '^carbonio'"
   when: ansible_facts.os_family == "Debian"
   failed_when: false
   register: carbonio_packages
   tags: 
     - set-zextras-repos
 
-- name: Display notice if Zextras repository is prepared (Ubuntu)
+- name: Display notice if Zextras repository is prepared [Ubuntu]
   block:
     - name: Display Zextras repository notice
-      debug:
+      ansible.builtin.debug:
         msg: "{{ update_result.stdout_lines }}"
 
     - name: Wait 10 seconds to allow users to review the notice
-      pause:
+      ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 0
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 0
   tags: 
     - set-zextras-repos
 
-- name: Display notice if Zextras repository is not prepared (Ubuntu)
+- name: Display notice if Zextras repository is not prepared [Ubuntu]
   block:
     - name: Display Zextras repository notice
-      debug:
+      ansible.builtin.debug:
         msg: |
           Repository update completed successfully:
           {{ update_result.stdout_lines }}
@@ -44,92 +46,102 @@
           Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
 
     - name: Wait 10 seconds to allow users to review the notice
-      pause:
+      ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags: 
     - set-zextras-repos
 
-- name: Ensure apt keyrings directory exists on Ubuntu
+- name: Ensure apt keyrings directory exists [Ubuntu]
   become: true
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
     mode: "0755"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
-- name: Download Zextras repository key on Ubuntu
+- name: Download Zextras repository key [Ubuntu]
   become: true
   ansible.builtin.get_url:
     url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21"
     dest: /etc/apt/keyrings/zextras.asc
     mode: "0644"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
-- name: Copy Zextras repository for Ubuntu
+- name: Copy Zextras repository [Ubuntu]
   become: true
   ansible.builtin.template:
     src: zextras.list.j2
     dest: /etc/apt/sources.list.d/zextras.list
     mode: "0644"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
-- name: Update repos Ubuntu  
+- name: Update repos [Ubuntu]  
   become: true
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
   when: ansible_facts.os_family == "Debian"
   tags: 
     - set-zextras-repos
 
 ############ RHEL ############
 
-- name: Update repos RHEL  
+- name: Update repos [RHEL]  
   become: true
-  yum:
-    update_cache: yes
+  ansible.builtin.yum:
+    update_cache: true
   when: ansible_facts.os_family == "RedHat"
   tags: 
     - set-zextras-repos
 
-- name: Check for carbonio packages in repositories (RHEL)
-  shell: "dnf list available 2>/dev/null | grep '^carbonio'"
+- name: Check for carbonio packages in repositories [RHEL]
+  ansible.builtin.shell: "dnf list available 2>/dev/null | grep '^carbonio'"
   when: ansible_facts.os_family == "RedHat"
   failed_when: false
   register: carbonio_packages_rhel
   tags: 
     - set-zextras-repos
 
-- name: Check list of repositories (RHEL)
-  shell: "dnf repolist "
+- name: Check list of repositories [RHEL]
+  ansible.builtin.shell: "dnf repolist "
   when: ansible_facts.os_family == "RedHat"
   register: update_result_rhel
   tags: 
     - set-zextras-repos
 
-- name: Verify repositories (RHEL)
+- name: Verify repositories [RHEL]
   block:
     - name: Display list of repositories
-      debug:
+      ansible.builtin.debug:
         msg: "{{ update_result_rhel.stdout_lines }}"
       
     - name: Wait 10 seconds to allow users to review the output
-      pause:
+      ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 0
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 0
   tags: 
     - set-zextras-repos
     
-- name: Display notice if Zextras repository is not prepared (RHEL)
+- name: Display notice if Zextras repository is not prepared [RHEL]
   block:
     - name: Display Zextras repository notice
-      debug:
+      ansible.builtin.debug:
         msg: |
           Repository update completed successfully:
           {{ update_result_rhel.stdout_lines }}
@@ -137,25 +149,29 @@
           Zextras repository is not prepared prior to installation. Carbonio will be installed using the current release version. Please consider adding the Zextras repository to ensure access to the latest updates.
 
     - name: Wait 10 seconds to allow users to review the notice
-      pause:
+      ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 1
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
   tags: 
     - set-zextras-repos
     
-- name: Copy Zextras repository for RHEL
+- name: Copy Zextras repository [RHEL]
   become: true
   ansible.builtin.template:
     src: zextras.repo.j2
     dest: /etc/yum.repos.d/zextras.repo
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 1
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
   tags: 
     - set-zextras-repos
     
-- name: Update repos RHEL  
+- name: Update repos [RHEL]  
   become: true
-  yum:
-    update_cache: yes
+  ansible.builtin.yum:
+    update_cache: true
   when: ansible_facts.os_family == "RedHat"
   tags: 
     - set-zextras-repos

@@ -1,0 +1,198 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Replace scram-sha-256 authentication with md5 [Ubuntu]
+  ansible.builtin.shell:
+    cmd: "sed -i 's/scram-sha-256/md5/g' {{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Replace scram-sha-256 authentication with md5 [RHEL]
+  ansible.builtin.shell:
+    cmd: "sed -i 's/scram-sha-256/md5/g' {{ rhel_postgresql_data_dir }}pg_hba.conf"
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Allow md5 connections to PostgreSQL [Ubuntu]
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ ubuntu_postgresql_conf_dir }}pg_hba.conf"
+    contype: host
+    databases: all
+    method: md5
+    users: "all"
+    source: "0.0.0.0/0"
+    create: true
+  become: true
+  become_user: postgres
+  notify: restart_postgres
+  when: 
+    - ansible_facts.os_family == "Debian" 
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Allow md5 connections to PostgreSQL [RHEL]
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
+    contype: host
+    databases: all
+    method: md5
+    users: "all"
+    source: "0.0.0.0/0"
+    create: true
+  become: true
+  become_user: postgres
+  notify: restart_postgres-rhel
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Add md5 host access rule to pg_hba.conf [RHEL]
+  become: true
+  notify: restart_postgres-rhel
+  ansible.builtin.lineinfile:
+    path: "{{ rhel_postgresql_data_dir }}pg_hba.conf"
+    insertafter: '# \$inet_socket_port = \[10024,10026\];.*'
+    line: "host    all             all             0.0.0.0/0               md5"
+    regexp: host\s*all\s*all\s*0.0.0.0/0\s*md5
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL listen addresses [Ubuntu]
+  community.postgresql.postgresql_alter_system:
+    param: listen_addresses
+    value: "*"
+  become: true
+  become_user: postgres
+  notify: restart_postgres
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL port [Ubuntu]
+  community.postgresql.postgresql_alter_system:
+    param: port
+    value: 5432
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL maximum connections [Ubuntu]
+  community.postgresql.postgresql_alter_system:
+    param: max_connections
+    value: 500
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres
+  tags:
+    - configure-postgres
+
+- name: Calculate PostgreSQL shared memory allocation (25% of RAM) [Ubuntu]
+  ansible.builtin.set_fact:
+    ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Set shared_buffers [Ubuntu]
+  community.postgresql.postgresql_alter_system:
+    param: shared_buffers
+    value: "{{ ram_size_mb }}"
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL listen addresses [RHEL]
+  community.postgresql.postgresql_alter_system:
+    param: listen_addresses
+    value: "*"
+  become: true
+  become_user: postgres
+  notify: restart_postgres-rhel
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL port [RHEL]
+  community.postgresql.postgresql_alter_system:
+    param: port
+    value: 5432
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres-rhel
+  tags:
+    - configure-postgres
+
+- name: Set PostgreSQL maximum connections [RHEL]
+  community.postgresql.postgresql_alter_system:
+    param: max_connections
+    value: 500
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres-rhel
+  tags:
+    - configure-postgres
+
+- name: Calculate PostgreSQL shared memory allocation (25% of RAM) [RHEL]
+  ansible.builtin.set_fact:
+    ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  tags:
+    - configure-postgres
+
+- name: Set shared_buffers [RHEL]
+  community.postgresql.postgresql_alter_system:
+    param: shared_buffers
+    value: "{{ ram_size_mb }}"
+  become: true
+  become_user: postgres
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+  notify: restart_postgres-rhel
+  tags:
+    - configure-postgres

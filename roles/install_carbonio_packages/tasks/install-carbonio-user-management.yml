@@ -1,24 +1,30 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install carbonio user management Ubuntu
+  - name: Install carbonio user management [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ carbonio_user_management_packages }}"
-    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["serviceDiscoverServers"] and (groups['filesServers'] | length > 0 or groups['taskServers'] | length > 0 or groups['workStreamServers'] | length > 0)
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["serviceDiscoverServers"]
+      - (groups["filesServers"] | length > 0 or groups["taskServers"] | length > 0 or groups["workStreamServers"] | length > 0)
     tags:
       - install-carbonio-user-management
 
 ##### RHEL
 
-  - name: Install carbonio user management RHEL
+  - name: Install carbonio user management [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ carbonio_user_management_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["serviceDiscoverServers"] and (groups['filesServers'] | length > 0 or groups['taskServers'] | length > 0 or groups['workStreamServers'] | length > 0)
+    when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["serviceDiscoverServers"]
+    - (groups["filesServers"] | length > 0 or groups["taskServers"] | length > 0 or groups["workStreamServers"] | length > 0)
     tags:
       - install-carbonio-user-management

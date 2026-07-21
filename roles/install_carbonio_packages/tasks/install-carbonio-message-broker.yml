@@ -1,18 +1,28 @@
 ---
-  - name: Install Message Broker on Server Ubuntu
+  - name: Install Message Broker on Server [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ message_broker_packages }}"
-    when: ansible_facts.os_family == "Debian" and ((groups['serviceDiscoverServers'] | length == 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length == 1 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
+    when: 
+      - ansible_facts.os_family == "Debian" 
+      - (
+          (groups["serviceDiscoverServers"] | length == 3 and inventory_hostname == groups["serviceDiscoverServers"][2]) or 
+          (groups["serviceDiscoverServers"] | length == 1 and inventory_hostname == groups["serviceDiscoverServers"][0])
+        ) 
     tags:
       - install-carbonio-message-broker
       
   - name: Install Message Broker on RH
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ message_broker_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and ((groups['serviceDiscoverServers'] | length == 3 and inventory_hostname in groups['serviceDiscoverServers'][2]) or (groups['serviceDiscoverServers'] | length == 1 and inventory_hostname in groups['serviceDiscoverServers'][0])) 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - (
+          (groups["serviceDiscoverServers"] | length == 3 and inventory_hostname == groups["serviceDiscoverServers"][2]) or 
+          (groups["serviceDiscoverServers"] | length == 1 and inventory_hostname == groups["serviceDiscoverServers"][0])
+        ) 
     tags:
       - install-carbonio-message-broker

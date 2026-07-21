@@ -1,14 +1,15 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-- hosts: all
-  gather_facts: no
+- name: Confirm license acceptance and deployment type
+  hosts: all
+  gather_facts: false
   run_once: true
   tasks:
-    - name: EULA Acceptance
-      pause:
+    - name: Accept Carbonio license
+      ansible.builtin.pause:
         prompt: |
           ============================================================
           IMPORTANT - LICENSE AGREEMENT
@@ -29,25 +30,25 @@
             https://zextras.com/licenses#zextras-carbonio-eula
 
           ============================================================
-          Type 'YES' and press ENTER to accept and continue: 
+          Type 'YES' and press ENTER to accept and continue:
       register: eula_acceptance
       when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
 
     - name: Auto-accept EULA
-      set_fact:
-          eula_acceptance:
-            user_input: 'YES'
+      ansible.builtin.set_fact:
+        eula_acceptance:
+          user_input: 'YES'
       when: carbonio_auto_accept_eula is defined and (carbonio_auto_accept_eula | bool)
 
     - name: Abort if EULA not accepted
-      fail:
+      ansible.builtin.fail:
         msg: >
           Installation aborted. You must type 'YES' to accept the
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
 
     - name: Multi-Server Status
-      pause:
+      ansible.builtin.pause:
         seconds: 10
         prompt: |
           =======================================================
@@ -55,10 +56,10 @@
           Proceeding with distributed components setup.
           =======================================================
           (Waiting 10 seconds...)
-      when: groups['all'] | length > 1
+      when: groups["all"] | length > 1
 
     - name: Single-Server Status
-      pause:
+      ansible.builtin.pause:
         seconds: 10
         prompt: |
           -------------------------------------------------------
@@ -66,69 +67,84 @@
           Proceeding with all-in-one components setup.
           -------------------------------------------------------
           (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
-      when: 
-        - groups['all'] | length == 1
+      when:
+        - groups["all"] | length == 1
 
-- hosts: all
-  order: inventory
-  gather_facts: yes
+- name: Prepare Ansible controller
+  hosts: localhost
+  connection: local
+  gather_facts: true
   roles:
-     - ../roles/pre_installation_checks
-     - ../roles/prepare_carbonio_vms
-     - ../roles/install_carbonio_packages
+    - ../roles/prepare_ansible_controller
+    
+- name: Validate hosts and install Carbonio packages
+  hosts: all
+  order: inventory
+  gather_facts: true
+  roles:
+    - ../roles/pre_installation_checks
+    - ../roles/prepare_carbonio_vms
+    - ../roles/install_carbonio_packages
 
-- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+- name: Bootstrap primary cluster services
+  hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
-     - ../roles/bootstrap_cluster_services
+    - ../roles/bootstrap_cluster_services
 
-- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
+- name: Bootstrap remaining cluster services
+  hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
-     - ../roles/bootstrap_cluster_services
+    - ../roles/bootstrap_cluster_services
 
-- hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
+- name: Configure primary Carbonio cluster servers
+  hosts: masterDirectoryServers, replicaDirectoryServers, postgresServers
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
-     - ../roles/bootstrap_carbonio
-     - ../roles/execute_final_setups
+    - ../roles/bootstrap_carbonio
+    - ../roles/execute_final_setups
 
-- hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers, !videoServers
+- name: Configure remaining Carbonio servers (except video servers)
+  hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers, !videoServers
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
-     - ../roles/bootstrap_carbonio
-     - ../roles/execute_final_setups
+    - ../roles/bootstrap_carbonio
+    - ../roles/execute_final_setups
 
-- hosts: videoServers
+- name: Configure video servers
+  hosts: videoServers
   serial: 1
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   roles:
-     - ../roles/bootstrap_carbonio
-     - ../roles/execute_final_setups
+    - ../roles/bootstrap_carbonio
+    - ../roles/execute_final_setups
 
-- hosts: all
+- name: Update Carbonio authentication keys
+  hosts: all
   order: inventory
-  gather_facts: yes
-  tasks: 
+  gather_facts: false
+  tasks:
     - name: Update auth keys
       become: true
       become_method: su
       become_user: zextras
-      command: '/opt/zextras/bin/zmupdateauthkeys'
+      ansible.builtin.command: '/opt/zextras/bin/zmupdateauthkeys'
 
-- hosts: all
+- name: Apply single-server optimizations
+  hosts: all
   order: inventory
-  gather_facts: yes
+  gather_facts: true
   tasks:
     - name: Single-Server Optimization Confirmation
-      pause:
+      ansible.builtin.pause:
         prompt: |
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           CONFIRMATION: SINGLE-SERVER OPTIMIZATION
@@ -141,36 +157,36 @@
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           Type 'YES' to apply optimizations, or press ENTER to skip:
       register: ss_final_confirm
-      when: 
-        - groups['all'] | length == 1
+      when:
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower not in ['true', 'false', 'yes', 'no', '1', '0']
 
     - name: Auto-apply Single-Server Optimization
-      set_fact:
-          ss_final_confirm:
-            user_input: 'YES'
-      when: 
-        - groups['all'] | length == 1
+      ansible.builtin.set_fact:
+        ss_final_confirm:
+          user_input: 'YES'
+      when:
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['true', 'yes', '1']
 
     - name: Auto-skip Single-Server Optimization
-      set_fact:
-          ss_final_confirm:
-            user_input: ''
-      when: 
-        - groups['all'] | length == 1
+      ansible.builtin.set_fact:
+        ss_final_confirm:
+          user_input: ''
+      when:
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
 
     - name: Optimization Skipped Message
-      debug:
+      ansible.builtin.debug:
         msg: "Optimization skipped. Single-server installation completed successfully without optimization."
-      when: 
-        - groups['all'] | length == 1
+      when:
+        - groups["all"] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) != 'YES'
 
     - name: Include Single-Server Setup Role
-      include_role:
+      ansible.builtin.include_role:
         name: ../roles/single_server_setup
-      when: 
-        - groups['all'] | length == 1
+      when:
+        - groups["all"] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) == 'YES'

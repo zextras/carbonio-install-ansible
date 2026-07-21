@@ -1,41 +1,51 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio preview Ubuntu
+  - name: Install Carbonio preview [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ preview_packages }}"
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["previewServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["previewServers"] 
     tags:
       - install-carbonio-preview
 
-  - name: Install Carbonio Docs Editor Ubuntu 
+  - name: Install Carbonio Docs Editor [Ubuntu] 
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ preview_dependencies_packages }}"
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["previewServers"]
+      - groups["docsServers"] | length == 0
     tags:
       - install-carbonio-preview
 
-  - name: Install Carbonio preview RHEL
+  - name: Install Carbonio preview [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ preview_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["previewServers"] 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["previewServers"] 
     tags:
       - install-carbonio-preview
 
-  - name: Install Carbonio Docs Editor RHEL
+  - name: Install Carbonio Docs Editor [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ preview_dependencies_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["previewServers"] and groups['docsServers'] | length == 0
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["previewServers"]
+      - groups["docsServers"] | length == 0
     tags:
       - install-carbonio-preview
      

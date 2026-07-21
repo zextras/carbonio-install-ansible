@@ -1,38 +1,71 @@
-Role Name
-=========
+# Install Carbonio Packages
 
-A brief description of the role goes here.
+This role installs Carbonio components on the hosts selected through the inventory groups.
 
-Requirements
-------------
+Package selection is based on the target operating system and the Carbonio component groups assigned to each host.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role installs Carbonio packages.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Special Placement Rules
 
-Dependencies
-------------
+### Database Connectors
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Database connector packages are installed on the first host in:
 
-Example Playbook
-----------------
+```
+[postgresServers]
+```
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Component-specific database connectors are installed only when the corresponding component group is populated.
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Examples:
 
-License
--------
+- Files DB when `filesServers` is populated;
+- Docs DB when `docsServers` is populated;
+- Preview DB when `previewServers` is populated;
+- Tasks DB when `taskServers` is populated;
+- Chats-related databases when `workStreamServers` is populated;
+- Video Recorder DB when `videoServers` is populated.
 
-BSD
+### Memcached
 
-Author Information
-------------------
+`carbonio-memcached` is installed only on the first Proxy host:
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+```
+inventory_hostname == groups["proxyServers"][0]
+```
+
+### Message Dispatcher
+
+Message Dispatcher is installed only on the first host in `workStreamServers`.
+
+### Message Broker
+
+Message Broker is installed:
+
+- on `serviceDiscoverServers[2]` when exactly three Service Discover servers are configured;
+- on `serviceDiscoverServers[0]` when exactly one Service Discover server is configured.
+
+### Storages
+
+Starting with Carbonio 26.6.0, `carbonio-storages` is installed:
+
+- on every MTA node;
+- on Files nodes when they are configured.
+
+### Docs Editor
+
+Docs Editor is installed on a Docs node by default.
+
+When no `docsServers` host is configured, it is installed on the Preview node as a dependency.
+
+## License
+
+GPL-3.0-only
+
+## Author Information
+
+Zextras 
+<https://www.zextras.com>

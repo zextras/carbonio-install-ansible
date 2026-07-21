@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 * Added installation and database bootstrap support for the new carbonio-preview-db package.
+* Refactored the playbook structure and standardized Ansible content across roles, including task names, module FQCNs, inventory group references, and task conditions.
 
 
 ### [26.6.1] (2026-07-10)

@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
@@ -6,7 +6,7 @@
 # tasks file  to upgrade OS
 - name: Upgrade RHEL Family OS packages
   become: true
-  yum:
+  ansible.builtin.yum:
     name: '*'
     state: latest
   when: ansible_facts.os_family == "RedHat"
@@ -16,15 +16,15 @@
 # Debian Family upgrade
 - name: Update repositories cache
   become: true
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
   when: ansible_facts.os_family == "Debian"
   tags: 
     - update-os
 
 - name: Update all packages to their latest version
   become: true
-  apt:
+  ansible.builtin.apt:
     name: "*"
     state: latest
   when: ansible_facts.os_family == "Debian"
@@ -33,7 +33,7 @@
 
 - name: Upgrade the OS (apt-get dist-upgrade)
   become: true
-  apt:
+  ansible.builtin.apt:
     upgrade: dist
   when: ansible_facts.os_family == "Debian"
   tags: 

@@ -1,11 +1,12 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
 # tasks file for bootstrap-cluster-services
-  - import_tasks: configure-syslog-aggregator.yml
-  - import_tasks: execute-master-directory-bootstrap.yml
-  - import_tasks: execute-replica-directory-bootstrap.yml
-  - import_tasks: initialize-postgres.yml
-  - import_tasks: execute-service-discover-bootstrap.yml
+  - ansible.builtin.import_tasks: configure-syslog-aggregator.yml
+  - ansible.builtin.import_tasks: execute-master-directory-bootstrap.yml
+  - ansible.builtin.import_tasks: execute-replica-directory-bootstrap.yml
+  - ansible.builtin.import_tasks: initialize-postgres.yml
+  - ansible.builtin.import_tasks: configure-postgres.yml
+  - ansible.builtin.import_tasks: execute-service-discover-bootstrap.yml

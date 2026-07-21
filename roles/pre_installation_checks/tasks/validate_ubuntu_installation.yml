@@ -1,9 +1,9 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 ---
-- name: Check if unminimize file exists on Ubuntu
-  stat:
+- name: Check if unminimize file exists [Ubuntu]
+  ansible.builtin.stat:
     path: /etc/update-motd.d/60-unminimize
   register: unminimize_file
   when: ansible_facts.distribution == "Ubuntu"
@@ -11,7 +11,7 @@
     - check-ubuntu-minimized
 
 - name: Fail if Ubuntu is running a minimized installation
-  fail:
+  ansible.builtin.fail:
     msg: "This server is running a minimized Ubuntu installation. To continue, please upgrade to standard installation first by running the 'unminimize' command on this node."
   when:
     - ansible_facts.distribution == "Ubuntu"

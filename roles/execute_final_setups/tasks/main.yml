@@ -1,14 +1,14 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
 # tasks file for execute-pending-setups
-  - import_tasks: execute-carbonio-pending-setups.yml
-  - import_tasks: execute-post-install-cmds.yml
-  - import_tasks: execute-dbconnectors-bootstrap.yml
-  - import_tasks: execute-config-fixes.yml
-  - import_tasks: restart-carbonio-appserver.yml
-  - import_tasks: execute-carbonio-pending-setups.yml
-    when: "groups['all'] | length == 1"
-  - import_tasks: configure-videoserver.yml
+  - ansible.builtin.import_tasks: execute-carbonio-pending-setups.yml
+  - ansible.builtin.import_tasks: execute-post-install-cmds.yml
+  - ansible.builtin.import_tasks: execute-dbconnectors-bootstrap.yml
+  - ansible.builtin.import_tasks: execute-config-fixes.yml
+  - ansible.builtin.import_tasks: restart-carbonio-appserver.yml
+  - ansible.builtin.import_tasks: execute-carbonio-pending-setups.yml
+    when: groups["all"] | length == 1
+  - ansible.builtin.import_tasks: configure-videoserver.yml

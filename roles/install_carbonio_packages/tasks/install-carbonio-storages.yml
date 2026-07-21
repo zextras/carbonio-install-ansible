@@ -1,28 +1,28 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-- name: Install carbonio-storages Ubuntu
+- name: Install carbonio-storages [Ubuntu]
   become: true
   ansible.builtin.apt:
     name: "{{ carbonio_storages_packages }}"
     state: present
   when:
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups['mtaServers'] or inventory_hostname in groups['filesServers']
+    - inventory_hostname in groups["mtaServers"] or inventory_hostname in groups["filesServers"]
   tags:
     - install-carbonio-storages
 
 ##### RHEL
 
-- name: Install carbonio-storages RHEL
+- name: Install carbonio-storages [RHEL]
   become: true
   ansible.builtin.yum:
     name: "{{ carbonio_storages_packages }}"
     state: present
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups['mtaServers'] or inventory_hostname in groups['filesServers']
+    - inventory_hostname in groups["mtaServers"] or inventory_hostname in groups["filesServers"]
   tags:
     - install-carbonio-storages

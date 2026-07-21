@@ -1,9 +1,8 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-
 - name: Check if Ansible is running from a Python virtual environment
   ansible.builtin.command:
     argv:
@@ -13,8 +12,6 @@
   register: ansible_venv_check
   changed_when: false
   failed_when: false
-  run_once: true
-  delegate_to: localhost
   become: false
 
 - name: Check netaddr Python dependency on Ansible controller
@@ -26,8 +23,6 @@
   register: netaddr_check
   changed_when: false
   failed_when: false
-  run_once: true
-  delegate_to: localhost
   become: false
 
 - name: Fail when netaddr is missing in Python virtual environment
@@ -46,8 +41,6 @@
   when:
     - netaddr_check.rc != 0
     - ansible_venv_check.stdout | trim == 'True'
-  run_once: true
-  delegate_to: localhost
   become: false
 
 - name: Warn that netaddr dependency will be installed on Ansible controller
@@ -59,8 +52,6 @@
   when:
     - netaddr_check.rc != 0
     - ansible_venv_check.stdout | trim != 'True'
-  run_once: true
-  delegate_to: localhost
   become: false
 
 - name: Gather facts from Ansible controller
@@ -71,12 +62,9 @@
   when:
     - netaddr_check.rc != 0
     - ansible_venv_check.stdout | trim != 'True'
-  run_once: true
-  delegate_to: localhost
-  delegate_facts: true
   become: false
 
-- name: Install netaddr dependency on Ubuntu Ansible controller
+- name: Install netaddr dependency Ansible controller [Ubuntu]
   ansible.builtin.apt:
     name: python3-netaddr
     state: present
@@ -84,21 +72,17 @@
   when:
     - netaddr_check.rc != 0
     - ansible_venv_check.stdout | trim != 'True'
-    - hostvars['localhost'].ansible_facts['os_family'] == 'Debian'
-  run_once: true
-  delegate_to: localhost
+    - ansible_facts.os_family == 'Debian'
   become: true
 
-- name: Install netaddr dependency on RHEL Ansible controller
+- name: Install netaddr dependency Ansible controller [RHEL]
   ansible.builtin.dnf:
     name: python3-netaddr
     state: present
   when:
     - netaddr_check.rc != 0
     - ansible_venv_check.stdout | trim != 'True'
-    - hostvars['localhost'].ansible_facts['os_family'] == 'RedHat'
-  run_once: true
-  delegate_to: localhost
+    - ansible_facts.os_family == 'RedHat'
   become: true
 
 - name: Re-check netaddr Python dependency on Ansible controller
@@ -111,8 +95,6 @@
   changed_when: false
   failed_when: false
   when: netaddr_check.rc != 0
-  run_once: true
-  delegate_to: localhost
   become: false
 
 - name: Fail if netaddr is still missing
@@ -133,6 +115,4 @@
   when:
     - netaddr_check.rc != 0
     - netaddr_recheck.rc != 0
-  run_once: true
-  delegate_to: localhost
   become: false

@@ -1,17 +1,17 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Manage Consul password
+  - name: Load or generate Service Discover password
     ansible.builtin.set_fact:
        carbonio_mesh_password: "{{ lookup('ansible.builtin.password', inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
     tags:
       - execute-pending-setups
       
-  - name: Copy scripts to remote host
+  - name: Copy pending-setup script to remote host
     become: true
-    template:
+    ansible.builtin.template:
       src: apply-pending-setups.sh.j2
       dest: /tmp/apply-pending-setups.sh
       mode: '0755'
@@ -20,12 +20,12 @@
       
   - name: Run Carbonio pending-setups
     become: true
-    command: /tmp/apply-pending-setups.sh {{ carbonio_mesh_password }}
+    ansible.builtin.command: /tmp/apply-pending-setups.sh {{ carbonio_mesh_password }}
     register: pso
     tags:
       - execute-pending-setups
       
-  - name: Remove scripts from remote host
+  - name: Remove pending-setup script from remote host
     become: true
     ansible.builtin.file:
       state: absent

@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+# tasks file for prepare_ansible_controller
+  - ansible.builtin.import_tasks: ensure_python_dependencies.yml
+  

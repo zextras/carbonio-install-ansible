@@ -1,113 +1,145 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Proxy an UIs Ubuntu
+  - name: Install Carbonio Proxy and UIs [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ proxy_packages }}"        
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["proxyServers"] 
     tags:
       - install-carbonio-proxy 
 
-  - name: Install Memcached on Server Ubuntu
+  - name: Install Memcached on Server [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["proxyServers"][0]
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname == groups["proxyServers"][0]
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio files UI Ubuntu
+  - name: Install Carbonio files UI [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ files_ui_packages }}"        
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    when: 
+      - ansible_facts.os_family == "Debian" 
+      - inventory_hostname in groups["proxyServers"]
+      - groups["filesServers"] | length > 0 
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio task UI Ubuntu
+  - name: Install Carbonio task UI [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ task_ui_packages }}"        
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["proxyServers"]
+      - groups["taskServers"] | length > 0 
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio WSC UI Ubuntu
+  - name: Install Carbonio WSC UI [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ ws_ui_packages }}"        
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["proxyServers"]
+      - groups["workStreamServers"] | length > 0 
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio storage UI Ubuntu
+  - name: Install Carbonio storage UI [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ storage_ui_packages }}"        
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["proxyServers"]
+      - groups["filesServers"] | length > 0
     tags:
       - install-carbonio-proxy
     
 ######## RHEL
-  - name: Install Carbonio Proxy an UIs RHEL
+  - name: Install Carbonio Proxy and UIs [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ proxy_packages }}"        
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["proxyServers"] 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["proxyServers"] 
     tags:
       - install-carbonio-proxy    
 
-  - name: Install Memcached on Server RHEL
+  - name: Install Memcached on Server [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ memcached_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["proxyServers"][0]
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname == groups["proxyServers"][0]
     tags:
       - install-carbonio-proxy
 
-  - name: Install Carbonio files UI RHEL
+  - name: Install Carbonio files UI [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ files_ui_packages }}"        
-    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["proxyServers"]
+      - groups["filesServers"] | length > 0 
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio task UI RHEL
+  - name: Install Carbonio task UI [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ task_ui_packages }}"        
-    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['taskServers'] | length > 0 
+    when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["proxyServers"] 
+    - groups["taskServers"] | length > 0 
     tags:
       - install-carbonio-proxy   
 
-  - name: Install Carbonio WSC UI RHEL
+  - name: Install Carbonio WSC UI [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ ws_ui_packages }}"        
-    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['workStreamServers'] | length > 0 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["proxyServers"]
+      - groups["workStreamServers"] | length > 0 
     tags:
       - install-carbonio-proxy  
 
-  - name: Install Carbonio storage UI RHEL
+  - name: Install Carbonio storage UI [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ storage_ui_packages }}"        
-    when: ansible_facts.os_family == "RedHat"  and inventory_hostname in groups["proxyServers"] and groups['filesServers'] | length > 0
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["proxyServers"] 
+      - groups["filesServers"] | length > 0
     tags:
       - install-carbonio-proxy

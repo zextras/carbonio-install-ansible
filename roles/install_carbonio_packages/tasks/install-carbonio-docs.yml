@@ -1,23 +1,27 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Docs Ubuntu 
+  - name: Install Carbonio Docs [Ubuntu] 
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ docs_packages }}"
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["docsServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["docsServers"] 
     tags:
       - install-carbonio-docs
 
-  - name: Install Carbonio Docs RHEL
+  - name: Install Carbonio Docs [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ docs_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["docsServers"] 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["docsServers"] 
     tags:
       - install-carbonio-docs
     

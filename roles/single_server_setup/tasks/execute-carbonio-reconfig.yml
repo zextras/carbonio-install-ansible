@@ -1,11 +1,11 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
 
-  - name: Calculate 10% of RAM
-    set_fact:
+  - name: Calculate application server heap allocation (10% of RAM)
+    ansible.builtin.set_fact:
       ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}"
     when: inventory_hostname in groups["applicationServers"]
     tags:
@@ -15,7 +15,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/zmlocalconfig -e ldap_common_threads=4 mailboxd_java_heap_size={{ ram_size_mb }}'
+    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig -e ldap_common_threads=4 mailboxd_java_heap_size={{ ram_size_mb }}'
     when: inventory_hostname in groups["applicationServers"]
     tags:
       - singleserver-reconfig-cmds
@@ -24,7 +24,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l mcf zimbraScheduledTaskMaxRetryDelay 10m zimbraGalMaxResults 50 zimbraGalSyncMaxConcurrentClients 1 zimbraScheduledTaskMaxRetries 5 zimbraSmtpHostname "127.0.0.1" zimbraSmtpPort 25'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l mcf zimbraScheduledTaskMaxRetryDelay 10m zimbraGalMaxResults 50 zimbraGalSyncMaxConcurrentClients 1 zimbraScheduledTaskMaxRetries 5 zimbraSmtpHostname "127.0.0.1" zimbraSmtpPort 25'
     when: inventory_hostname in groups["applicationServers"]
     tags:
       - singleserver-reconfig-cmds
@@ -33,7 +33,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} zimbraAdminImapImportNumThreads 2 zimbraDatabaseSlowSqlThreshold 4s zimbraHttpNumThreads 100 zimbraImapNumThreads 100 zimbraLmtpNumThreads 20 zimbraMilterNumThreads 50 zimbraPop3NumThreads 50 zimbraScheduledTaskNumThreads 5 zimbraAmavisMaxServers 5 zimbraCBPolicydMaxRequests 400 zimbraCBPolicydMaxServers 5 zimbraCBPolicydMaxSpareServers 3 zimbraClamAVMaxThreads 2 zimbraGalMaxResults "" zimbraGalSyncMaxConcurrentClients "" zimbraHttpDosFilterMaxRequestsPerSec 15 zimbraImapMaxConnections 100 zimbraMilterMaxConnections 2000 zimbraMtaMaxUse 100 zimbraPop3MaxConnections 100 zimbraScheduledTaskMaxRetries "" zimbraScheduledTaskMaxRetryDelay ""'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} zimbraAdminImapImportNumThreads 2 zimbraDatabaseSlowSqlThreshold 4s zimbraHttpNumThreads 100 zimbraImapNumThreads 100 zimbraLmtpNumThreads 20 zimbraMilterNumThreads 50 zimbraPop3NumThreads 50 zimbraScheduledTaskNumThreads 5 zimbraAmavisMaxServers 5 zimbraCBPolicydMaxRequests 400 zimbraCBPolicydMaxServers 5 zimbraCBPolicydMaxSpareServers 3 zimbraClamAVMaxThreads 2 zimbraGalMaxResults "" zimbraGalSyncMaxConcurrentClients "" zimbraHttpDosFilterMaxRequestsPerSec 15 zimbraImapMaxConnections 100 zimbraMilterMaxConnections 2000 zimbraMtaMaxUse 100 zimbraPop3MaxConnections 100 zimbraScheduledTaskMaxRetries "" zimbraScheduledTaskMaxRetryDelay ""'
     when: inventory_hostname in groups["applicationServers"]
     tags:
       - singleserver-reconfig-cmds
@@ -42,7 +42,7 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} -zimbraServiceEnabled stats'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} -zimbraServiceEnabled stats'
     tags:
       - singleserver-reconfig-cmds    
       
@@ -50,13 +50,13 @@
     become: true
     become_method: su
     become_user: zextras
-    command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} zimbraSmtpHostname "" zimbraSmtpPort ""'
+    ansible.builtin.command: '/opt/zextras/bin/carbonio prov -l ms {{inventory_hostname}} zimbraSmtpHostname "" zimbraSmtpPort ""'
     when: inventory_hostname in groups["mtaServers"]
     tags:
       - singleserver-reconfig-cmds     
  
-  - name: Calculate 10% of RAM
-    set_fact:
+  - name: Calculate MariaDB buffer pool allocation (10% of RAM)
+    ansible.builtin.set_fact:
       mysql_ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}M"
     when: inventory_hostname in groups["postgresServers"]
     tags:
@@ -72,30 +72,34 @@
       - singleserver-reconfig-cmds
 
   - name: Calculate 10% of RAM for shared_buffers
-    set_fact:
+    ansible.builtin.set_fact:
       ram_size_mb_psql: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}MB"
     when: inventory_hostname in groups["postgresServers"]
     tags:
       - singleserver-reconfig-cmds
       
-  - name: Set shared_buffers
+  - name: Set shared_buffers [Ubuntu]
     community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb_psql }}"
-    become: yes
+    become: true
     become_user: postgres
     notify: restart_postgres
-    when: ansible_facts.os_family == 'Debian' and inventory_hostname in groups["postgresServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"] 
     tags:
       - singleserver-reconfig-cmds
 
-  - name: Set shared_buffers
+  - name: Set shared_buffers [RHEL]
     community.postgresql.postgresql_alter_system:
       param: shared_buffers
       value: "{{ ram_size_mb_psql }}"
-    become: yes
+    become: true
     become_user: postgres
     notify: restart_postgres_rhel
-    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - singleserver-reconfig-cmds

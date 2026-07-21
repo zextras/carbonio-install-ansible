@@ -1,35 +1,41 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Ensure apt keyrings directory exists on Ubuntu
+  - name: Ensure apt keyrings directory exists [Ubuntu]
     become: true
     ansible.builtin.file:
       path: /etc/apt/keyrings
       state: directory
       mode: "0755"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when:
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
 
-  - name: Download PostgreSQL repository key on Ubuntu
+  - name: Download PostgreSQL repository key [Ubuntu]
     become: true
     ansible.builtin.get_url:
       url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
       dest: /etc/apt/keyrings/postgresql.asc
       mode: "0644"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
       
-  - name: Create Postgres repo on Ubuntu
+  - name: Create Postgres repo [Ubuntu]
     become: true
     ansible.builtin.template:
       src: postgres.list.j2
       dest: /etc/apt/sources.list.d/pgdg.list
       mode: "0644"
-    when: ansible_facts.os_family == "Debian" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
        
@@ -45,7 +51,7 @@
 
   - name: Enable powertools or crb 
     become: true
-    command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_facts.distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
+    ansible.builtin.command: "{{ '/usr/bin/dnf config-manager --set-enabled powertools' if ansible_facts.distribution_major_version == '8' else '/usr/bin/dnf config-manager --set-enabled crb' }}"
     when: ansible_facts.distribution == "Rocky"
     tags:
       - set-repos 
@@ -56,7 +62,10 @@
     register: baseos_check_8
     changed_when: false
     failed_when: false
-    when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "8" and ansible_facts.distribution != "Rocky"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - ansible_facts.distribution_major_version == "8"
+      - ansible_facts.distribution != "Rocky"
     tags:
       - set-repos
 
@@ -90,7 +99,10 @@
     register: appstream_check_8
     changed_when: false
     failed_when: false
-    when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "8" and ansible_facts.distribution != "Rocky"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - ansible_facts.distribution_major_version == "8"
+      - ansible_facts.distribution != "Rocky"
     tags:
       - set-repos
 
@@ -160,7 +172,10 @@
     ansible.builtin.rpm_key:
       state: present
       key: https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-8
-    when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "8" and ansible_facts.distribution != "Rocky"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - ansible_facts.distribution_major_version == "8"
+      - ansible_facts.distribution != "Rocky"
     tags:
       - set-repos
 
@@ -169,7 +184,10 @@
     register: epel_check_rhel8
     changed_when: false
     failed_when: false
-    when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "8" and ansible_facts.distribution != "Rocky"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - ansible_facts.distribution_major_version == "8"
+      - ansible_facts.distribution != "Rocky"
     tags:
       - set-repos
 
@@ -177,7 +195,7 @@
     ansible.builtin.yum:
       name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
       state: present
-      update_cache: yes
+      update_cache: true
       disable_gpg_check: true
     when:
       - ansible_facts.os_family == "RedHat"
@@ -207,7 +225,10 @@
     register: baseos_check_9
     changed_when: false
     failed_when: false
-    when: ansible_facts.os_family == "RedHat" and ansible_facts.distribution_major_version == "9" and ansible_facts.distribution != "Rocky"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - ansible_facts.distribution_major_version == "9"
+      - ansible_facts.distribution != "Rocky"
     tags:
       - set-repos
 
@@ -326,7 +347,7 @@
     ansible.builtin.yum:
       name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
       state: present
-      update_cache: yes
+      update_cache: true
       disable_gpg_check: true
     when:
       - ansible_facts.os_family == "RedHat"
@@ -356,14 +377,18 @@
       name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_facts.distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm
       state: present
       disable_gpg_check : true
-    when: ansible_facts.os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
 
   - name: Disable the postgresql stream module in AppStream
     become: true
-    command: '/usr/bin/dnf -qy module disable postgresql'
-    when: ansible_facts.os_family == "RedHat" and (inventory_hostname in groups["dbsConnectorServers"] or inventory_hostname in groups["postgresServers"])
+    ansible.builtin.command: '/usr/bin/dnf -qy module disable postgresql'
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - set-repos
        

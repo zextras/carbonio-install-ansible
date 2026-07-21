@@ -1,19 +1,17 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for pre-installation_checks
-  - import_tasks: chats_check.yml
-  - import_tasks: dbconnectors_checks.yml
-  - import_tasks: consul_checks.yml
-  - import_tasks: postgres_checks.yml
-  - import_tasks: directory_server_checks.yml
-  - import_tasks: ansible_controller_dependencies.yml
-  - import_tasks: inventory_values_checks.yml
-  - import_tasks: single_server_checks.yml
-    when: "groups['all'] | length == 1"
-  - import_tasks: validate_ubuntu_installation.yml
-  - import_tasks: validate_fqdn_checks.yml
-  - import_tasks: hosts_check.yml
+- ansible.builtin.import_tasks: validate_inventory_chats.yml
+- ansible.builtin.import_tasks: validate_inventory_db_connectors.yml
+- ansible.builtin.import_tasks: validate_inventory_consul.yml
+- ansible.builtin.import_tasks: validate_inventory_postgresql.yml
+- ansible.builtin.import_tasks: validate_inventory_directory.yml
+- ansible.builtin.import_tasks: validate_inventory_values.yml
+- ansible.builtin.import_tasks: validate_inventory_single_server.yml
+  when: groups["all"] | length == 1
+- ansible.builtin.import_tasks: validate_ubuntu_installation.yml
+- ansible.builtin.import_tasks: validate_host_fqdn.yml
+- ansible.builtin.import_tasks: validate_hosts_file.yml
   

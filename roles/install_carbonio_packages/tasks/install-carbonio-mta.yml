@@ -1,23 +1,27 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio MTA Ubuntu
+  - name: Install Carbonio MTA [Ubuntu]
     become: true
-    apt: name={{ item }} state=present
+    ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ mta_packages }}" 
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["mtaServers"] 
+    when:
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["mtaServers"]
     tags:
       - install-carbonio-mta
       
-  - name: Install Carbonio MTA RHEL
+  - name: Install Carbonio MTA [RHEL]
     become: true
-    yum: name={{ item }} state=present
+    ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ mta_packages }}" 
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["mtaServers"] 
+    when:
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["mtaServers"]
     tags:
       - install-carbonio-mta
 

@@ -278,5 +278,5 @@ If either value is invalid (not a recognized boolean), the playbook falls back t
 
 See [COPYING](COPYING.md)
 
-SPDX-FileCopyrightText: 2024 Zextras https://www.zextras.com
+SPDX-FileCopyrightText: Zextras https://www.zextras.com
 SPDX-License-Identifier: GPL-3.0-only

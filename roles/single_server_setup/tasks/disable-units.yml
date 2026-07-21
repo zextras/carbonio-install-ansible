@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Stop and disable unnecessary servises
-    ansible.builtin.systemd:
+  - name: Stop and disable unnecessary services
+    ansible.builtin.systemd_service:
       name: "{{ item }}"
       state: stopped 
       enabled: false
@@ -20,38 +20,38 @@
       state: absent
     with_items:
       - "{{ hcl_paths }}"
-    become: yes
+    become: true
     when: inventory_hostname in groups["mtaServers"]
     tags:
       - disable-unnecessary-services
 
   - name: Get list of carbonio-prometheus services
-    shell: "systemctl list-units --state=active 'carbonio-prometheus*' --no-legend | awk '{print $1}'"
+    ansible.builtin.shell: "systemctl list-units --state=active 'carbonio-prometheus*' --no-legend | awk '{print $1}'"
     register: services_list
     ignore_errors: true
     changed_when: false
-    when: groups['prometheusServers'] | length == 0
+    when: groups["prometheusServers"] | length == 0
     tags:
       - disable-unnecessary-services
 
   - name: Notify if no carbonio-prometheus services found
-    debug:
+    ansible.builtin.debug:
       msg: "No carbonio-prometheus services found."
-    when: 
-      - groups['prometheusServers'] | length == 0 
+    when:
+      - groups["prometheusServers"] | length == 0 
       - services_list is defined
       - services_list.stdout_lines | length == 0
     tags:
       - disable-unnecessary-services
       
   - name: Stop and disable carbonio-prometheus services
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       name: "{{ item }}"
       state: stopped
       enabled: false
     loop: "{{ services_list.stdout_lines }}"
-    when: 
-      - groups['prometheusServers'] | length == 0
+    when:
+      - groups["prometheusServers"] | length == 0
       - services_list is defined
       - services_list.stdout_lines | length > 0
     notify: restart_service_discover
@@ -61,11 +61,11 @@
   # - name: Stop and disable carbonio-prometheus services
   #   shell: "systemctl stop {{ item }} && systemctl mask {{ item }}"
   #   loop: "{{ services_list.stdout_lines }}"
-  #   become: yes
+  #   become: true
 
   - name: Disable carbonio-stats service on Ubuntu 24 and RHEL 9
     become: true
-    ansible.builtin.systemd:
+    ansible.builtin.systemd_service:
       name: carbonio-stats.service
       enabled: false
       state: stopped

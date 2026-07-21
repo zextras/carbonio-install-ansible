@@ -1,38 +1,26 @@
-Role Name
-=========
+# Bootstrap Carbonio
 
-A brief description of the role goes here.
+This role completes Carbonio bootstrap operations on cluster nodes after the primary Directory, PostgreSQL, and Service Discover services have been initialized.
 
-Requirements
-------------
+It also configures the Service Discover agent on nodes that are not Service Discover servers.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- checks whether Carbonio bootstrap has already been performed on the current host;
+- generates or loads the shared LDAP password;
+- creates the Carbonio bootstrap configuration file;
+- runs `carbonio-bootstrap` on nodes that still require bootstrap;
+- checks whether Service Discover agent credentials already exist;
+- generates or loads the Service Discover password;
+- runs Service Discover agent setup on non-Service Discover nodes.
 
-Dependencies
-------------
+## License
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+GPL-3.0-only
 
-Example Playbook
-----------------
+## Author Information
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Zextras 
+<https://www.zextras.com>

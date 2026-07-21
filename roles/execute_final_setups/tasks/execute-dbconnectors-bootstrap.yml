@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
@@ -13,126 +13,114 @@
     retries: 20
     delay: 3
     when:
-      - inventory_hostname in groups['postgresServers'][0]
+      - inventory_hostname == groups["postgresServers"][0]
     tags:
       - db-connectors-bootstrap
       
-  - name: Manage Postgres password
+  - name: Load or generate PostgreSQL password
     ansible.builtin.set_fact:
        carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
-    when: 
-      - inventory_hostname in groups['postgresServers'][0]
-    tags:
-      - db-connectors-bootstrap
-
-  - name: run mailbox db-connectors Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
-    become: true
-    when: 
-      - inventory_hostname in groups['postgresServers'][0]
-    tags:
-      - db-connectors-bootstrap
-      
-  - name: run files-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
-    become: true
-    when: 
-      - inventory_hostname in groups['postgresServers'][0]
-      - groups['filesServers'] | length > 0
-    tags:
-      - db-connectors-bootstrap
-      
-  - name: run docs-connector-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    become: true
-    command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - inventory_hostname in groups['postgresServers'][0]
-      - groups['docsServers'] | length > 0 
-    tags:
-      - db-connectors-bootstrap
-
-  - name: run preview-db Bootstrap
-    environment:
-      PGPASSWORD: "{{ carbonio_postgres_password }}"
-    become: true
-    command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
     when:
-      - inventory_hostname in groups['postgresServers'][0]
-      - groups['previewServers'] | length > 0
+      - inventory_hostname == groups["postgresServers"][0]
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Run mailbox db-connectors Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    ansible.builtin.command: /usr/bin/carbonio-mailbox-db-bootstrap carbonio_adm 127.0.0.1      
+    become: true
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
     tags:
       - db-connectors-bootstrap
       
-  - name: run tasks-connector-db Bootstrap
+  - name: Run files-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    ansible.builtin.command: /usr/bin/carbonio-files-db-bootstrap carbonio_adm 127.0.0.1 
+    become: true
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["filesServers"] | length > 0
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: Run docs-connector-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - inventory_hostname in groups['postgresServers'][0]
-      - groups['taskServers'] | length > 0
+    ansible.builtin.command: /usr/bin/carbonio-docs-connector-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["docsServers"] | length > 0 
     tags:
       - db-connectors-bootstrap
 
-  - name: run message-dispatcher-db Bootstrap
+  - name: Run preview-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0
+    ansible.builtin.command: /usr/bin/carbonio-preview-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["previewServers"] | length > 0
+    tags:
+      - db-connectors-bootstrap
+      
+  - name: Run tasks-connector-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: true
+    ansible.builtin.command: /usr/bin/carbonio-tasks-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["taskServers"] | length > 0
     tags:
       - db-connectors-bootstrap
 
-  - name: run carbonio-ws-collaboration-db Bootstrap
+  - name: Run message-dispatcher-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0
+    ansible.builtin.command: /usr/bin/carbonio-message-dispatcher-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["workStreamServers"] | length > 0
     tags:
       - db-connectors-bootstrap
 
-  - name: run carbonio-notification-push-db Bootstrap
+  - name: Run carbonio-ws-collaboration-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-notification-push-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['workStreamServers'] | length > 0
+    ansible.builtin.command: /usr/bin/carbonio-ws-collaboration-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["workStreamServers"] | length > 0
+    tags:
+      - db-connectors-bootstrap
+
+  - name: Run carbonio-notification-push-db Bootstrap
+    environment:
+      PGPASSWORD: "{{ carbonio_postgres_password }}"
+    become: true
+    ansible.builtin.command: /usr/bin/carbonio-notification-push-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["workStreamServers"] | length > 0
     tags:
       - db-connectors-bootstrap
       - install-carbonio-notification-push
 
-  - name: run carbonio-videorecorder-db Bootstrap
+  - name: Run carbonio-videorecorder-db Bootstrap
     environment:
       PGPASSWORD: "{{ carbonio_postgres_password }}"
     become: true
-    command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
-    when: 
-      - (
-          (inventory_hostname in groups['postgresServers'][0] and groups['dbsConnectorServers'] | length == 0) or 
-          (groups['dbsConnectorServers'] | length > 0 and inventory_hostname in groups['dbsConnectorServers'][0] and groups['dbsConnectorServers'][0] != groups['postgresServers'][0])
-        )
-      - groups['videoServers'] | length > 0
+    ansible.builtin.command: /usr/bin/carbonio-videorecorder-db-bootstrap carbonio_adm 127.0.0.1
+    when:
+      - inventory_hostname == groups["postgresServers"][0]
+      - groups["videoServers"] | length > 0
     tags:
       - db-connectors-bootstrap
       - install-carbonio-videoserver

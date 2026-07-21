@@ -1,10 +1,10 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
   - name: Enable remote syslog
-    lineinfile:
+    ansible.builtin.lineinfile:
         # firstmatch: true
         dest: /etc/rsyslog.conf
         regex: '^#\s*{{ item.regex }}(.*)$'
