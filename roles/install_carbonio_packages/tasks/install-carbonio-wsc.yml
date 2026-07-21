@@ -7,7 +7,9 @@
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ workstream_packages }}"
-    when: ansible_facts.os_family == "Debian"  and inventory_hostname in groups["workStreamServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["workStreamServers"] 
     tags:
       - install-carbonio-chats
 
@@ -16,7 +18,10 @@
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_packages }}"
-    when: ansible_facts.os_family == "Debian" and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0]
+    when:
+      - ansible_facts.os_family == "Debian"
+      - groups["workStreamServers"] | length > 0
+      - inventory_hostname == groups["workStreamServers"][0]
     tags:
       - install-carbonio-chats
 
@@ -26,7 +31,9 @@
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ workstream_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and inventory_hostname in groups["workStreamServers"] 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["workStreamServers"] 
     tags:
       - install-carbonio-chats
 
@@ -35,6 +42,9 @@
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
       - "{{ message_dispatcher_packages }}"
-    when: (ansible_facts.os_family == "RedHat" or ansible_facts.os_family == "CentOS") and groups["workStreamServers"] | length > 0 and inventory_hostname in groups["workStreamServers"][0] 
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - groups["workStreamServers"] | length > 0
+      - inventory_hostname == groups["workStreamServers"][0] 
     tags:
       - install-carbonio-chats

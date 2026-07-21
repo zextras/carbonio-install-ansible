@@ -6,7 +6,9 @@
 - name: Set Postgres Service name [RHEL]
   ansible.builtin.set_fact:
     postgresql_service_name: "{{ rhel_postgresql_service_name }}"
-  when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
@@ -24,7 +26,10 @@
   become: true
   ansible.builtin.command: "{{ rhel_postgres_init_script }} initdb"
   notify: restart_postgres-rhel
-  when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"] and not pgdata_dir_version.stat.exists
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
+    - not pgdata_dir_version.stat.exists
   tags:
     - initialize-postgres
 
@@ -33,7 +38,9 @@
     name: "{{ rhel_postgresql_service_name }}"
     state: started
     enabled: true
-  when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
   tags:
     - initialize-postgres
 
@@ -43,7 +50,9 @@
     value: md5
   become: true
   become_user: postgres
-  when: ansible_facts.os_family == "Debian" and inventory_hostname in groups["postgresServers"]
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres
   tags:
     - initialize-postgres
@@ -54,7 +63,9 @@
     value: md5
   become: true
   become_user: postgres
-  when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - inventory_hostname in groups["postgresServers"]
   notify: restart_postgres-rhel
   tags:
     - initialize-postgres

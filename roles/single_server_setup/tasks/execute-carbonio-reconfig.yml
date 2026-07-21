@@ -85,7 +85,9 @@
     become: true
     become_user: postgres
     notify: restart_postgres
-    when: ansible_facts.os_family == 'Debian' and inventory_hostname in groups["postgresServers"] 
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups["postgresServers"] 
     tags:
       - singleserver-reconfig-cmds
 
@@ -96,6 +98,8 @@
     become: true
     become_user: postgres
     notify: restart_postgres_rhel
-    when: ansible_facts.os_family == "RedHat" and inventory_hostname in groups["postgresServers"]
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups["postgresServers"]
     tags:
       - singleserver-reconfig-cmds

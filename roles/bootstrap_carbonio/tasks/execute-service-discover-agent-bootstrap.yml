@@ -14,13 +14,17 @@
   - name: Load or generate Service Discover password
     ansible.builtin.set_fact:
        carbonio_mesh_password: "{{ lookup('ansible.builtin.password', inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
-    when:  inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists
+    when:
+      - inventory_hostname not in groups["serviceDiscoverServers"]
+      - not sdb.stat.exists
     tags:
       - service-discover-agent-bootstrap 
     
   - name: Run Service Discover Agents Bootstrap
     become: true
     ansible.builtin.command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
-    when: inventory_hostname not in groups["serviceDiscoverServers"] and not sdb.stat.exists 
+    when:
+      - inventory_hostname not in groups["serviceDiscoverServers"]
+      - not sdb.stat.exists
     tags:
       - service-discover-agent-bootstrap

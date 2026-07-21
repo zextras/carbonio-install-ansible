@@ -29,7 +29,9 @@
     - name: Wait 10 seconds to allow users to review the notice
       ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 0
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 0
   tags: 
     - set-zextras-repos
 
@@ -46,7 +48,9 @@
     - name: Wait 10 seconds to allow users to review the notice
       ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags: 
     - set-zextras-repos
 
@@ -56,7 +60,9 @@
     path: /etc/apt/keyrings
     state: directory
     mode: "0755"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
@@ -66,7 +72,9 @@
     url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21"
     dest: /etc/apt/keyrings/zextras.asc
     mode: "0644"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when: 
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
@@ -76,7 +84,9 @@
     src: zextras.list.j2
     dest: /etc/apt/sources.list.d/zextras.list
     mode: "0644"
-  when: ansible_facts.os_family == "Debian" and carbonio_packages.rc == 1
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
@@ -122,7 +132,9 @@
     - name: Wait 10 seconds to allow users to review the output
       ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 0
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 0
   tags: 
     - set-zextras-repos
     
@@ -139,7 +151,9 @@
     - name: Wait 10 seconds to allow users to review the notice
       ansible.builtin.pause:
         seconds: 10
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 1
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
   tags: 
     - set-zextras-repos
     
@@ -148,7 +162,9 @@
   ansible.builtin.template:
     src: zextras.repo.j2
     dest: /etc/yum.repos.d/zextras.repo
-  when: ansible_facts.os_family == "RedHat" and carbonio_packages_rhel.rc == 1
+  when: 
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
   tags: 
     - set-zextras-repos
     
