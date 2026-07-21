@@ -20,7 +20,7 @@ galaxy_info:
   # https://galaxy.ansible.com/api/v1/platforms/
   #
   platforms:
-  - name: [RHEL]
+  - name: RHEL
     versions:
     - 8
     - 9

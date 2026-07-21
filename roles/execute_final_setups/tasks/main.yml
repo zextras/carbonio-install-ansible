@@ -10,5 +10,5 @@
   - ansible.builtin.import_tasks: execute-config-fixes.yml
   - ansible.builtin.import_tasks: restart-carbonio-appserver.yml
   - ansible.builtin.import_tasks: execute-carbonio-pending-setups.yml
-    when: "groups['all'] | length == 1"
+    when: "groups["all"] | length == 1"
   - ansible.builtin.import_tasks: configure-videoserver.yml

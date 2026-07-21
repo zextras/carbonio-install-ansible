@@ -56,7 +56,7 @@
           Proceeding with distributed components setup.
           =======================================================
           (Waiting 10 seconds...)
-      when: groups['all'] | length > 1
+      when: groups["all"] | length > 1
 
     - name: Single-Server Status
       ansible.builtin.pause:
@@ -68,7 +68,7 @@
           -------------------------------------------------------
           (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
 
 - name: Prepare Ansible controller
   hosts: localhost
@@ -158,7 +158,7 @@
           Type 'YES' to apply optimizations, or press ENTER to skip:
       register: ss_final_confirm
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower not in ['true', 'false', 'yes', 'no', '1', '0']
 
     - name: Auto-apply Single-Server Optimization
@@ -166,7 +166,7 @@
         ss_final_confirm:
           user_input: 'YES'
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['true', 'yes', '1']
 
     - name: Auto-skip Single-Server Optimization
@@ -174,19 +174,19 @@
         ss_final_confirm:
           user_input: ''
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
 
     - name: Optimization Skipped Message
       ansible.builtin.debug:
         msg: "Optimization skipped. Single-server installation completed successfully without optimization."
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) != 'YES'
 
     - name: Include Single-Server Setup Role
       ansible.builtin.include_role:
         name: ../roles/single_server_setup
       when:
-        - groups['all'] | length == 1
+        - groups["all"] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) == 'YES'

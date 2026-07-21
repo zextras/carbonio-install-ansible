@@ -23,7 +23,7 @@
 
   - name: Report that Carbonio bootstrap never performed
     ansible.builtin.debug:
-    msg: "Carbonio bootstrap never performed"
+      msg: "Carbonio bootstrap never performed"
     when:
       - glc is search("localhost")
       - inventory_hostname not in groups["masterDirectoryServers"]

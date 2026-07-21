@@ -62,7 +62,7 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: "/opt/zextras/bin/carbonio prov -l mcf zimbraLogHostname {{ hostvars[groups["syslogServer"][0]].inventory_hostname }}"
+    ansible.builtin.command: "/opt/zextras/bin/carbonio prov -l mcf zimbraLogHostname {{ hostvars[groups['syslogServer'][0]].inventory_hostname }}"
     when:
       - groups["syslogServer"] | length > 0
       - inventory_hostname in groups["masterDirectoryServers"]

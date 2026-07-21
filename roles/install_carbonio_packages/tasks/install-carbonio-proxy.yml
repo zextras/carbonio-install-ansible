@@ -32,7 +32,8 @@
       - "{{ files_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian" 
-      - inventory_hostname in groups["proxyServers"] and groups["filesServers"] | length > 0 
+      - inventory_hostname in groups["proxyServers"]
+      - groups["filesServers"] | length > 0 
     tags:
       - install-carbonio-proxy
 

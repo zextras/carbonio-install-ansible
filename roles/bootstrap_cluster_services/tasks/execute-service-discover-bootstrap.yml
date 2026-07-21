@@ -23,7 +23,9 @@
   - name: Load or generate LDAP password
     ansible.builtin.set_fact:
        carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password',  chars=['ascii_letters', 'digits'], length=8) }}"
-    when: glc is search("localhost") and inventory_hostname in groups["serviceDiscoverServers"]
+    when: 
+      - glc is search("localhost")
+      - inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - service-discover-bootstrap
       
@@ -31,7 +33,9 @@
     ansible.builtin.template:
       src: carbonio-config.txt.j2
       dest: /tmp/carbonio-config.txt
-    when: glc is search("localhost") and inventory_hostname in groups["serviceDiscoverServers"]
+    when:
+      - glc is search("localhost")
+      - inventory_hostname in groups["serviceDiscoverServers"]
     tags:
       - service-discover-bootstrap
       
@@ -78,7 +82,11 @@
       - service-discover-bootstrap
 
   - name: Save Service Discover bootstrap output locally
-    local_action: copy content={{ sdbo.stdout }} dest=/tmp/sdbo_{{ inventory_hostname }}
+    ansible.builtin.copy:
+      content: "{{ sdbo.stdout }}"
+      dest: "/tmp/sdbo_{{ inventory_hostname }}"
+    delegate_to: localhost
+    become: false
     when: 
       - inventory_hostname in groups["serviceDiscoverServers"]
       - not sdb.stat.exists
