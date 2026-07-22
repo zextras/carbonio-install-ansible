@@ -7,7 +7,7 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig zimbra_server_hostname"
     register: glc  
     when:
       - inventory_hostname in groups['replicaDirectoryServers']

@@ -15,7 +15,7 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig -e ldap_common_threads=4 mailboxd_java_heap_size={{ ram_size_mb }}'
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig -e ldap_common_threads=4 mailboxd_java_heap_size={{ ram_size_mb }}"
     when: inventory_hostname in groups['applicationServers']
     tags:
       - singleserver-reconfig-cmds
