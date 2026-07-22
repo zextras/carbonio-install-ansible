@@ -8,7 +8,7 @@
     msg: >
       Single Server does not support Replica Directory installation.
       The 'replicaDirectoryServers' group must be empty.
-  when: groups["replicaDirectoryServers"] | length > 0
+  when: groups['replicaDirectoryServers'] | length > 0
   tags:
     - check-single-server-inventory
 
@@ -17,6 +17,6 @@
     msg: >
       Single Server does not support Syslog installation.
       The 'syslogServer' group must be empty.
-  when: groups["syslogServer"] | length > 0
+  when: groups['syslogServer'] | length > 0
   tags:
     - check-single-server-inventory

@@ -9,7 +9,7 @@
       - "{{ workstream_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["workStreamServers"] 
+      - inventory_hostname in groups['workStreamServers'] 
     tags:
       - install-carbonio-chats
 
@@ -20,8 +20,8 @@
       - "{{ message_dispatcher_packages }}"
     when:
       - ansible_facts.os_family == "Debian"
-      - groups["workStreamServers"] | length > 0
-      - inventory_hostname == groups["workStreamServers"][0]
+      - groups['workStreamServers'] | length > 0
+      - inventory_hostname == groups['workStreamServers'][0]
     tags:
       - install-carbonio-chats
 
@@ -33,7 +33,7 @@
       - "{{ workstream_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["workStreamServers"] 
+      - inventory_hostname in groups['workStreamServers'] 
     tags:
       - install-carbonio-chats
 
@@ -44,7 +44,7 @@
       - "{{ message_dispatcher_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - groups["workStreamServers"] | length > 0
-      - inventory_hostname == groups["workStreamServers"][0] 
+      - groups['workStreamServers'] | length > 0
+      - inventory_hostname == groups['workStreamServers'][0] 
     tags:
       - install-carbonio-chats

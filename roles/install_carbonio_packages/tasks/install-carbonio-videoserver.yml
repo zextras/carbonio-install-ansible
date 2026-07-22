@@ -10,7 +10,7 @@
       - "{{ videoserver_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["videoServers"] 
+      - inventory_hostname in groups['videoServers'] 
     tags:
       - install-carbonio-videoserver
       
@@ -21,7 +21,7 @@
       - "{{ videoserver_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["videoServers"] 
+      - inventory_hostname in groups['videoServers'] 
     tags:
       - install-carbonio-videoserver
 

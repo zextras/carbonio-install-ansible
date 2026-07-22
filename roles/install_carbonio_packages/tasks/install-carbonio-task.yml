@@ -10,7 +10,7 @@
       - "{{ task_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["taskServers"] 
+      - inventory_hostname in groups['taskServers'] 
     tags:
       - install-carbonio-task
       
@@ -21,7 +21,7 @@
       - "{{ task_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["taskServers"] 
+      - inventory_hostname in groups['taskServers'] 
     tags:
       - install-carbonio-task
 

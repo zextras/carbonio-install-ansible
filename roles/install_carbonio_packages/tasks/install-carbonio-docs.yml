@@ -10,7 +10,7 @@
       - "{{ docs_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["docsServers"] 
+      - inventory_hostname in groups['docsServers'] 
     tags:
       - install-carbonio-docs
 
@@ -21,7 +21,7 @@
       - "{{ docs_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["docsServers"] 
+      - inventory_hostname in groups['docsServers'] 
     tags:
       - install-carbonio-docs
     

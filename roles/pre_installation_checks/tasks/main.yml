@@ -10,7 +10,7 @@
 - ansible.builtin.import_tasks: validate_inventory_directory.yml
 - ansible.builtin.import_tasks: validate_inventory_values.yml
 - ansible.builtin.import_tasks: validate_inventory_single_server.yml
-  when: groups["all"] | length == 1
+  when: groups['all'] | length == 1
 - ansible.builtin.import_tasks: validate_ubuntu_installation.yml
 - ansible.builtin.import_tasks: validate_host_fqdn.yml
 - ansible.builtin.import_tasks: validate_hosts_file.yml

@@ -10,7 +10,7 @@
       - "{{ proxy_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["proxyServers"] 
+      - inventory_hostname in groups['proxyServers'] 
     tags:
       - install-carbonio-proxy 
 
@@ -21,7 +21,7 @@
       - "{{ memcached_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname == groups["proxyServers"][0]
+      - inventory_hostname == groups['proxyServers'][0]
     tags:
       - install-carbonio-proxy
 
@@ -32,8 +32,8 @@
       - "{{ files_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian" 
-      - inventory_hostname in groups["proxyServers"]
-      - groups["filesServers"] | length > 0 
+      - inventory_hostname in groups['proxyServers']
+      - groups['filesServers'] | length > 0 
     tags:
       - install-carbonio-proxy
 
@@ -44,8 +44,8 @@
       - "{{ task_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["proxyServers"]
-      - groups["taskServers"] | length > 0 
+      - inventory_hostname in groups['proxyServers']
+      - groups['taskServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
 
@@ -56,8 +56,8 @@
       - "{{ ws_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["proxyServers"]
-      - groups["workStreamServers"] | length > 0 
+      - inventory_hostname in groups['proxyServers']
+      - groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy
 
@@ -68,8 +68,8 @@
       - "{{ storage_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["proxyServers"]
-      - groups["filesServers"] | length > 0
+      - inventory_hostname in groups['proxyServers']
+      - groups['filesServers'] | length > 0
     tags:
       - install-carbonio-proxy
     
@@ -81,7 +81,7 @@
       - "{{ proxy_packages }}"        
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["proxyServers"] 
+      - inventory_hostname in groups['proxyServers'] 
     tags:
       - install-carbonio-proxy    
 
@@ -92,7 +92,7 @@
       - "{{ memcached_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname == groups["proxyServers"][0]
+      - inventory_hostname == groups['proxyServers'][0]
     tags:
       - install-carbonio-proxy
 
@@ -103,8 +103,8 @@
       - "{{ files_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["proxyServers"]
-      - groups["filesServers"] | length > 0 
+      - inventory_hostname in groups['proxyServers']
+      - groups['filesServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
 
@@ -115,8 +115,8 @@
       - "{{ task_ui_packages }}"        
     when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["proxyServers"] 
-    - groups["taskServers"] | length > 0 
+    - inventory_hostname in groups['proxyServers'] 
+    - groups['taskServers'] | length > 0 
     tags:
       - install-carbonio-proxy   
 
@@ -127,8 +127,8 @@
       - "{{ ws_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["proxyServers"]
-      - groups["workStreamServers"] | length > 0 
+      - inventory_hostname in groups['proxyServers']
+      - groups['workStreamServers'] | length > 0 
     tags:
       - install-carbonio-proxy  
 
@@ -139,7 +139,7 @@
       - "{{ storage_ui_packages }}"        
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["proxyServers"] 
-      - groups["filesServers"] | length > 0
+      - inventory_hostname in groups['proxyServers'] 
+      - groups['filesServers'] | length > 0
     tags:
       - install-carbonio-proxy

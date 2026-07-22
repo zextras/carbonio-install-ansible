@@ -10,7 +10,7 @@
       - "{{ prometheus_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["prometheusServers"] 
+      - inventory_hostname in groups['prometheusServers'] 
     tags:
       - install-carbonio-prometheus
       
@@ -21,7 +21,7 @@
       - "{{ prometheus_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["prometheusServers"] 
+      - inventory_hostname in groups['prometheusServers'] 
     tags:
       - install-carbonio-prometheus
     

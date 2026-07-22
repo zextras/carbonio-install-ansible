@@ -10,7 +10,7 @@
       enabled: false
     with_items:
       - "{{ unnecessary_services }}"
-    when: inventory_hostname in groups["mtaServers"]
+    when: inventory_hostname in groups['mtaServers']
     tags:
       - disable-unnecessary-services
   
@@ -21,7 +21,7 @@
     with_items:
       - "{{ hcl_paths }}"
     become: true
-    when: inventory_hostname in groups["mtaServers"]
+    when: inventory_hostname in groups['mtaServers']
     tags:
       - disable-unnecessary-services
 
@@ -30,7 +30,7 @@
     register: services_list
     ignore_errors: true
     changed_when: false
-    when: groups["prometheusServers"] | length == 0
+    when: groups['prometheusServers'] | length == 0
     tags:
       - disable-unnecessary-services
 
@@ -38,7 +38,7 @@
     ansible.builtin.debug:
       msg: "No carbonio-prometheus services found."
     when:
-      - groups["prometheusServers"] | length == 0 
+      - groups['prometheusServers'] | length == 0 
       - services_list is defined
       - services_list.stdout_lines | length == 0
     tags:
@@ -51,7 +51,7 @@
       enabled: false
     loop: "{{ services_list.stdout_lines }}"
     when:
-      - groups["prometheusServers"] | length == 0
+      - groups['prometheusServers'] | length == 0
       - services_list is defined
       - services_list.stdout_lines | length > 0
     notify: restart_service_discover
