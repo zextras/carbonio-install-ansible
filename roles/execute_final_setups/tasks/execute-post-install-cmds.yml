@@ -13,7 +13,7 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig -e ldap_url="ldap://"{{ groups['replicaDirectoryServers'][0] }}":389 ldap://"{{ groups['masterDirectoryServers'][0] }}":389"'
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig -e ldap_url='ldap://{{ groups['replicaDirectoryServers'][0] }}:389 ldap://{{ groups['masterDirectoryServers'][0] }}:389'"
     when: 
       - ds_replica_count | int > 0
       - inventory_hostname not in groups['masterDirectoryServers']
