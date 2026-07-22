@@ -10,7 +10,7 @@
       - "{{ syslog_packages }}"    
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["syslogServer"]
+      - inventory_hostname in groups['syslogServer']
     tags:
       - install-carbonio-syslog
       
@@ -20,6 +20,6 @@
       - "{{ syslog_packages }}"    
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["syslogServer"]
+      - inventory_hostname in groups['syslogServer']
     tags:
       - install-carbonio-syslog

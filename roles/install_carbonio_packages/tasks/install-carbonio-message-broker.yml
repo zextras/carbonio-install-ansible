@@ -7,8 +7,8 @@
     when: 
       - ansible_facts.os_family == "Debian" 
       - (
-          (groups["serviceDiscoverServers"] | length == 3 and inventory_hostname == groups["serviceDiscoverServers"][2]) or 
-          (groups["serviceDiscoverServers"] | length == 1 and inventory_hostname == groups["serviceDiscoverServers"][0])
+          (groups['serviceDiscoverServers'] | length == 3 and inventory_hostname == groups['serviceDiscoverServers'][2]) or 
+          (groups['serviceDiscoverServers'] | length == 1 and inventory_hostname == groups['serviceDiscoverServers'][0])
         ) 
     tags:
       - install-carbonio-message-broker
@@ -21,8 +21,8 @@
     when: 
       - ansible_facts.os_family == "RedHat"
       - (
-          (groups["serviceDiscoverServers"] | length == 3 and inventory_hostname == groups["serviceDiscoverServers"][2]) or 
-          (groups["serviceDiscoverServers"] | length == 1 and inventory_hostname == groups["serviceDiscoverServers"][0])
+          (groups['serviceDiscoverServers'] | length == 3 and inventory_hostname == groups['serviceDiscoverServers'][2]) or 
+          (groups['serviceDiscoverServers'] | length == 1 and inventory_hostname == groups['serviceDiscoverServers'][0])
         ) 
     tags:
       - install-carbonio-message-broker

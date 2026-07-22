@@ -10,7 +10,7 @@
       - "{{ appserver_packages }}"    
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["applicationServers"]
+      - inventory_hostname in groups['applicationServers']
     tags:
       - install-carbonio-appserver
       
@@ -20,6 +20,6 @@
       - "{{ appserver_packages }}"    
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["applicationServers"]
+      - inventory_hostname in groups['applicationServers']
     tags:
       - install-carbonio-appserver

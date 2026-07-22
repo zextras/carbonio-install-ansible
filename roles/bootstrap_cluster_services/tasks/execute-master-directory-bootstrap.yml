@@ -9,7 +9,7 @@
     become_user: zextras
     ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
     register: glc  
-    when: inventory_hostname in groups["masterDirectoryServers"]
+    when: inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap
       
@@ -25,7 +25,7 @@
        carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password', chars=['ascii_letters', 'digits'], length=8) }}"
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap
       
@@ -35,7 +35,7 @@
       dest: /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap
       
@@ -44,7 +44,7 @@
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap
 
@@ -53,8 +53,8 @@
     ansible.builtin.command: '/opt/zextras/libexec/zmldapenablereplica'
     when:
       - glc is search("localhost")
-      - groups["replicaDirectoryServers"] | length > 0
-      - inventory_hostname in groups["masterDirectoryServers"]
+      - groups['replicaDirectoryServers'] | length > 0
+      - inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap
 
@@ -64,7 +64,7 @@
     become_user: zextras
     ansible.builtin.command: "/opt/zextras/bin/carbonio prov -l mcf zimbraLogHostname {{ hostvars[groups['syslogServer'][0]].inventory_hostname }}"
     when:
-      - groups["syslogServer"] | length > 0
-      - inventory_hostname in groups["masterDirectoryServers"]
+      - groups['syslogServer'] | length > 0
+      - inventory_hostname in groups['masterDirectoryServers']
     tags:
       - master-directory-bootstrap     

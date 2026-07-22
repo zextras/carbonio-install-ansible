@@ -17,7 +17,7 @@
        carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password', chars=['ascii_letters', 'digits'], length=8) }}"
     when:
       - glc is search("localhost")
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - execute-carbonio-bootstrap
 
@@ -26,7 +26,7 @@
       msg: "Carbonio bootstrap never performed"
     when:
       - glc is search("localhost")
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - execute-carbonio-bootstrap
       
@@ -36,7 +36,7 @@
       dest: /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - execute-carbonio-bootstrap
       
@@ -45,6 +45,6 @@
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - execute-carbonio-bootstrap

@@ -11,7 +11,7 @@
       mode: "0755"
     when:
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
 
@@ -23,7 +23,7 @@
       mode: "0644"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
       
@@ -35,7 +35,7 @@
       mode: "0644"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
        
@@ -379,7 +379,7 @@
       disable_gpg_check : true
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
 
@@ -388,7 +388,7 @@
     ansible.builtin.command: '/usr/bin/dnf -qy module disable postgresql'
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - set-repos
        

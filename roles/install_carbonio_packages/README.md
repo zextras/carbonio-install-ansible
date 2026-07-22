@@ -34,7 +34,7 @@ Examples:
 `carbonio-memcached` is installed only on the first Proxy host:
 
 ```
-inventory_hostname == groups["proxyServers"][0]
+inventory_hostname == groups['proxyServers'][0]
 ```
 
 ### Message Dispatcher

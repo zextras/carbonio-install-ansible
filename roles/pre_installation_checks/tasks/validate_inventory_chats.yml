@@ -14,7 +14,7 @@
   ansible.builtin.fail:
     msg: "The inventory file must include server in [workStreamServers] group if videoserver is defined in [videoServers] group. Starting with version 25.3.0, Chats server is mandatory if videoserver is defined. Please update your inventory file and re-run the installation."
   when:
-    - groups["videoServers"] | length != 0
-    - groups["workStreamServers"] | length == 0
+    - groups['videoServers'] | length != 0
+    - groups['workStreamServers'] | length == 0
   tags:
   - check-chats

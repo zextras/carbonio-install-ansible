@@ -8,7 +8,7 @@
     postgresql_service_name: "{{ rhel_postgresql_service_name }}"
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -18,7 +18,7 @@
   register: pgdata_dir_version
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -28,7 +28,7 @@
   notify: restart_postgres-rhel
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
     - not pgdata_dir_version.stat.exists
   tags:
     - initialize-postgres
@@ -40,7 +40,7 @@
     enabled: true
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -52,7 +52,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres
   tags:
     - initialize-postgres
@@ -65,7 +65,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres-rhel
   tags:
     - initialize-postgres
@@ -73,7 +73,7 @@
 - name: Load or generate PostgreSQL administrator password
   ansible.builtin.set_fact:
     carbonio_postgres_password: "{{ lookup('ansible.builtin.password', inventory_file + '_postgrespassword', chars=['ascii_letters', 'digits'], length=8) }}"
-  when: inventory_hostname in groups["postgresServers"]
+  when: inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -83,7 +83,7 @@
     name: "carbonio_adm"
   become: true
   become_user: postgres
-  when: inventory_hostname in groups["postgresServers"]
+  when: inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -95,7 +95,7 @@
     role_attr_flags: LOGIN,SUPERUSER
   become: true
   become_user: postgres
-  when: inventory_hostname in groups["postgresServers"]
+  when: inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres
 
@@ -108,6 +108,6 @@
     privs: ALL
   become: true
   become_user: postgres
-  when: inventory_hostname in groups["postgresServers"]
+  when: inventory_hostname in groups['postgresServers']
   tags:
     - initialize-postgres

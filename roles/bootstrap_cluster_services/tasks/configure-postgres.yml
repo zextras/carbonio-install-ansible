@@ -10,7 +10,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -21,7 +21,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -39,7 +39,7 @@
   notify: restart_postgres
   when: 
     - ansible_facts.os_family == "Debian" 
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -57,7 +57,7 @@
   notify: restart_postgres-rhel
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -71,7 +71,7 @@
     regexp: host\s*all\s*all\s*0.0.0.0/0\s*md5
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -84,7 +84,7 @@
   notify: restart_postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -96,7 +96,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres
   tags:
     - configure-postgres
@@ -109,7 +109,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres
   tags:
     - configure-postgres
@@ -119,7 +119,7 @@
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -131,7 +131,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "Debian"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres
   tags:
     - configure-postgres
@@ -145,7 +145,7 @@
   notify: restart_postgres-rhel
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -157,7 +157,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres-rhel
   tags:
     - configure-postgres
@@ -170,7 +170,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres-rhel
   tags:
     - configure-postgres
@@ -180,7 +180,7 @@
     ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.25) | int }}MB"
   when:
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   tags:
     - configure-postgres
 
@@ -192,7 +192,7 @@
   become_user: postgres
   when: 
     - ansible_facts.os_family == "RedHat"
-    - inventory_hostname in groups["postgresServers"]
+    - inventory_hostname in groups['postgresServers']
   notify: restart_postgres-rhel
   tags:
     - configure-postgres
