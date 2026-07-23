@@ -7,11 +7,11 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig zimbra_server_hostname"
     register: glc  
     when:
-      - inventory_hostname in groups["replicaDirectoryServers"]
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['replicaDirectoryServers']
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - replica-directory-bootstrap
     
@@ -20,8 +20,8 @@
        carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password', chars=['ascii_letters', 'digits'], length=8) }}"
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["replicaDirectoryServers"]
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['replicaDirectoryServers']
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - replica-directory-bootstrap
       
@@ -30,8 +30,8 @@
       msg: "Carbonio bootstrap never performed" 
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["replicaDirectoryServers"]
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['replicaDirectoryServers']
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - replica-directory-bootstrap
     
@@ -41,8 +41,8 @@
       dest: /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["replicaDirectoryServers"]
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['replicaDirectoryServers']
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - replica-directory-bootstrap
       
@@ -51,7 +51,7 @@
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["replicaDirectoryServers"]
-      - inventory_hostname not in groups["masterDirectoryServers"]
+      - inventory_hostname in groups['replicaDirectoryServers']
+      - inventory_hostname not in groups['masterDirectoryServers']
     tags:
       - replica-directory-bootstrap

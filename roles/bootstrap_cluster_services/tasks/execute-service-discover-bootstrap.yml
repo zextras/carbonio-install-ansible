@@ -7,9 +7,9 @@
     become: true
     become_method: su
     become_user: zextras
-    ansible.builtin.command: '/opt/zextras/bin/zmlocalconfig zimbra_server_hostname'
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig zimbra_server_hostname"
     register: glc  
-    when: inventory_hostname in groups["serviceDiscoverServers"]
+    when: inventory_hostname in groups['serviceDiscoverServers']
     tags:
       - service-discover-bootstrap
       
@@ -25,7 +25,7 @@
        carbonio_ldap_password: "{{ lookup('ansible.builtin.password', inventory_file + '_ldap_password',  chars=['ascii_letters', 'digits'], length=8) }}"
     when: 
       - glc is search("localhost")
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
     tags:
       - service-discover-bootstrap
       
@@ -35,7 +35,7 @@
       dest: /tmp/carbonio-config.txt
     when:
       - glc is search("localhost")
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
     tags:
       - service-discover-bootstrap
       
@@ -44,7 +44,7 @@
     ansible.builtin.command: /usr/bin/carbonio-bootstrap -c /tmp/carbonio-config.txt
     when: 
       - glc is search("localhost")
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
     tags:
       - service-discover-bootstrap
 
@@ -52,7 +52,7 @@
     ansible.builtin.stat:
       path: /etc/zextras/service-discover/cluster-credentials.tar.gpg
     register: sdb  
-    when: inventory_hostname in groups["serviceDiscoverServers"]
+    when: inventory_hostname in groups['serviceDiscoverServers']
     tags:
       - service-discover-bootstrap
 
@@ -67,7 +67,7 @@
     ansible.builtin.set_fact:
        carbonio_mesh_password: "{{ lookup('ansible.builtin.password',  inventory_file + '_consulpassword', chars=['ascii_letters', 'digits'], length=8) }}"
     when: 
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
       - not sdb.stat.exists
     tags:
       - service-discover-bootstrap 
@@ -75,7 +75,7 @@
   - name: Run Service Discover Bootstrap
     ansible.builtin.command: /usr/bin/service-discover setup {{ ansible_facts.default_ipv4.address }} --password {{ carbonio_mesh_password }}
     when: 
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
       - not sdb.stat.exists
     register: sdbo
     tags:
@@ -88,7 +88,7 @@
     delegate_to: localhost
     become: false
     when: 
-      - inventory_hostname in groups["serviceDiscoverServers"]
+      - inventory_hostname in groups['serviceDiscoverServers']
       - not sdb.stat.exists
     tags:
       - service-discover-bootstrap

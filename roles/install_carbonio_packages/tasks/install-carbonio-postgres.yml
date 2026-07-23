@@ -10,7 +10,7 @@
       - "{{ postgres_packages_ubuntu }}"  
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["postgresServers"]
+      - inventory_hostname in groups['postgresServers']
     tags:
       - install-postgres
 
@@ -21,7 +21,7 @@
       - "{{ postgres_packages_rhel }}"  
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["postgresServers"] 
+      - inventory_hostname in groups['postgresServers'] 
     tags:
       - install-postgres
 

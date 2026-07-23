@@ -10,7 +10,7 @@
       - "{{ files_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["filesServers"] 
+      - inventory_hostname in groups['filesServers'] 
     tags:
       - install-carbonio-files
       
@@ -21,7 +21,7 @@
       - "{{ files_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat" 
-      - inventory_hostname in groups["filesServers"] 
+      - inventory_hostname in groups['filesServers'] 
     tags:
       - install-carbonio-files
 

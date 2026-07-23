@@ -10,7 +10,7 @@
       - "{{ preview_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["previewServers"] 
+      - inventory_hostname in groups['previewServers'] 
     tags:
       - install-carbonio-preview
 
@@ -21,8 +21,8 @@
       - "{{ preview_dependencies_packages }}"
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["previewServers"]
-      - groups["docsServers"] | length == 0
+      - inventory_hostname in groups['previewServers']
+      - groups['docsServers'] | length == 0
     tags:
       - install-carbonio-preview
 
@@ -33,7 +33,7 @@
       - "{{ preview_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["previewServers"] 
+      - inventory_hostname in groups['previewServers'] 
     tags:
       - install-carbonio-preview
 
@@ -44,8 +44,8 @@
       - "{{ preview_dependencies_packages }}"
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["previewServers"]
-      - groups["docsServers"] | length == 0
+      - inventory_hostname in groups['previewServers']
+      - groups['docsServers'] | length == 0
     tags:
       - install-carbonio-preview
      

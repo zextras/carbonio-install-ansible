@@ -47,6 +47,6 @@
       Invalid syntax for 'public_ip_address': '{{ public_ip_address | default("") }}'.
       Video servers must define a valid IP address.
       Example: 192.0.2.10
-  when: inventory_hostname in (groups["videoServers"] | default([]))
+  when: inventory_hostname in (groups['videoServers'] | default([]))
   tags:
     - check-inventory-values

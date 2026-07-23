@@ -10,7 +10,7 @@
       - "{{ sda_packages }}"  
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname not in groups["serviceDiscoverServers"]
+      - inventory_hostname not in groups['serviceDiscoverServers']
     tags:
       - install-service-discover-agent
       
@@ -21,7 +21,7 @@
       - "{{ sda_packages }}"  
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname not in groups["serviceDiscoverServers"]
+      - inventory_hostname not in groups['serviceDiscoverServers']
     tags:
       - install-service-discover-agent
    

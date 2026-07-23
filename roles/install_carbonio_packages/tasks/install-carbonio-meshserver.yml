@@ -10,7 +10,7 @@
       - "{{ sds_packages }}"    
     when: 
       - ansible_facts.os_family == "Debian"
-      - inventory_hostname in groups["serviceDiscoverServers"] 
+      - inventory_hostname in groups['serviceDiscoverServers'] 
     tags:
       - install-service-discover-server
       
@@ -21,7 +21,7 @@
       - "{{ sds_packages }}"    
     when: 
       - ansible_facts.os_family == "RedHat"
-      - inventory_hostname in groups["serviceDiscoverServers"] 
+      - inventory_hostname in groups['serviceDiscoverServers'] 
     tags:
       - install-service-discover-server
       
