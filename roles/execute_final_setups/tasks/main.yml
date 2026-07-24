@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for execute_pending_setups
+# tasks file for execute_final_setups
   - ansible.builtin.import_tasks: execute_carbonio_pending_setups.yml
   - ansible.builtin.import_tasks: execute_post_install_cmds.yml
   - ansible.builtin.import_tasks: execute_dbconnectors_bootstrap.yml
