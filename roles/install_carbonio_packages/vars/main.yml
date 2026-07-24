@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# vars file for install-carbonio-packages
+# vars file for install_carbonio_packages
 
   appserver_packages: 
     - carbonio-appserver

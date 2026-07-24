@@ -3,5 +3,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# vars file for prepare-carbonio-vms
+# vars file for prepare_carbonio_vms
 repo_key: 52FD40243E584A21
