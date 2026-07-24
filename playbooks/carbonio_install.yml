@@ -73,7 +73,7 @@
 - name: Prepare Ansible controller
   hosts: localhost
   connection: local
-  gather_facts: true
+  gather_facts: false
   roles:
     - ../roles/prepare_ansible_controller
     
