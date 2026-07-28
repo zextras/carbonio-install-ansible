@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# handlers file for prepare-carbonio-vms
+# handlers file for prepare_carbonio_vms
   - name: Restart NetworkManager
     ansible.builtin.service:
       name: NetworkManager

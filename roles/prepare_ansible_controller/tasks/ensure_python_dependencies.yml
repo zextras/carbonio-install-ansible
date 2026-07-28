@@ -40,7 +40,7 @@
       {{ ansible_playbook_python }} -m pip install netaddr
   when:
     - netaddr_check.rc != 0
-    - ansible_venv_check.stdout | trim == 'True'
+    - ansible_venv_check.stdout | trim == "True"
   become: false
 
 - name: Warn that netaddr dependency will be installed on Ansible controller
@@ -51,7 +51,7 @@
       before running inventory checks.
   when:
     - netaddr_check.rc != 0
-    - ansible_venv_check.stdout | trim != 'True'
+    - ansible_venv_check.stdout | trim != "True"
   become: false
 
 - name: Gather facts from Ansible controller
@@ -61,28 +61,28 @@
       - "min"
   when:
     - netaddr_check.rc != 0
-    - ansible_venv_check.stdout | trim != 'True'
+    - ansible_venv_check.stdout | trim != "True"
   become: false
 
-- name: Install netaddr dependency Ansible controller [Ubuntu]
+- name: Install netaddr on Ansible controller [Ubuntu]
   ansible.builtin.apt:
     name: python3-netaddr
     state: present
     update_cache: true
   when:
     - netaddr_check.rc != 0
-    - ansible_venv_check.stdout | trim != 'True'
-    - ansible_facts.os_family == 'Debian'
+    - ansible_venv_check.stdout | trim != "True"
+    - ansible_facts.os_family == "Debian"
   become: true
 
-- name: Install netaddr dependency Ansible controller [RHEL]
+- name: Install netaddr on Ansible controller [RHEL]
   ansible.builtin.dnf:
     name: python3-netaddr
     state: present
   when:
     - netaddr_check.rc != 0
-    - ansible_venv_check.stdout | trim != 'True'
-    - ansible_facts.os_family == 'RedHat'
+    - ansible_venv_check.stdout | trim != "True"
+    - ansible_facts.os_family == "RedHat"
   become: true
 
 - name: Re-check netaddr Python dependency on Ansible controller

@@ -3,12 +3,12 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for execute-pending-setups
-  - ansible.builtin.import_tasks: execute-carbonio-pending-setups.yml
-  - ansible.builtin.import_tasks: execute-post-install-cmds.yml
-  - ansible.builtin.import_tasks: execute-dbconnectors-bootstrap.yml
-  - ansible.builtin.import_tasks: execute-config-fixes.yml
-  - ansible.builtin.import_tasks: restart-carbonio-appserver.yml
-  - ansible.builtin.import_tasks: execute-carbonio-pending-setups.yml
+# tasks file for execute_final_setups
+  - ansible.builtin.import_tasks: execute_carbonio_pending_setups.yml
+  - ansible.builtin.import_tasks: execute_post_install_cmds.yml
+  - ansible.builtin.import_tasks: execute_dbconnectors_bootstrap.yml
+  - ansible.builtin.import_tasks: execute_config_fixes.yml
+  - ansible.builtin.import_tasks: restart_carbonio_appserver.yml
+  - ansible.builtin.import_tasks: execute_carbonio_pending_setups.yml
     when: groups['all'] | length == 1
-  - ansible.builtin.import_tasks: configure-videoserver.yml
+  - ansible.builtin.import_tasks: configure_videoserver.yml

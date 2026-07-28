@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# handlers file for bootstrap-cluster-services
+# handlers file for bootstrap_cluster_services
   - name: restart_postgres
     ansible.builtin.service: name={{ postgresql_service_name }} state=restarted
 
