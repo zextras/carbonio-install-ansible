@@ -14,7 +14,10 @@ pipeline {
     stages {
         stage('Checkout') {
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                anyOf {
+                    expression { env.BRANCH_NAME == 'main'}
+                    buildingTag()
+                }
             }
             steps {
                 checkout scm
@@ -23,7 +26,10 @@ pipeline {
 
         stage('Build Collection') { 
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                anyOf {
+                    expression { env.BRANCH_NAME == 'main'}
+                    buildingTag()
+                }
             }          
             steps {
                 container('ansible') {
@@ -34,7 +40,7 @@ pipeline {
 
         stage('Publish Collection') {   
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                buildingTag()
             }         
             steps {
                 container('ansible') {
@@ -48,6 +54,4 @@ pipeline {
             }
         }
     }
-
 }
-
