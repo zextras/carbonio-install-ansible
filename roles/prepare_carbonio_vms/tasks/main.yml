@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for prepare_carbonio_vms
-  - ansible.builtin.import_tasks: set_repos.yml
-  - ansible.builtin.import_tasks: set_os.yml
-  - ansible.builtin.import_tasks: update_os.yml
-  - ansible.builtin.import_tasks: minimize_swap.yml
-  - ansible.builtin.import_tasks: set_zextras_repos.yml
+- ansible.builtin.import_tasks: set_repos.yml
+- ansible.builtin.import_tasks: set_os.yml
+- ansible.builtin.import_tasks: update_os.yml
+- ansible.builtin.import_tasks: minimize_swap.yml
+- ansible.builtin.import_tasks: set_zextras_repos.yml

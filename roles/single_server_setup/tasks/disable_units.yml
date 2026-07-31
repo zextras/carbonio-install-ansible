@@ -58,11 +58,6 @@
     tags:
       - disable-unnecessary-services
 
-  # - name: Stop and disable carbonio-prometheus services
-  #   shell: "systemctl stop {{ item }} && systemctl mask {{ item }}"
-  #   loop: "{{ services_list.stdout_lines }}"
-  #   become: true
-
   - name: Disable carbonio-stats service on Ubuntu 24 and RHEL 9
     become: true
     ansible.builtin.systemd_service:

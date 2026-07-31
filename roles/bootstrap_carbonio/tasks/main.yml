@@ -3,6 +3,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for bootstrap_carbonio
-  - ansible.builtin.import_tasks: execute_carbonio_bootstrap.yml
-  - ansible.builtin.import_tasks: execute_service_discover_agent_bootstrap.yml
+- ansible.builtin.import_tasks: execute_carbonio_bootstrap.yml
+- ansible.builtin.import_tasks: execute_service_discover_agent_bootstrap.yml
