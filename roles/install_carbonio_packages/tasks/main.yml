@@ -3,27 +3,25 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for install_carbonio_packages
-# The order is 
-  - ansible.builtin.import_tasks: install_carbonio_postgres.yml
-  - ansible.builtin.import_tasks: install_carbonio_meshserver.yml
-  - ansible.builtin.import_tasks: install_carbonio_meshagent.yml
-  - ansible.builtin.import_tasks: install_carbonio_directoryserver.yml
-  - ansible.builtin.import_tasks: install_carbonio_appserver.yml
-  - ansible.builtin.import_tasks: install_carbonio_dbconnectors.yml
-  - ansible.builtin.import_tasks: install_carbonio_storages.yml
-  - ansible.builtin.import_tasks: install_carbonio_user_management.yml
-  - ansible.builtin.import_tasks: install_carbonio_mta.yml
-  - ansible.builtin.import_tasks: install_carbonio_task.yml
-  - ansible.builtin.import_tasks: install_carbonio_proxy.yml
-  - ansible.builtin.import_tasks: install_carbonio_files.yml
-  - ansible.builtin.import_tasks: install_carbonio_docs.yml
-  - ansible.builtin.import_tasks: install_carbonio_preview.yml
-  - ansible.builtin.import_tasks: install_carbonio_videoserver.yml
-  - ansible.builtin.import_tasks: install_carbonio_wsc.yml
-  - ansible.builtin.import_tasks: install_carbonio_notification_push.yml
-  - ansible.builtin.import_tasks: install_carbonio_prometheus.yml
-  - ansible.builtin.import_tasks: install_carbonio_message_broker.yml
-  - ansible.builtin.import_tasks: install_carbonio_syslog.yml
+- ansible.builtin.import_tasks: install_carbonio_postgres.yml
+- ansible.builtin.import_tasks: install_carbonio_meshserver.yml
+- ansible.builtin.import_tasks: install_carbonio_meshagent.yml
+- ansible.builtin.import_tasks: install_carbonio_directoryserver.yml
+- ansible.builtin.import_tasks: install_carbonio_appserver.yml
+- ansible.builtin.import_tasks: install_carbonio_dbconnectors.yml
+- ansible.builtin.import_tasks: install_carbonio_storages.yml
+- ansible.builtin.import_tasks: install_carbonio_user_management.yml
+- ansible.builtin.import_tasks: install_carbonio_mta.yml
+- ansible.builtin.import_tasks: install_carbonio_task.yml
+- ansible.builtin.import_tasks: install_carbonio_proxy.yml
+- ansible.builtin.import_tasks: install_carbonio_files.yml
+- ansible.builtin.import_tasks: install_carbonio_docs.yml
+- ansible.builtin.import_tasks: install_carbonio_preview.yml
+- ansible.builtin.import_tasks: install_carbonio_videoserver.yml
+- ansible.builtin.import_tasks: install_carbonio_wsc.yml
+- ansible.builtin.import_tasks: install_carbonio_notification_push.yml
+- ansible.builtin.import_tasks: install_carbonio_prometheus.yml
+- ansible.builtin.import_tasks: install_carbonio_message_broker.yml
+- ansible.builtin.import_tasks: install_carbonio_syslog.yml
 
   

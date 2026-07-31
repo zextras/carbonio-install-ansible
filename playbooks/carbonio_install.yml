@@ -47,7 +47,7 @@
           license terms and proceed with the installation.
       when: (eula_acceptance.user_input | default('') | upper) != 'YES'
 
-    - name: Multi-Server Status
+    - name: Display multi-server installation status
       ansible.builtin.pause:
         seconds: 10
         prompt: |
@@ -58,7 +58,7 @@
           (Waiting 10 seconds...)
       when: groups['all'] | length > 1
 
-    - name: Single-Server Status
+    - name: Display single-server installation status
       ansible.builtin.pause:
         seconds: 10
         prompt: |
@@ -143,7 +143,7 @@
   order: inventory
   gather_facts: true
   tasks:
-    - name: Single-Server Optimization Confirmation
+    - name: Confirm single-server optimization
       ansible.builtin.pause:
         prompt: |
           !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -177,14 +177,14 @@
         - groups['all'] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
 
-    - name: Optimization Skipped Message
+    - name: Display optimization skipped message
       ansible.builtin.debug:
         msg: "Optimization skipped. Single-server installation completed successfully without optimization."
       when:
         - groups['all'] | length == 1
         - (ss_final_confirm.user_input | default('') | upper) != 'YES'
 
-    - name: Include Single-Server Setup Role
+    - name: Include single-server setup role
       ansible.builtin.include_role:
         name: ../roles/single_server_setup
       when:

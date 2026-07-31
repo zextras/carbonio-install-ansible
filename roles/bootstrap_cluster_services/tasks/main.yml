@@ -3,10 +3,9 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# tasks file for bootstrap_cluster_services
-  - ansible.builtin.import_tasks: configure_syslog_aggregator.yml
-  - ansible.builtin.import_tasks: execute_master_directory_bootstrap.yml
-  - ansible.builtin.import_tasks: execute_replica_directory_bootstrap.yml
-  - ansible.builtin.import_tasks: initialize_postgres.yml
-  - ansible.builtin.import_tasks: configure_postgres.yml
-  - ansible.builtin.import_tasks: execute_service_discover_bootstrap.yml
+- ansible.builtin.import_tasks: configure_syslog_aggregator.yml
+- ansible.builtin.import_tasks: execute_master_directory_bootstrap.yml
+- ansible.builtin.import_tasks: execute_replica_directory_bootstrap.yml
+- ansible.builtin.import_tasks: initialize_postgres.yml
+- ansible.builtin.import_tasks: configure_postgres.yml
+- ansible.builtin.import_tasks: execute_service_discover_bootstrap.yml
