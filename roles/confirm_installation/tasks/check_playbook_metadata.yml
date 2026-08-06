@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Check source collection metadata
+  ansible.builtin.stat:
+    path: "{{ playbook_dir | dirname }}/galaxy.yml"
+  register: carbonio_galaxy_metadata
+  delegate_to: localhost
+  run_once: true
+
+- name: Check installed collection metadata
+  ansible.builtin.stat:
+    path: "{{ playbook_dir | dirname }}/MANIFEST.json"
+  register: carbonio_manifest_metadata
+  delegate_to: localhost
+  run_once: true
+
+- name: Validate Carbonio collection metadata
+  ansible.builtin.assert:
+    that:
+      - carbonio_galaxy_metadata.stat.exists or carbonio_manifest_metadata.stat.exists
+    fail_msg: >-
+      Unable to determine the Carbonio installation playbook version.
+      Neither galaxy.yml nor MANIFEST.json was found.
+  delegate_to: localhost
+  run_once: true
+
+- name: Read playbook version from source collection
+  ansible.builtin.set_fact:
+    carbonio_playbook_source: 'Source collection'
+    carbonio_playbook_version: "{{ (lookup('ansible.builtin.file', (playbook_dir | dirname) + '/galaxy.yml') | from_yaml).version }}"
+  run_once: true
+  when:
+    - carbonio_galaxy_metadata.stat.exists
+
+- name: Read playbook version from installed collection
+  ansible.builtin.set_fact:
+    carbonio_playbook_source: 'Ansible Galaxy collection'
+    carbonio_playbook_version: "{{ (lookup('ansible.builtin.file', (playbook_dir | dirname) + '/MANIFEST.json') | from_json).collection_info.version }}"
+  run_once: true
+  when:
+    - not carbonio_galaxy_metadata.stat.exists
+    - carbonio_manifest_metadata.stat.exists
+
+- name: Determine target Carbonio major version
+  ansible.builtin.set_fact:
+    carbonio_playbook_major_version: "{{ hostvars['localhost'].carbonio_playbook_version.split('.')[0] }}"
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true

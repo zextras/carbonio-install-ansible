@@ -1,0 +1,67 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Display Carbonio repository and playbook information
+  ansible.builtin.debug:
+    msg: |
+      ============================================================
+      CARBONIO INSTALLATION CONFIRMATION
+      ============================================================
+
+      Installation playbook source:
+        {{ hostvars['localhost'].carbonio_playbook_source }}
+
+      Installation playbook version:
+        {{ hostvars['localhost'].carbonio_playbook_version }}
+
+      Repository configuration:
+
+      {% for host in ansible_play_hosts_all %}
+      {{ host }}:
+      {% if hostvars[host].carbonio_repository_preconfigured %}
+        Configured Zextras repository:
+        {{ hostvars[host].carbonio_repository_url }}
+      {% else %}
+        No configured Zextras repository was detected.
+        The following release repository will be configured:
+        {{ hostvars[host].carbonio_default_repository_url }}
+      {% endif %}
+
+      {% endfor %}
+      Verify that the repository and installation playbook version
+      are correct for the Carbonio version you intend to install.
+      ============================================================
+  run_once: true
+
+- name: Prompt for repository and playbook confirmation
+  ansible.builtin.pause:
+    prompt: |
+      Are you sure that you want to continue using the repository
+      and installation playbook shown above?
+
+      Type 'YES' and press ENTER to continue:
+  register: carbonio_installation_confirmation
+  run_once: true
+  when:
+    - carbonio_auto_confirm_repository_and_playbook is not defined or not (carbonio_auto_confirm_repository_and_playbook | bool)
+
+- name: Set automatic repository and playbook confirmation
+  ansible.builtin.set_fact:
+    carbonio_installation_confirmation:
+      user_input: "YES"
+  run_once: true
+  when:
+    - carbonio_auto_confirm_repository_and_playbook is defined
+    - carbonio_auto_confirm_repository_and_playbook | bool
+
+- name: Abort installation when repository and playbook are not confirmed
+  ansible.builtin.fail:
+    msg: >-
+      Installation aborted. Verify that the configured Carbonio
+      repository and installation playbook version are correct
+      before continuing.
+  run_once: true
+  when:
+    - (carbonio_installation_confirmation.user_input | default('') | upper) != 'YES'
