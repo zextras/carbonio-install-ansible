@@ -44,13 +44,13 @@
   when:
     - ansible_facts.os_family == "RedHat"
 
-- name: Store Carbonio repository information [RHEL]
+- name: Store Carbonio repository information [Ubuntu]
   ansible.builtin.set_fact:
     carbonio_repository_preconfigured: "{{ carbonio_repository_output | length > 0 }}"
-    carbonio_repository_urls: "{{ carbonio_repository_output | join(' ') | regex_findall('https?://\\S+') | map('regex_replace', '/$', '') | unique | list }}"
-    carbonio_default_repository_url: "https://repo.zextras.io/release/rhel{{ ansible_facts.distribution_major_version }}"
+    carbonio_repository_urls: "{{ carbonio_repository_output | join(' ') | regex_findall('(?:Hit|Get|Ign|Err):\\d+\\s+(https?://\\S+)') | map('regex_replace', '/$', '') | unique | list }}"
+    carbonio_default_repository_url: 'https://repo.zextras.io/release/ubuntu'
   when:
-    - ansible_facts.os_family == "RedHat"
+    - ansible_facts.os_family == "Debian"
 
 - name: Abort when configured Carbonio repository URL cannot be determined
   ansible.builtin.fail:

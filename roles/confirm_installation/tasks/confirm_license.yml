@@ -12,13 +12,16 @@
 
       The system is going to start configuring all the packages.
 
-      If you are installing Carbonio CE, please refer to every
-      individual package license and the GitHub repositories for
-      information about open source licenses:
+      If you are installing Carbonio CE please refer to every
+      single package license and to the Github repo for more
+      informations on open source licenses:
         https://github.com/Zextras
 
-      For proprietary Carbonio software, please also refer to the
-      Zextras EULA:
+      If you are also installing Carbonio please refer to every
+      single package license, to the Github repo for more
+      informations on open source licenses:
+        https://github.com/Zextras
+      and to the Zextras EULA for the proprietary software:
         https://zextras.com/licenses#zextras-carbonio-eula
 
       ============================================================

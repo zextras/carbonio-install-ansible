@@ -285,7 +285,7 @@ ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
 
 ## Non-Interactive / Automation Usage
 
-both interactive prompts can be pre-answered via `--extra-vars`:
+Interactive prompts can be pre-answered via `--extra-vars`:
 
 ```
 ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
