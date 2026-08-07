@@ -30,12 +30,24 @@
     - carbonio_auto_confirm_repository_and_playbook is not defined or not (carbonio_auto_confirm_repository_and_playbook | bool)
 
 - name: Display Carbonio repository and playbook information
-  ansible.builtin.debug:
-    msg:
-      - "Installation playbook source: {{ hostvars['localhost'].carbonio_playbook_source }}"
-      - "Installation playbook version: {{ hostvars['localhost'].carbonio_playbook_version }}"
-      - "Zextras repository: {{ hostvars['localhost'].carbonio_repositories | first }}"
-      - "Automatic repository and playbook confirmation is enabled."
+  ansible.builtin.pause:
+    seconds: 5
+    prompt: |
+      ============================================================
+      CARBONIO INSTALLATION CONFIRMATION
+      ============================================================
+
+      Installation playbook source:
+        {{ hostvars['localhost'].carbonio_playbook_source }}
+
+      Installation playbook version:
+        {{ hostvars['localhost'].carbonio_playbook_version }}
+
+      Zextras repository:
+        {{ hostvars['localhost'].carbonio_repositories | first }}
+
+      Automatic repository and playbook confirmation is enabled.
+      ============================================================
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined

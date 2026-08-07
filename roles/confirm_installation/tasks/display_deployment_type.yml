@@ -5,24 +5,24 @@
 ---
 - name: Display multi-server installation status
   ansible.builtin.pause:
-    seconds: 10
+    seconds: 5
     prompt: |
       =======================================================
       DETECTED: MULTI-SERVER INSTALLATION
       Proceeding with distributed components setup.
       =======================================================
-      (Waiting 10 seconds...)
+      (Waiting 5 seconds...)
   run_once: true
   when: groups['all'] | length > 1
 
 - name: Display single-server installation status
   ansible.builtin.pause:
-    seconds: 10
+    seconds: 5
     prompt: |
       -------------------------------------------------------
       DETECTED: SINGLE-SERVER INSTALLATION
       Proceeding with all-in-one components setup.
       -------------------------------------------------------
-      (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
+      (Waiting 5 seconds. Press Ctrl+C and 'C' to skip wait)
   run_once: true
   when: groups['all'] | length == 1
