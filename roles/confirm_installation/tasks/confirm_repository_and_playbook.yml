@@ -16,25 +16,14 @@
       Installation playbook version:
         {{ hostvars['localhost'].carbonio_playbook_version }}
 
-      Repository configuration:
+      Zextras repository:
+        {{ hostvars['localhost'].carbonio_repositories | first }}
 
-      {% for host in ansible_play_hosts_all %}
-      {{ host }}:
-      {% if hostvars[host].carbonio_repository_preconfigured %}
-        Configured Zextras repository:
-        {{ hostvars[host].carbonio_repository_url }}
-      {% else %}
-        No configured Zextras repository was detected.
-        The following release repository will be configured:
-        {{ hostvars[host].carbonio_default_repository_url }}
-      {% endif %}
-
-      {% endfor %}
       Verify that the repository and installation playbook version
       are correct for the Carbonio version you intend to install.
 
       ============================================================
-      Type 'YES' and press ENTER to continue:
+      Type 'yes' and press ENTER to continue:
   register: carbonio_repository_and_playbook_confirmation
   run_once: true
   when:
@@ -42,33 +31,11 @@
 
 - name: Display Carbonio repository and playbook information
   ansible.builtin.debug:
-    msg: |
-      ============================================================
-      CARBONIO INSTALLATION CONFIRMATION
-      ============================================================
-
-      Installation playbook source:
-        {{ hostvars['localhost'].carbonio_playbook_source }}
-
-      Installation playbook version:
-        {{ hostvars['localhost'].carbonio_playbook_version }}
-
-      Repository configuration:
-
-      {% for host in ansible_play_hosts_all %}
-      {{ host }}:
-      {% if hostvars[host].carbonio_repository_preconfigured %}
-        Configured Zextras repository:
-        {{ hostvars[host].carbonio_repository_url }}
-      {% else %}
-        No configured Zextras repository was detected.
-        The following release repository will be configured:
-        {{ hostvars[host].carbonio_default_repository_url }}
-      {% endif %}
-
-      {% endfor %}
-      Automatic repository and playbook confirmation is enabled.
-      ============================================================
+    msg:
+      - "Installation playbook source: {{ hostvars['localhost'].carbonio_playbook_source }}"
+      - "Installation playbook version: {{ hostvars['localhost'].carbonio_playbook_version }}"
+      - "Zextras repository: {{ hostvars['localhost'].carbonio_repositories | first }}"
+      - "Automatic repository and playbook confirmation is enabled."
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
@@ -77,7 +44,7 @@
 - name: Set automatic repository and playbook confirmation
   ansible.builtin.set_fact:
     carbonio_repository_and_playbook_confirmation:
-      user_input: 'YES'
+      user_input: 'yes'
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
@@ -91,4 +58,4 @@
       before continuing.
   run_once: true
   when:
-    - (carbonio_repository_and_playbook_confirmation.user_input | default('') | upper) != 'YES'
+    - (carbonio_repository_and_playbook_confirmation.user_input | default('') | lower) != 'yes'

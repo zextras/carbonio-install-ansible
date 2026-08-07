@@ -29,7 +29,7 @@
 
 - name: Read playbook version from source collection
   ansible.builtin.set_fact:
-    carbonio_playbook_source: 'Source collection'
+    carbonio_playbook_source: 'GitHub repository'
     carbonio_playbook_version: "{{ (lookup('ansible.builtin.file', (playbook_dir | dirname) + '/galaxy.yml') | from_yaml).version }}"
   delegate_to: localhost
   delegate_facts: true
