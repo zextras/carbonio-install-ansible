@@ -1,0 +1,45 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Accept Carbonio license
+  ansible.builtin.pause:
+    prompt: |
+      ============================================================
+      IMPORTANT - LICENSE AGREEMENT
+      ============================================================
+
+      The system is going to start configuring all the packages.
+
+      If you are installing Carbonio CE, please refer to every
+      individual package license and the GitHub repositories for
+      information about open source licenses:
+        https://github.com/Zextras
+
+      For proprietary Carbonio software, please also refer to the
+      Zextras EULA:
+        https://zextras.com/licenses#zextras-carbonio-eula
+
+      ============================================================
+      Type 'YES' and press ENTER to accept and continue:
+  register: eula_acceptance
+  run_once: true
+  when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
+
+- name: Auto-accept Carbonio license
+  ansible.builtin.set_fact:
+    eula_acceptance:
+      user_input: "YES"
+  run_once: true
+  when:
+    - carbonio_auto_accept_eula is defined
+    - carbonio_auto_accept_eula | bool
+
+- name: Abort if Carbonio license is not accepted
+  ansible.builtin.fail:
+    msg: >-
+      Installation aborted. You must type 'YES' to accept the
+      license terms and proceed with the installation.
+  run_once: true
+  when: (eula_acceptance.user_input | default('') | upper) != "YES"
