@@ -39,7 +39,7 @@
       are correct for the Carbonio version you intend to install.
 
       ============================================================
-      Type 'YES' and press ENTER to continue:
+      Type 'yes' and press ENTER to continue:
   register: carbonio_repository_and_playbook_confirmation
   run_once: true
   when:
@@ -62,6 +62,7 @@
       Zextras repository:
         {{ hostvars['localhost'].carbonio_repositories | first }}
 
+      {% if hostvars['localhost'].carbonio_hosts_without_repository | length > 0 %}
       ============================================================
       REPOSITORY CONFIGURATION NOTICE
       ============================================================
