@@ -95,18 +95,41 @@
   delegate_to: localhost
   delegate_facts: true
   run_once: true
-  
-- name: Abort when different Carbonio repositories are configured
-  ansible.builtin.fail:
-    msg: |
-      Different Carbonio repositories were detected across the infrastructure:
 
-      {% for host in ansible_play_hosts_all %}
-      {{ host }}: {{ hostvars[host].carbonio_repository_url }}
+- name: Display Carbonio repository mismatch
+  ansible.builtin.pause:
+    seconds: 5
+    prompt: |
+      ============================================================
+      CARBONIO REPOSITORY MISMATCH
+      ============================================================
+
+      Different Zextras repositories were detected across the
+      infrastructure:
+
+      {% for repository in hostvars['localhost'].carbonio_repositories %}
+      Repository:
+        {{ repository }}
+
+      Configured on:
+      {% for host in ansible_play_hosts_all if hostvars[host].carbonio_repository_url == repository %}
+        - {{ host }}
       {% endfor %}
 
+      {% endfor %}
       Configure the same Carbonio repository on all servers
       before continuing.
+
+      ============================================================
+  run_once: true
+  when:
+    - hostvars['localhost'].carbonio_repositories | length > 1
+
+- name: Abort when different Carbonio repositories are configured
+  ansible.builtin.fail:
+    msg: >-
+      Installation aborted because different Carbonio repositories
+      are configured across the infrastructure.
   run_once: true
   when:
     - hostvars['localhost'].carbonio_repositories | length > 1
