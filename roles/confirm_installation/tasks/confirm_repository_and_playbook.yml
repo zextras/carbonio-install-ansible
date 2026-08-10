@@ -20,20 +20,26 @@
         {{ hostvars['localhost'].carbonio_repositories | first }}
 
       {% if hostvars['localhost'].carbonio_hosts_without_repository | length > 0 %}
+      ============================================================
+      REPOSITORY CONFIGURATION NOTICE
+      ============================================================
+
       Zextras repository is not configured on:
       {% for host in hostvars['localhost'].carbonio_hosts_without_repository %}
         - {{ host }}
       {% endfor %}
 
-      The current release repository will be configured on these servers:
+      These servers will be configured with the current release repository:
         {{ hostvars['localhost'].carbonio_repositories | first }}
 
+      ============================================================
       {% endif %}
+
       Verify that the repository and installation playbook version
       are correct for the Carbonio version you intend to install.
 
       ============================================================
-      Type 'yes' and press ENTER to continue:
+      Type 'YES' and press ENTER to continue:
   register: carbonio_repository_and_playbook_confirmation
   run_once: true
   when:
@@ -55,6 +61,21 @@
 
       Zextras repository:
         {{ hostvars['localhost'].carbonio_repositories | first }}
+
+      ============================================================
+      REPOSITORY CONFIGURATION NOTICE
+      ============================================================
+
+      Zextras repository is not configured on:
+      {% for host in hostvars['localhost'].carbonio_hosts_without_repository %}
+        - {{ host }}
+      {% endfor %}
+
+      These servers will be configured with the current release repository:
+        {{ hostvars['localhost'].carbonio_repositories | first }}
+
+      ============================================================
+      {% endif %}
 
       Automatic repository and playbook confirmation is enabled.
       ============================================================
