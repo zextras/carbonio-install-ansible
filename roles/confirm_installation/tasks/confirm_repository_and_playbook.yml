@@ -19,6 +19,16 @@
       Zextras repository:
         {{ hostvars['localhost'].carbonio_repositories | first }}
 
+      {% if hostvars['localhost'].carbonio_hosts_without_repository | length > 0 %}
+      Zextras repository is not configured on:
+      {% for host in hostvars['localhost'].carbonio_hosts_without_repository %}
+        - {{ host }}
+      {% endfor %}
+
+      The current release repository will be configured on these servers:
+        {{ hostvars['localhost'].carbonio_repositories | first }}
+
+      {% endif %}
       Verify that the repository and installation playbook version
       are correct for the Carbonio version you intend to install.
 

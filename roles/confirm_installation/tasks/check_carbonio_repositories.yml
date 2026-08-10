@@ -82,6 +82,20 @@
   delegate_facts: true
   run_once: true
 
+- name: Collect hosts without configured Zextras repository
+  ansible.builtin.set_fact:
+    carbonio_hosts_without_repository: >-
+      {{
+        ansible_play_hosts_all
+        | map('extract', hostvars)
+        | selectattr('carbonio_repository_preconfigured', 'equalto', false)
+        | map(attribute='inventory_hostname')
+        | list
+      }}
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true
+  
 - name: Abort when different Carbonio repositories are configured
   ansible.builtin.fail:
     msg: |
