@@ -88,7 +88,7 @@
 - name: Set automatic repository and playbook confirmation
   ansible.builtin.set_fact:
     carbonio_repository_and_playbook_confirmation:
-      user_input: 'yes'
+      user_input: 'YES'
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
@@ -102,4 +102,4 @@
       before continuing.
   run_once: true
   when:
-    - (carbonio_repository_and_playbook_confirmation.user_input | default('') | lower) != 'yes'
+    - (carbonio_repository_and_playbook_confirmation.user_input | default('') | upper) != 'YES'

@@ -54,9 +54,11 @@ For non-interactive runs (see [Non-Interactive / Automation Usage](#non-interact
 
 Before starting the installation, the playbook displays:
 
-- the installation collection source and version;
-- the Zextras repository configured on each server;
-- the default release repository that will be configured if no Zextras repository is detected.
+- the installation playbook source and version;
+- the Zextras repository that will be used for the installation;
+- the hosts where no Zextras repository is currently configured.
+
+If no Zextras repository is configured on a host, the current release repository will be used.
 
 The playbook verifies that all servers use the same repository and stops the installation if different repository URLs are detected.
 
