@@ -7,6 +7,7 @@
   hosts: all
   order: inventory
   gather_facts: false
+  any_errors_fatal: true
   roles:
     - ../roles/confirm_installation
 

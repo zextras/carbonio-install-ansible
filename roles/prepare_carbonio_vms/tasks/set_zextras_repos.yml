@@ -8,7 +8,6 @@
 - name: Update repositories [Ubuntu]
   become: true
   ansible.builtin.shell: "apt update"
-  register: update_result
   when:
     - ansible_facts.os_family == "Debian"
   tags:
