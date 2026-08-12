@@ -59,12 +59,13 @@
   tags:
     - set-zextras-repos
 
-- name: Update repositories [Ubuntu]
+- name: Update repositories after configuration [Ubuntu]
   become: true
   ansible.builtin.apt:
     update_cache: true
   when:
     - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
   tags:
     - set-zextras-repos
 
