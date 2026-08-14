@@ -12,6 +12,7 @@ It features an intelligent detection system that automatically adapts the instal
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [EULA Acceptance](#eula-acceptance)
+- [Repository and Playbook Confirmation](#repository-and-playbook-confirmation)
 - [Deployment Modes](#deployment-modes)
 - [Inventory Configuration](#inventory-configuration)
 - [Important Variables](#important-variables)
@@ -49,6 +50,22 @@ As of version 26.6.0, the playbook prompts for EULA acceptance as its first step
 
 For non-interactive runs (see [Non-Interactive / Automation Usage](#non-interactive--automation-usage)), this can be pre-accepted with the `carbonio_auto_accept_eula` extra-var.
 
+## Repository and Playbook Confirmation
+
+Before starting the installation, the playbook displays:
+
+- the installation playbook source and version;
+- the Zextras repository that will be used for the installation;
+- the hosts where no Zextras repository is currently configured.
+
+If no Zextras repository is configured on a host, the current release repository will be used.
+
+The playbook verifies that all servers use the same repository and stops the installation if different repository URLs are detected.
+
+The user must confirm the displayed repository and playbook information by entering `YES`.
+
+For non-interactive runs, this confirmation can be pre-answered with the `carbonio_auto_confirm_repository_and_playbook` extra-var.
+
 ## Deployment Modes
 
 The playbook automatically determines the installation mode based on the inventory. There are three possible deployment scenarios:
@@ -56,7 +73,7 @@ The playbook automatically determines the installation mode based on the invento
 ### Multi-server installation
 
 - Used when components are distributed across multiple nodes.
-- Installation proceeds automatically after EULA acceptance.
+- Installation proceeds after EULA acceptance and repository and playbook confirmation.
 - A short delay is shown before execution.
 - DB connectors are installed on the Postgres server.
 - `carbonio-memcached` is installed only on the **first** proxy host listed under `[proxyServers]` (memcached runs behind the service mesh, which currently supports a single instance).
@@ -65,7 +82,7 @@ The playbook automatically determines the installation mode based on the invento
 ### Single-server installation (not optimized)
 
 - Used when all components are assigned to a single node.
-- Installation proceeds automatically.
+- Installation proceeds after the initial confirmations.
 - A short informational message is displayed.
 - No additional optimizations are applied.
 - Unsupported groups for this mode (see [Inventory Configuration](#inventory-configuration)) are validated and will cause the playbook to fail if populated.
@@ -243,6 +260,14 @@ Extra-var. When `true`, skips the interactive EULA acceptance prompt. See [Non-I
 
 Extra-var. When `true`, skips the interactive single-server optimization confirmation prompt (single-server mode only). See [Non-Interactive / Automation Usage](#non-interactive--automation-usage).
 
+### `carbonio_auto_confirm_repository_and_playbook`
+
+Extra-var. When `true`, skips the interactive confirmation of the configured repository and installation playbook version.
+
+The repository and playbook information is still displayed.
+
+See [Non-Interactive / Automation Usage](#non-interactive--automation-usage).
+
 ## Usage
 
 Standard interactive run:
@@ -254,22 +279,25 @@ ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install
 Non-interactive run:
 
 ```
-ansible-playbook -i -u root inventory zxbot.carbonio_install.carbonio_install \
+ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
   -e carbonio_auto_accept_eula=true \
+  -e carbonio_auto_confirm_repository_and_playbook=true \
   -e autoapply_ss_optimization=true
 ```
 
 ## Non-Interactive / Automation Usage
 
-both interactive prompts can be pre-answered via `--extra-vars`:
+Interactive prompts can be pre-answered via `--extra-vars`:
 
 ```
 ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
   -e carbonio_auto_accept_eula=true \
+  -e carbonio_auto_confirm_repository_and_playbook=true \
   -e autoapply_ss_optimization=true
 ```
 
 - `carbonio_auto_accept_eula` — skips the EULA prompt when set to `true`.
+- `carbonio_auto_confirm_repository_and_playbook` — skips the repository and playbook confirmation prompt when set to `true`.
 - `autoapply_ss_optimization` — skips the single-server optimization confirmation prompt when set to `true` (single-server mode only).
 
 If either value is invalid (not a recognized boolean), the playbook falls back to the manual/interactive prompt for that step.

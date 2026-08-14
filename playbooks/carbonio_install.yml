@@ -3,72 +3,13 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-- name: Confirm license acceptance and deployment type
+- name: Confirm Carbonio installation
   hosts: all
+  order: inventory
   gather_facts: false
-  run_once: true
-  tasks:
-    - name: Accept Carbonio license
-      ansible.builtin.pause:
-        prompt: |
-          ============================================================
-          IMPORTANT - LICENSE AGREEMENT
-          ============================================================
-
-          The system is going to start configuring all the packages.
-
-          If you are installing Carbonio CE please refer to every
-          single package license and to the Github repo for more
-          informations on open source licenses:
-            https://github.com/Zextras
-
-          If you are also installing Carbonio please refer to every
-          single package license, to the Github repo for more
-          informations on open source licenses:
-            https://github.com/Zextras
-          and to the Zextras EULA for the proprietary software:
-            https://zextras.com/licenses#zextras-carbonio-eula
-
-          ============================================================
-          Type 'YES' and press ENTER to accept and continue:
-      register: eula_acceptance
-      when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
-
-    - name: Auto-accept EULA
-      ansible.builtin.set_fact:
-        eula_acceptance:
-          user_input: 'YES'
-      when: carbonio_auto_accept_eula is defined and (carbonio_auto_accept_eula | bool)
-
-    - name: Abort if EULA not accepted
-      ansible.builtin.fail:
-        msg: >
-          Installation aborted. You must type 'YES' to accept the
-          license terms and proceed with the installation.
-      when: (eula_acceptance.user_input | default('') | upper) != 'YES'
-
-    - name: Display multi-server installation status
-      ansible.builtin.pause:
-        seconds: 10
-        prompt: |
-          =======================================================
-          DETECTED: MULTI-SERVER INSTALLATION
-          Proceeding with distributed components setup.
-          =======================================================
-          (Waiting 10 seconds...)
-      when: groups['all'] | length > 1
-
-    - name: Display single-server installation status
-      ansible.builtin.pause:
-        seconds: 10
-        prompt: |
-          -------------------------------------------------------
-          DETECTED: SINGLE-SERVER INSTALLATION
-          Proceeding with all-in-one components setup.
-          -------------------------------------------------------
-          (Waiting 10 seconds. Press Ctrl+C and 'C' to skip wait)
-      when:
-        - groups['all'] | length == 1
+  any_errors_fatal: true
+  roles:
+    - ../roles/confirm_installation
 
 - name: Prepare Ansible controller
   hosts: localhost

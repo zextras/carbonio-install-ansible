@@ -1,0 +1,135 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Update repositories [Ubuntu]
+  become: true
+  ansible.builtin.shell: "apt update"
+  register: update_result
+  when:
+    - ansible_facts.os_family == "Debian"
+
+- name: Store configured Zextras repository output [Ubuntu]
+  ansible.builtin.set_fact:
+    carbonio_repository_output: "{{ ((update_result.stdout_lines | default([])) + (update_result.stderr_lines | default([]))) | select('search', '(?i)zextras') | list }}"
+  when:
+    - ansible_facts.os_family == "Debian"
+
+- name: Store Carbonio repository information [Ubuntu]
+  ansible.builtin.set_fact:
+    carbonio_repository_preconfigured: "{{ carbonio_repository_output | length > 0 }}"
+    carbonio_repository_urls: "{{ carbonio_repository_output | join(' ') | regex_findall('(?:Hit|Get|Ign|Err):\\d+\\s+(https?://\\S+)') | map('regex_replace', '/$', '') | unique | list }}"
+    carbonio_default_repository_url: 'https://repo.zextras.io/release/ubuntu'
+  when:
+    - ansible_facts.os_family == "Debian"
+
+- name: Update repositories [RHEL]
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+  when:
+    - ansible_facts.os_family == "RedHat"
+
+- name: Retrieve configured repositories [RHEL]
+  ansible.builtin.shell: "dnf repolist -v"
+  register: update_result_rhel
+  changed_when: false
+  when:
+    - ansible_facts.os_family == "RedHat"
+
+- name: Store configured Zextras repository output [RHEL]
+  ansible.builtin.set_fact:
+    carbonio_repository_output: "{{ ((update_result_rhel.stdout_lines | default([])) + (update_result_rhel.stderr_lines | default([]))) | select('search', '(?i)zextras') | list }}"
+  when:
+    - ansible_facts.os_family == "RedHat"
+
+- name: Store Carbonio repository information [RHEL]
+  ansible.builtin.set_fact:
+    carbonio_repository_preconfigured: "{{ carbonio_repository_output | length > 0 }}"
+    carbonio_repository_urls: "{{ carbonio_repository_output | join(' ') | regex_findall('https?://\\S+') | map('regex_replace', '/$', '') | unique | list }}"
+    carbonio_default_repository_url: "https://repo.zextras.io/release/rhel{{ ansible_facts.distribution_major_version }}"
+  when:
+    - ansible_facts.os_family == "RedHat"
+
+- name: Abort when configured Carbonio repository URL cannot be determined
+  ansible.builtin.fail:
+    msg: >-
+      A configured Zextras repository was detected on
+      {{ inventory_hostname }}, but its URL could not be determined:
+      {{ carbonio_repository_output | join(', ') }}
+  when:
+    - carbonio_repository_preconfigured
+    - carbonio_repository_urls | length == 0
+
+- name: Abort when multiple Carbonio repositories are configured
+  ansible.builtin.fail:
+    msg: >-
+      Multiple Carbonio repositories are configured on
+      {{ inventory_hostname }}:
+      {{ carbonio_repository_urls | join(', ') }}
+  when:
+    - carbonio_repository_urls | length > 1
+
+- name: Determine Carbonio repository to use
+  ansible.builtin.set_fact:
+    carbonio_repository_url: "{{ (carbonio_repository_urls | first) if carbonio_repository_preconfigured else carbonio_default_repository_url }}"
+
+- name: Collect Carbonio repositories
+  ansible.builtin.set_fact:
+    carbonio_repositories: "{{ ansible_play_hosts_all | map('extract', hostvars, 'carbonio_repository_url') | unique | list }}"
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true
+
+- name: Collect hosts without configured Zextras repository
+  ansible.builtin.set_fact:
+    carbonio_hosts_without_repository: >-
+      {{
+        ansible_play_hosts_all
+        | map('extract', hostvars)
+        | selectattr('carbonio_repository_preconfigured', 'equalto', false)
+        | map(attribute='inventory_hostname')
+        | list
+      }}
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true
+
+- name: Display Carbonio repository mismatch
+  ansible.builtin.pause:
+    seconds: 5
+    prompt: |
+      ============================================================
+      CARBONIO REPOSITORY MISMATCH
+      ============================================================
+
+      Different Zextras repositories were detected across the
+      infrastructure:
+
+      {% for repository in hostvars['localhost'].carbonio_repositories %}
+      Repository:
+        {{ repository }}
+
+      Configured on:
+      {% for host in ansible_play_hosts_all if hostvars[host].carbonio_repository_url == repository %}
+        - {{ host }}
+      {% endfor %}
+
+      {% endfor %}
+      Configure the same Carbonio repository on all servers
+      before continuing.
+
+      ============================================================
+  run_once: true
+  when:
+    - hostvars['localhost'].carbonio_repositories | length > 1
+
+- name: Abort when different Carbonio repositories are configured
+  ansible.builtin.fail:
+    msg: >-
+      Installation aborted because different Carbonio repositories
+      are configured across the infrastructure.
+  run_once: true
+  when:
+    - hostvars['localhost'].carbonio_repositories | length > 1

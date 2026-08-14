@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+galaxy_info:
+  author: zextras-mobius <mobius@zextras.com>
+  description: Carbonio installation confirmation role
+  company: zextras
+  license: GPL-3.0-only
+
+  min_ansible_version: 2.15.13
+
+  platforms:
+    - name: RHEL
+      versions:
+        - 8
+        - 9
+    - name: Ubuntu
+      versions:
+        - 22.04
+        - 24.04
+
+  galaxy_tags: [zextras, carbonio]
+
+dependencies: []
