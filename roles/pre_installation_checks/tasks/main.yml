@@ -14,4 +14,5 @@
 - ansible.builtin.import_tasks: validate_ubuntu_installation.yml
 - ansible.builtin.import_tasks: validate_host_fqdn.yml
 - ansible.builtin.import_tasks: validate_hosts_file.yml
+- ansible.builtin.import_tasks: validate_rsyslog_mail_dedup.yml
   

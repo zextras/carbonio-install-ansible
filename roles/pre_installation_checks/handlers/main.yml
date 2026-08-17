@@ -4,3 +4,9 @@
 
 ---
 # handlers file for pre_installation_checks    
+- name: restart rsyslog
+  ansible.builtin.systemd:
+    name: rsyslog
+    state: restarted
+  tags:
+    - rsyslog_dedup
