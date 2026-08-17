@@ -1,68 +1,24 @@
----
-# Pre-validation: check whether mail.* rules in 50-default.conf are still active (uncommented). If so, flag remediation as required.
-
-- name: Check if mail.* rule is still active in 50-default.conf
-  ansible.builtin.command:
-    cmd: grep -E '^mail\.\*\s+-/var/log/mail\.log' /etc/rsyslog.d/50-default.conf
-  register: rsyslog_mail_star_check
-  failed_when: false
-  changed_when: false
-  when:
-      - ansible_facts.os_family == "Debian"
-  tags:
-    - rsyslog_dedup
-
-- name: Check if mail.err rule is still active in 50-default.conf
-  ansible.builtin.command:
-    cmd: grep -E '^mail\.err\s+/var/log/mail\.err' /etc/rsyslog.d/50-default.conf
-  register: rsyslog_mail_err_check
-  failed_when: false
-  changed_when: false
-  when:
-      - ansible_facts.os_family == "Debian"
-  tags:
-    - rsyslog_dedup
-
-- name: Check if mail.* rule is active in rsyslog.conf [RHEL]
-  ansible.builtin.command:
-    cmd: grep -E '^mail\.\*\s+-/var/log/maillog' /etc/rsyslog.conf
-  register: rsyslog_mail_star_check
-  failed_when: false
-  changed_when: false
-  when:
-    - ansible_facts.os_family == "RedHat"
-  tags:
-    - rsyslog_dedup
-
-- name: Set fact for whether mail log dedup remediation is needed
-  ansible.builtin.set_fact:
-    rsyslog_mail_dedup_needed: >-
-      {{ rsyslog_mail_star_check.rc == 0
-           or (rsyslog_mail_err_check.rc | default(1)) == 0 }}
-  tags:
-    - rsyslog_dedup
-
-- name: Comment out mail.* rule in 50-default.conf to prevent duplicate logging with carbonio.log
+- name: Comment out mail.* rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
   ansible.builtin.lineinfile:
     path: /etc/rsyslog.d/50-default.conf
     regexp: '^mail\.\*\s+-/var/log/mail\.log\s*$'
     line: '#mail.* -/var/log/mail.log'
+  register: rsyslog_mail_star_conf
   notify: restart rsyslog
-  when: 
+  when:
     - ansible_facts.os_family == "Debian"
-    - rsyslog_mail_dedup_needed | default(false)
   tags:
     - rsyslog_dedup
 
-- name: Comment out mail.err rule in 50-default.conf to prevent duplicate logging with carbonio.log
+- name: Comment out mail.err rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
   ansible.builtin.lineinfile:
     path: /etc/rsyslog.d/50-default.conf
     regexp: '^mail\.err\s+/var/log/mail\.err\s*$'
     line: '#mail.err /var/log/mail.err'
+  register: rsyslog_mail_err_conf
   notify: restart rsyslog
-  when: 
+  when:
     - ansible_facts.os_family == "Debian"
-    - rsyslog_mail_dedup_needed | default(false)
   tags:
     - rsyslog_dedup
 
@@ -71,10 +27,10 @@
     path: /etc/rsyslog.conf
     regexp: '^mail\.\*\s+-/var/log/maillog\s*$'
     line: '#mail.* -/var/log/maillog'
+  register: rsyslog_mail_star_conf
   notify: restart rsyslog
   when:
     - ansible_facts.os_family == "RedHat"
-    - rsyslog_mail_dedup_needed | default(false)
   tags:
     - rsyslog_dedup
 
@@ -86,6 +42,8 @@
       from this point on. All mail logs are now exclusively in
       /var/log/carbonio.log — update any scripts, cron jobs, or
       archiving/monitoring processes that currently read the mail log.
-  when: rsyslog_mail_dedup_needed | default(false)
+  when: >-
+    (rsyslog_mail_star_conf.changed | default(false))
+    or (rsyslog_mail_err_conf.changed | default(false))
   tags:
     - rsyslog_dedup
