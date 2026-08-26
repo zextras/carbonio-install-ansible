@@ -1,8 +1,10 @@
 - name: Comment out mail.* rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
   ansible.builtin.lineinfile:
     path: /etc/rsyslog.d/50-default.conf
-    regexp: '^mail\.\*\s+-/var/log/mail\.log\s*$'
-    line: '#mail.* -/var/log/mail.log'
+    regexp: '^(mail\.\*\s+-/var/log/mail\.log)$'
+    line: '#\1'
+    backrefs: true
+    state: present
   register: rsyslog_mail_star_conf
   notify: restart rsyslog
   when:
@@ -13,8 +15,10 @@
 - name: Comment out mail.err rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
   ansible.builtin.lineinfile:
     path: /etc/rsyslog.d/50-default.conf
-    regexp: '^mail\.err\s+/var/log/mail\.err\s*$'
-    line: '#mail.err /var/log/mail.err'
+    regexp: '^(mail\.err\s+/var/log/mail\.err)$'
+    line: '#\1'
+    backrefs: true
+    state: present
   register: rsyslog_mail_err_conf
   notify: restart rsyslog
   when:
@@ -25,8 +29,10 @@
 - name: Comment out mail.* rule in rsyslog.conf to prevent duplicate logging with carbonio.log [RHEL]
   ansible.builtin.lineinfile:
     path: /etc/rsyslog.conf
-    regexp: '^mail\.\*\s+-/var/log/maillog\s*$'
-    line: '#mail.* -/var/log/maillog'
+    regexp: '^(mail\.\*\s+-/var/log/maillog)$'
+    line: '#\1'
+    backrefs: true
+    state: present
   register: rsyslog_mail_star_conf
   notify: restart rsyslog
   when:
