@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Install Carbonio Master Directoryserver [Ubuntu]
+    become: true
+    ansible.builtin.apt: name={{ item }} state=present
+    with_items:
+      - "{{ license_service_packages }}"
+    when: 
+      - ansible_facts.os_family == "Debian" 
+      - inventory_hostname in groups['masterDirectoryServers']
+    tags:
+      - install-license-service
+
+  - name: Install Carbonio Master Directoryserver [RHEL]
+    become: true
+    ansible.builtin.yum: name={{ item }} state=present
+    with_items:
+      - "{{ license_service_packages }}"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups['masterDirectoryServers']
+    tags:
+      - install-license-service
