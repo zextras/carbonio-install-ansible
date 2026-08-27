@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Install Carbonio Master Directoryserver [Ubuntu]
+  - name: Install Carbonio License service [Ubuntu]
     become: true
     ansible.builtin.apt: name={{ item }} state=present
     with_items:
@@ -14,7 +14,7 @@
     tags:
       - install-license-service
 
-  - name: Install Carbonio Master Directoryserver [RHEL]
+  - name: Install Carbonio License service [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
