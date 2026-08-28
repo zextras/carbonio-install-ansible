@@ -1,3 +1,14 @@
+library(
+    identifier: 'jenkins-lib-common@v4.10.0',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'git@github.com:zextras/jenkins-lib-common.git',
+        credentialsId: 'jenkins-integration-with-github-account'
+    ])
+)
+
+properties(defaultPipelineProperties())
+
 pipeline {
     agent {
         node {
@@ -9,6 +20,7 @@ pipeline {
         skipDefaultCheckout()
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
     }
     
     stages {
