@@ -60,7 +60,6 @@
   proxy_packages: 
     - carbonio-catalog
     - carbonio-proxy
-    - carbonio-webui
     - carbonio-admin-console-ui
     - carbonio-avdb-updater
 
