@@ -3,13 +3,14 @@
 All notable changes to this project will be documented in this file. 
 
 
-### [26.9.0] (2026-09-01)
+### [26.9.0] (2026-09-30)
 
 
 ### Features
 * Added installation and database bootstrap support for the new carbonio-preview-db package.
 * Refactored the playbook structure and standardized Ansible content across roles, including task names, module FQCNs, inventory group references, and task conditions.
 * Added repository and playbook validation and confirmation before Carbonio installation, with repository consistency checks across all hosts and support for non-interactive confirmation.
+* Replaced the carbonio-webui meta-package with its individual UI packages to support the updated package structure.
 
 ### Bug Fixes
 * Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.
