@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 
 ### Bug Fixes
 * Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.
+* Replaced the removed carbonio-webui meta-package in the Proxy package list with the UI packages it used to pull in (carbonio-admin-login-ui, carbonio-auth-ui, carbonio-calendars-ui, carbonio-contacts-ui, carbonio-login-ui, carbonio-mails-ui, carbonio-search-ui, carbonio-shell-ui), fixing "No package matching 'carbonio-webui' is available" during installation
 
 
 ### [26.6.1] (2026-07-10)
