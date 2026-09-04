@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Added installation and database bootstrap support for the new carbonio-preview-db package.
 * Refactored the playbook structure and standardized Ansible content across roles, including task names, module FQCNs, inventory group references, and task conditions.
 * Added repository and playbook validation and confirmation before Carbonio installation, with repository consistency checks across all hosts and support for non-interactive confirmation.
+* Added carbonio-license-service installation.
 * Replaced the carbonio-webui meta-package with its individual UI packages to support the updated package structure.
 
 ### Bug Fixes
