@@ -54,6 +54,9 @@
   ds_packages: 
     - carbonio-directory-server
 
+  license_service_packages: 
+    - carbonio-license-service
+
   memcached_packages:
     - carbonio-memcached
 
