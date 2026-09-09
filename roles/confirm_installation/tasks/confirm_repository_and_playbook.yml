@@ -39,7 +39,7 @@
       are correct for the Carbonio version you intend to install.
 
       ============================================================
-      Type 'yes' and press ENTER to continue:
+      Type 'YES' and press ENTER to continue:
   register: carbonio_repository_and_playbook_confirmation
   run_once: true
   when:
