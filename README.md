@@ -300,6 +300,8 @@ ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
 - `carbonio_auto_confirm_repository_and_playbook` — when set to `true`, skips the interactive repository and playbook confirmation; when set to `false`, the interactive prompt is shown.
 - `autoapply_ss_optimization` — when set to `true`, applies single-server optimization automatically; when set to `false`, skips the optimization.
 
+Only `true` and `false` are supported values for these variables.
+
 
 ## License
 
