@@ -28,7 +28,7 @@
       Type 'YES' and press ENTER to accept and continue:
   register: eula_acceptance
   run_once: true
-  when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | bool)
+  when: carbonio_auto_accept_eula is not defined or not (carbonio_auto_accept_eula | lower == 'true')
 
 - name: Auto-accept Carbonio license
   ansible.builtin.set_fact:
@@ -37,7 +37,7 @@
   run_once: true
   when:
     - carbonio_auto_accept_eula is defined
-    - carbonio_auto_accept_eula | bool
+    - carbonio_auto_accept_eula | lower == 'true'
 
 - name: Abort if Carbonio license is not accepted
   ansible.builtin.fail:

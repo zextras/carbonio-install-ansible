@@ -39,11 +39,10 @@
       are correct for the Carbonio version you intend to install.
 
       ============================================================
-      Type 'yes' and press ENTER to continue:
+      Type 'YES' and press ENTER to continue:
   register: carbonio_repository_and_playbook_confirmation
   run_once: true
-  when:
-    - carbonio_auto_confirm_repository_and_playbook is not defined or not (carbonio_auto_confirm_repository_and_playbook | bool)
+  when: carbonio_auto_confirm_repository_and_playbook is not defined or not (carbonio_auto_confirm_repository_and_playbook | lower == 'true')
 
 - name: Display Carbonio repository and playbook information
   ansible.builtin.pause:
@@ -83,7 +82,7 @@
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
-    - carbonio_auto_confirm_repository_and_playbook | bool
+    - carbonio_auto_confirm_repository_and_playbook | lower == 'true'
 
 - name: Set automatic repository and playbook confirmation
   ansible.builtin.set_fact:
@@ -92,7 +91,7 @@
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
-    - carbonio_auto_confirm_repository_and_playbook | bool
+    - carbonio_auto_confirm_repository_and_playbook | lower == 'true'
 
 - name: Abort installation when repository and playbook are not confirmed
   ansible.builtin.fail:
