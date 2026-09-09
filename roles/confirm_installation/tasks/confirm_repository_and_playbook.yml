@@ -82,7 +82,7 @@
   run_once: true
   when:
     - carbonio_auto_confirm_repository_and_playbook is defined
-    - carbonio_auto_confirm_repository_and_playbook | bool
+    - carbonio_auto_confirm_repository_and_playbook | lower == 'true'
 
 - name: Set automatic repository and playbook confirmation
   ansible.builtin.set_fact:
