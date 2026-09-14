@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 * Added repository and playbook validation and confirmation before Carbonio installation, with repository consistency checks across all hosts and support for non-interactive confirmation.
 * Added carbonio-license-service installation.
 * Replaced the carbonio-webui meta-package with its individual UI packages to support the updated package structure.
+* Standardized interactive prompts and boolean input validation across Ansible playbooks, limiting supported boolean values to true and false.
 
 ### Bug Fixes
 * Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.

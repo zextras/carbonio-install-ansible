@@ -296,11 +296,12 @@ ansible-playbook -i inventory -u root zxbot.carbonio_install.carbonio_install \
   -e autoapply_ss_optimization=true
 ```
 
-- `carbonio_auto_accept_eula` — skips the EULA prompt when set to `true`.
-- `carbonio_auto_confirm_repository_and_playbook` — skips the repository and playbook confirmation prompt when set to `true`.
-- `autoapply_ss_optimization` — skips the single-server optimization confirmation prompt when set to `true` (single-server mode only).
+- `carbonio_auto_accept_eula` — when set to `true`, skips the EULA prompt and accepts the license; when set to `false`, the interactive prompt is shown.
+- `carbonio_auto_confirm_repository_and_playbook` — when set to `true`, skips the interactive repository and playbook confirmation; when set to `false`, the interactive prompt is shown.
+- `autoapply_ss_optimization` — when set to `true`, applies single-server optimization automatically; when set to `false`, skips the optimization (single-server mode only).
 
-If either value is invalid (not a recognized boolean), the playbook falls back to the manual/interactive prompt for that step.
+Only `true` and `false` are supported values for these variables.
+
 
 ## License
 

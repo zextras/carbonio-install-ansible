@@ -100,7 +100,7 @@
       register: ss_final_confirm
       when:
         - groups['all'] | length == 1
-        - autoapply_ss_optimization | default('') | lower not in ['true', 'false', 'yes', 'no', '1', '0']
+        - autoapply_ss_optimization | default('') | lower not in ['true', 'false']
 
     - name: Auto-apply Single-Server Optimization
       ansible.builtin.set_fact:
@@ -108,7 +108,7 @@
           user_input: 'YES'
       when:
         - groups['all'] | length == 1
-        - autoapply_ss_optimization | default('') | lower in ['true', 'yes', '1']
+        - autoapply_ss_optimization | default('') | lower in ['true']
 
     - name: Auto-skip Single-Server Optimization
       ansible.builtin.set_fact:
@@ -116,7 +116,7 @@
           user_input: ''
       when:
         - groups['all'] | length == 1
-        - autoapply_ss_optimization | default('') | lower in ['false', 'no', '0']
+        - autoapply_ss_optimization | default('') | lower in ['false']
 
     - name: Display optimization skipped message
       ansible.builtin.debug:
