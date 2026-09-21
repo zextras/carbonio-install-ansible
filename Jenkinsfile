@@ -12,7 +12,7 @@ properties(defaultPipelineProperties())
 pipeline {
     agent {
         node {
-            label 'infra-v1'
+            label 'ansible-v1'
         }
     }
 
