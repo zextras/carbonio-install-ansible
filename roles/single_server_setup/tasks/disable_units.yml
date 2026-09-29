@@ -3,28 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Stop and disable unnecessary services
-    ansible.builtin.systemd_service:
-      name: "{{ item }}"
-      state: stopped 
-      enabled: false
-    with_items:
-      - "{{ unnecessary_services }}"
-    when: inventory_hostname in groups['mtaServers']
-    tags:
-      - disable-unnecessary-services
-  
-  - name: Remove hcl files
-    ansible.builtin.file:
-      path: "{{ item }}"
-      state: absent
-    with_items:
-      - "{{ hcl_paths }}"
-    become: true
-    when: inventory_hostname in groups['mtaServers']
-    tags:
-      - disable-unnecessary-services
-
   - name: Get list of carbonio-prometheus services
     ansible.builtin.shell: "systemctl list-units --state=active 'carbonio-prometheus*' --no-legend | awk '{print $1}'"
     register: services_list
@@ -54,6 +32,23 @@
       - groups['prometheusServers'] | length == 0
       - services_list is defined
       - services_list.stdout_lines | length > 0
+    tags:
+      - disable-unnecessary-services
+
+  - name: Remove hcl files for disabled carbonio-prometheus exporters
+    become: true
+    ansible.builtin.file:
+      path: >-
+        /etc/zextras/service-discover/{{
+          item | regex_replace('\.service$', '.hcl')
+        }}
+      state: absent
+    loop: "{{ services_list.stdout_lines }}"
+    when:
+      - groups['prometheusServers'] | length == 0
+      - services_list is defined
+      - services_list.stdout_lines | length > 0
+      - item is match('^carbonio-prometheus-.*-exporter\.service$')
     notify: restart_service_discover
     tags:
       - disable-unnecessary-services
