@@ -55,6 +55,16 @@
     tags:
       - singleserver-reconfig-cmds     
  
+  - name: Configure local ClamAV endpoint for single server
+    become: true
+    ansible.builtin.replace:
+      path: /opt/zextras/conf/amavisd.conf.in
+      regexp: 'clamd:127\.78\.0\.17:20000'
+      replace: 'clamd:127.0.0.1:3310'
+    when: inventory_hostname in groups['mtaServers']
+    tags:
+      - singleserver-reconfig-cmds
+
   - name: Calculate MariaDB buffer pool allocation (10% of RAM)
     ansible.builtin.set_fact:
       mysql_ram_size_mb: "{{ (ansible_facts.memtotal_mb * 0.10) | int }}M"
