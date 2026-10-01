@@ -3,15 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-  - name: Add and enable service-discover service
-    become: true
-    become_method: su
-    become_user: zextras
-    ansible.builtin.command: "/opt/zextras/bin/carbonio prov -l ms {{ inventory_hostname }} +zimbraServiceInstalled service-discover +zimbraServiceEnabled service-discover"
-    when: inventory_hostname in groups['serviceDiscoverServers']
-    tags:
-      - fix-config  
-
   - name: Add proxy address to Carbonio trusted IPs
     become: true
     become_method: su
