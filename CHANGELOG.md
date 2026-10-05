@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file.
 * Added carbonio-license-service installation.
 * Replaced the carbonio-webui meta-package with its individual UI packages to support the updated package structure.
 * Standardized interactive prompts and boolean input validation across Ansible playbooks, limiting supported boolean values to true and false.
+* Added a carbonio_ss_optimized local configuration marker when Single Server Optimization is selected, allowing future upgrades to reliably identify optimized installations
+
 
 ### Bug Fixes
 * Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.
