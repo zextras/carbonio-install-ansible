@@ -110,6 +110,15 @@
         - groups['all'] | length == 1
         - autoapply_ss_optimization | default('') | lower in ['true']
 
+    - name: Store single-server optimization marker
+      become: true
+      become_method: su
+      become_user: zextras
+      ansible.builtin.command: /opt/zextras/bin/zmlocalconfig -e carbonio_ss_optimized=true
+      when:
+        - groups['all'] | length == 1
+        - ss_final_confirm.user_input | default('') | upper == 'YES'
+
     - name: Auto-skip Single-Server Optimization
       ansible.builtin.set_fact:
         ss_final_confirm:
