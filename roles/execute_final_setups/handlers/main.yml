@@ -16,3 +16,9 @@
 
     - name: restart_postgres-rhel
       ansible.builtin.service: name={{ postgresql_service_name }} state=restarted
+
+    - name: Restart carbonio-avdb-updater
+      become: true
+      ansible.builtin.systemd_service:
+        name: carbonio-avdb-updater.service
+        state: restarted
