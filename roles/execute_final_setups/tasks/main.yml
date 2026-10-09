@@ -8,6 +8,7 @@
 - ansible.builtin.import_tasks: execute_dbconnectors_bootstrap.yml
 - ansible.builtin.import_tasks: execute_config_fixes.yml
 - ansible.builtin.import_tasks: restart_carbonio_appserver.yml
+- ansible.builtin.import_tasks: configure_avdb_updater.yml
 - ansible.builtin.import_tasks: execute_carbonio_pending_setups.yml
   when: groups['all'] | length == 1
 - ansible.builtin.import_tasks: configure_videoserver.yml
