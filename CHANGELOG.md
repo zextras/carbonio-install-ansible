@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 * Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.
 * Fixed Single Server optimization to keep the MTA and ClamAV sidecars enabled, preserve their Service Discover configuration, use the local ClamAV endpoint, and remove Service Discover HCL files for disabled Prometheus exporters.
 * Removed legacy `service-discover` LDAP attribute workaround from Carbonio installation playbook now resolved upstream.
+* Added a temporary workaround for carbonio-avdb-updater startup failures in multi-mailbox deployments by configuring the admin SOAP endpoint using the first application server from the inventory and restarting the service when the configuration changes.
 
 
 ### [26.6.1] (2026-07-10)

@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Configure AVDB updater for multi-mailbox deployments
+  become: true
+  ansible.builtin.template:
+    src: avdb-updater-config.properties.j2
+    dest: /opt/zextras/conf/avdb-updater-config.properties
+    owner: zextras
+    group: zextras
+    mode: '0644'
+  when:
+    - inventory_hostname in groups['proxyServers']
+    - groups['applicationServers'] | length > 1
+  notify: restart_avdb_updater
+  tags:
+    - fix-config
