@@ -14,6 +14,6 @@
   when:
     - inventory_hostname in groups['proxyServers']
     - groups['applicationServers'] | length > 1
-  notify: Restart carbonio-avdb-updater
+  notify: restart_avdb_updater
   tags:
     - fix-config
