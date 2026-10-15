@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Make sure that dbsConnectorServers group is empty
+    run_once: true
+    delegate_to: localhost
+    ansible.builtin.fail:
+      msg: "dbsConnectorServers group is deprecated for Standard Carbonio Installation. To continue, please keep this group empty."
+    when: groups['dbsConnectorServers'] | length > 0
+    tags:
+      - check-carbonio-dbconnectors
+            

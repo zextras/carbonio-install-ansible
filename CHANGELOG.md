@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.9.0] (2026-10-15)
+
+
+### Features
+* Added installation and database bootstrap support for the new carbonio-preview-db package.
+* Refactored the playbook structure and standardized Ansible content across roles, including task names, module FQCNs, inventory group references, and task conditions.
+* Added repository and playbook validation and confirmation before Carbonio installation, with repository consistency checks across all hosts and support for non-interactive confirmation.
+* Added carbonio-license-service installation.
+* Replaced the carbonio-webui meta-package with its individual UI packages to support the updated package structure.
+* Standardized interactive prompts and boolean input validation across Ansible playbooks, limiting supported boolean values to true and false.
+* Added a carbonio_ss_optimized local configuration marker when Single Server Optimization is selected, allowing future upgrades to reliably identify optimized installations
+
+
+### Bug Fixes
+* Comment out mail.* rsyslog rules in 50-default.conf to prevent duplicate mail log entries in carbonio.log, added pre-validation check and admin warning to use carbonio.log going forward.
+* Fixed Single Server optimization to keep the MTA and ClamAV sidecars enabled, preserve their Service Discover configuration, use the local ClamAV endpoint, and remove Service Discover HCL files for disabled Prometheus exporters.
+* Removed legacy `service-discover` LDAP attribute workaround from Carbonio installation playbook now resolved upstream.
+* Added a temporary workaround for carbonio-avdb-updater startup failures in multi-mailbox deployments by configuring the admin SOAP endpoint using the first application server from the inventory and restarting the service when the configuration changes.
+
+
 ### [26.6.1] (2026-07-10)
 
 

@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Install Carbonio Prometheus Server [Ubuntu]
+    become: true
+    ansible.builtin.apt: name={{ item }} state=present
+    with_items:
+      - "{{ prometheus_packages }}"
+    when: 
+      - ansible_facts.os_family == "Debian"
+      - inventory_hostname in groups['prometheusServers'] 
+    tags:
+      - install-carbonio-prometheus
+      
+  - name: Install Carbonio Prometheus Server RH
+    become: true
+    ansible.builtin.yum: name={{ item }} state=present
+    with_items:
+      - "{{ prometheus_packages }}"
+    when: 
+      - ansible_facts.os_family == "RedHat"
+      - inventory_hostname in groups['prometheusServers'] 
+    tags:
+      - install-carbonio-prometheus
+    
+     

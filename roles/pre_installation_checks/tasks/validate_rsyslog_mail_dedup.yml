@@ -1,0 +1,55 @@
+- name: Comment out mail.* rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
+  ansible.builtin.lineinfile:
+    path: /etc/rsyslog.d/50-default.conf
+    regexp: '^(mail\.\*\s+-/var/log/mail\.log)$'
+    line: '#\1'
+    backrefs: true
+    state: present
+  register: rsyslog_mail_star_conf
+  notify: restart rsyslog
+  when:
+    - ansible_facts.os_family == "Debian"
+  tags:
+    - rsyslog_dedup
+
+- name: Comment out mail.err rule in 50-default.conf to prevent duplicate logging with carbonio.log [Ubuntu]
+  ansible.builtin.lineinfile:
+    path: /etc/rsyslog.d/50-default.conf
+    regexp: '^(mail\.err\s+/var/log/mail\.err)$'
+    line: '#\1'
+    backrefs: true
+    state: present
+  register: rsyslog_mail_err_conf
+  notify: restart rsyslog
+  when:
+    - ansible_facts.os_family == "Debian"
+  tags:
+    - rsyslog_dedup
+
+- name: Comment out mail.* rule in rsyslog.conf to prevent duplicate logging with carbonio.log [RHEL]
+  ansible.builtin.lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: '^(mail\.\*\s+-/var/log/maillog)$'
+    line: '#\1'
+    backrefs: true
+    state: present
+  register: rsyslog_mail_star_conf
+  notify: restart rsyslog
+  when:
+    - ansible_facts.os_family == "RedHat"
+  tags:
+    - rsyslog_dedup
+
+- name: Warning that mail logs now live only in carbonio.log
+  ansible.builtin.debug:
+    msg: >-
+      WARNING: mail.* logging rule(s) have been disabled to prevent
+      duplicate log entries. The mail log file will receive NO new entries
+      from this point on. All mail logs are now exclusively in
+      /var/log/carbonio.log — update any scripts, cron jobs, or
+      archiving/monitoring processes that currently read the mail log.
+  when: >-
+    (rsyslog_mail_star_conf.changed | default(false))
+    or (rsyslog_mail_err_conf.changed | default(false))
+  tags:
+    - rsyslog_dedup

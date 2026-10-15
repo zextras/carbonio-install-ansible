@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+  - name: Configure Carbonio syslog
+    become: true
+    ansible.builtin.command: '/opt/zextras/libexec/zmsyslogsetup'
+    tags:
+      - post-install-cmds
+
+  - name: Set Replica and Master Url
+    become: true
+    become_method: su
+    become_user: zextras
+    ansible.builtin.command: "/opt/zextras/bin/zmlocalconfig -e ldap_url=\"ldap://{{ groups['replicaDirectoryServers'][0] }}:389 ldap://{{ groups['masterDirectoryServers'][0] }}:389\""
+    when: 
+      - ds_replica_count | int > 0
+      - inventory_hostname not in groups['masterDirectoryServers']
+      - inventory_hostname not in groups['replicaDirectoryServers']
+    tags:
+      - post-install-cmds
+      

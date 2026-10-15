@@ -1,0 +1,113 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+# Set Zextras repository
+---
+
+- name: Update repositories [Ubuntu]
+  become: true
+  ansible.builtin.shell: "apt update"
+  when:
+    - ansible_facts.os_family == "Debian"
+  tags:
+    - set-zextras-repos
+
+- name: Check for Carbonio packages in repositories [Ubuntu]
+  ansible.builtin.shell: "apt list 2>/dev/null | grep '^carbonio'"
+  register: carbonio_packages
+  failed_when: false
+  changed_when: false
+  when:
+    - ansible_facts.os_family == "Debian"
+  tags:
+    - set-zextras-repos
+
+- name: Ensure apt keyrings directory exists [Ubuntu]
+  become: true
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
+- name: Download Zextras repository key [Ubuntu]
+  become: true
+  ansible.builtin.get_url:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x52FD40243E584A21"
+    dest: /etc/apt/keyrings/zextras.asc
+    mode: "0644"
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
+- name: Configure Zextras repository [Ubuntu]
+  become: true
+  ansible.builtin.template:
+    src: zextras.list.j2
+    dest: /etc/apt/sources.list.d/zextras.list
+    mode: "0644"
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
+- name: Update repositories after configuration [Ubuntu]
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  when:
+    - ansible_facts.os_family == "Debian"
+    - carbonio_packages.rc == 1
+  tags:
+    - set-zextras-repos
+
+############ RHEL ############
+
+- name: Update repositories [RHEL]
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+  when:
+    - ansible_facts.os_family == "RedHat"
+  tags:
+    - set-zextras-repos
+
+- name: Check for Carbonio packages in repositories [RHEL]
+  ansible.builtin.shell: "dnf list available 2>/dev/null | grep '^carbonio'"
+  register: carbonio_packages_rhel
+  failed_when: false
+  changed_when: false
+  when:
+    - ansible_facts.os_family == "RedHat"
+  tags:
+    - set-zextras-repos
+
+- name: Configure Zextras repository [RHEL]
+  become: true
+  ansible.builtin.template:
+    src: zextras.repo.j2
+    dest: /etc/yum.repos.d/zextras.repo
+    mode: "0644"
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
+  tags:
+    - set-zextras-repos
+
+- name: Update repositories after configuration [RHEL]
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+  when:
+    - ansible_facts.os_family == "RedHat"
+    - carbonio_packages_rhel.rc == 1
+  tags:
+    - set-zextras-repos

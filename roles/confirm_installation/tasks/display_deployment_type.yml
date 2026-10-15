@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Display multi-server installation status
+  ansible.builtin.pause:
+    seconds: 5
+    prompt: |
+      =======================================================
+      DETECTED: MULTI-SERVER INSTALLATION
+      Proceeding with distributed components setup.
+      =======================================================
+      (Waiting 5 seconds...)
+  run_once: true
+  when: groups['all'] | length > 1
+
+- name: Display single-server installation status
+  ansible.builtin.pause:
+    seconds: 5
+    prompt: |
+      -------------------------------------------------------
+      DETECTED: SINGLE-SERVER INSTALLATION
+      Proceeding with all-in-one components setup.
+      -------------------------------------------------------
+      (Waiting 5 seconds. Press Ctrl+C and 'C' to skip wait)
+  run_once: true
+  when: groups['all'] | length == 1

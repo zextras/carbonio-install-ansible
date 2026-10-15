@@ -1,38 +1,34 @@
-Role Name
-=========
+# Single Server Setup
 
-A brief description of the role goes here.
+This role applies optional optimizations to a Carbonio installation where all components run on a single host.
 
-Requirements
-------------
+The role is executed only after the standard Single Server installation has completed and the administrator has explicitly approved the optimization step.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Warning
 
-Role Variables
---------------
+Single Server optimization is intended for installations that will remain on one host.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+After the optimization is applied, the installation should not be considered suitable for future conversion into a distributed multi-server deployment.
 
-Dependencies
-------------
+## Responsibilities
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+The role:
 
-Example Playbook
-----------------
+- reduces selected Application Server limits;
+- adjusts LDAP and mailbox thread settings;
+- configures SMTP values for the single-host topology;
+- reduces MariaDB memory allocation;
+- reduces PostgreSQL `shared_buffers`;
+- disables unnecessary sidecar services;
+- removes unused Service Discover configuration files;
+- disables unused Prometheus services when Prometheus is not configured;
+- disables `carbonio-stats.service` on Ubuntu 24 and RHEL 9.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## License
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+GPL-3.0-only
 
-License
--------
+## Author Information
 
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Zextras 
+<https://www.zextras.com>

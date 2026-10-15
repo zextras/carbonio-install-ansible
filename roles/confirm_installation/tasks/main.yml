@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- ansible.builtin.import_tasks: confirm_license.yml
+- ansible.builtin.import_tasks: gather_facts.yml
+- ansible.builtin.import_tasks: check_playbook_metadata.yml
+- ansible.builtin.import_tasks: check_carbonio_repositories.yml
+- ansible.builtin.import_tasks: confirm_repository_and_playbook.yml
+- ansible.builtin.import_tasks: display_deployment_type.yml

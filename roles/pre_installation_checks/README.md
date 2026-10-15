@@ -1,38 +1,52 @@
-Role Name
-=========
+# Pre-installation Checks
 
-A brief description of the role goes here.
+This role validates the inventory and target hosts before Carbonio packages are installed.
 
-Requirements
-------------
+Its purpose is to detect unsupported installation layouts and invalid configuration values before any significant changes are applied to the target systems.
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Responsibilities
 
-Role Variables
---------------
+The role validates:
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- required inventory groups;
+- the number of Service Discover servers;
+- the number of PostgreSQL servers;
+- the number of Master Directory servers;
+- use of the deprecated `dbsConnectorServers` group;
+- dependencies between Chats and Video Server components;
+- Single Server inventory restrictions;
+- inventory hostnames, domains, and IP addresses;
+- consistency between the inventory hostname and the operating system FQDN;
+- `/etc/hosts` configuration;
+- minimized Ubuntu installations.
 
-Dependencies
-------------
+## Inventory Requirements
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Important restrictions include:
 
-Example Playbook
-----------------
+- `serviceDiscoverServers` must contain exactly one or three servers;
+- only one server may be defined in `postgresServers`;
+- only one server may be defined in `masterDirectoryServers`;
+- `dbsConnectorServers` must remain empty;
+- `workStreamServers` must be present in the inventory, even when Chats is not installed;
+- `videoServers` cannot be used without `workStreamServers`;
+- `replicaDirectoryServers` and `syslogServer` must be empty in Single Server mode.
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+## Ubuntu Validation
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+Minimized Ubuntu installations are not supported directly.
 
-License
--------
+When `/etc/update-motd.d/60-unminimize` is detected, the role stops the installation and instructs the administrator to run:
 
-BSD
+```
+unminimize
+```
 
-Author Information
-------------------
+## License
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+GPL-3.0-only
+
+## Author Information
+
+Zextras 
+<https://www.zextras.com>

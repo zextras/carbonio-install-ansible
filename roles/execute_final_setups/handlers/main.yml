@@ -1,18 +1,24 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
 # handlers file for execute-final-setups
     - name: restart_preview
-      service:
+      ansible.builtin.service:
         name: carbonio-preview.service
         state: restarted
 
     - name: restart_videoserver
-      service:
+      ansible.builtin.service:
         name: carbonio-videoserver.service
         state: restarted
 
     - name: restart_postgres-rhel
-      service: name={{ postgresql_service_name }} state=restarted
+      ansible.builtin.service: name={{ postgresql_service_name }} state=restarted
+
+    - name: restart_avdb_updater
+      become: true
+      ansible.builtin.systemd_service:
+        name: carbonio-avdb-updater.service
+        state: restarted

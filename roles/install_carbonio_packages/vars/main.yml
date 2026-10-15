@@ -1,9 +1,9 @@
-# SPDX-FileCopyrightText: 2024 Zextras <https://www.zextras.com>
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 ---
-# vars file for install-carbonio-packages
+# vars file for install_carbonio_packages
 
   appserver_packages: 
     - carbonio-appserver
@@ -24,6 +24,9 @@
 
   docs_dbconnectors_packages: 
     - carbonio-docs-connector-db
+
+  preview_dbconnectors_packages:
+    - carbonio-preview-db
 
   task_dbconnectors_packages:
     - carbonio-tasks-db
@@ -51,6 +54,9 @@
   ds_packages: 
     - carbonio-directory-server
 
+  license_service_packages: 
+    - carbonio-license-service
+
   memcached_packages:
     - carbonio-memcached
 
@@ -60,8 +66,15 @@
   proxy_packages: 
     - carbonio-catalog
     - carbonio-proxy
-    - carbonio-webui
     - carbonio-admin-console-ui
+    - carbonio-admin-login-ui
+    - carbonio-auth-ui
+    - carbonio-calendars-ui
+    - carbonio-contacts-ui
+    - carbonio-login-ui
+    - carbonio-mails-ui
+    - carbonio-search-ui
+    - carbonio-shell-ui
     - carbonio-avdb-updater
 
   preview_packages: 
