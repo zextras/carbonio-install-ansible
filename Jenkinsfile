@@ -1,7 +1,18 @@
+library(
+    identifier: 'jenkins-lib-common@v4.15.2',
+    retriever: modernSCM([
+        $class: 'GitSCMSource',
+        remote: 'git@github.com:zextras/jenkins-lib-common.git',
+        credentialsId: 'jenkins-integration-with-github-account'
+    ])
+)
+
+properties(defaultPipelineProperties())
+
 pipeline {
     agent {
         node {
-            label 'infra-v1'
+            label 'ansible-v1'
         }
     }
 
@@ -9,12 +20,16 @@ pipeline {
         skipDefaultCheckout()
         buildDiscarder(logRotator(numToKeepStr: '10'))
         timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
     }
     
     stages {
         stage('Checkout') {
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                anyOf {
+                    expression { env.BRANCH_NAME == 'main'}
+                    buildingTag()
+                }
             }
             steps {
                 checkout scm
@@ -23,7 +38,10 @@ pipeline {
 
         stage('Build Collection') { 
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                anyOf {
+                    expression { env.BRANCH_NAME == 'main'}
+                    buildingTag()
+                }
             }          
             steps {
                 container('ansible') {
@@ -34,7 +52,7 @@ pipeline {
 
         stage('Publish Collection') {   
             when {
-                expression { env.BRANCH_NAME == 'main'}
+                buildingTag()
             }         
             steps {
                 container('ansible') {
@@ -48,6 +66,4 @@ pipeline {
             }
         }
     }
-
 }
-
