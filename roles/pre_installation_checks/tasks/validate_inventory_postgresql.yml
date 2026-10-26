@@ -6,6 +6,8 @@
 - name: Make sure there is only one server in the PostgresServers group
   ansible.builtin.fail:
     msg: "This playbook does not support multi-server PostgreSQL installation. To continue, please ensure there is only one PostgreSQL server defined in the postgresServers group."
-  when: groups['postgresServers'] | length > 1
+  when:
+    - not (hostvars['localhost']['ha_already_configured'] | default(false) | bool) 
+    - groups['postgresServers'] | length > 1
   tags:
     - check-carbonio-postgres

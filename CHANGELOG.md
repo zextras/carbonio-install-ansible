@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. 
 
+### [26.12.0]
+
+
+### Features
+* Add HA detection to the install playbook: when Patroni or carbonio-kafka is already installed, skip primary cluster bootstrap, standard-install-only checks and Postgres/DB connector installation, allowing nodes to be added to an existing HA infrastructure.
+
 
 ### [26.9.0] (2026-10-15)
 
