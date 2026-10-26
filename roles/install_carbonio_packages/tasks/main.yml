@@ -4,12 +4,14 @@
 
 ---
 - ansible.builtin.import_tasks: install_carbonio_postgres.yml
+  when: not (hostvars['localhost']['ha_already_configured'] | default(false) | bool)
 - ansible.builtin.import_tasks: install_carbonio_meshserver.yml
 - ansible.builtin.import_tasks: install_carbonio_meshagent.yml
 - ansible.builtin.import_tasks: install_carbonio_directoryserver.yml
 - ansible.builtin.import_tasks: install_carbonio_license_service.yml
 - ansible.builtin.import_tasks: install_carbonio_appserver.yml
 - ansible.builtin.import_tasks: install_carbonio_dbconnectors.yml
+  when: not (hostvars['localhost']['ha_already_configured'] | default(false) | bool)
 - ansible.builtin.import_tasks: install_carbonio_storages.yml
 - ansible.builtin.import_tasks: install_carbonio_user_management.yml
 - ansible.builtin.import_tasks: install_carbonio_mta.yml
