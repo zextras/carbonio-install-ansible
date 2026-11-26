@@ -83,7 +83,4 @@
 
       Configure the required system locale and remove conflicting
       environment overrides before retrying.
-
-      Documentation:
-      https://docs.zextras.com/carbonio/html/admincli/administration/locale.html
     success_msg: "Locale configuration meets Carbonio requirements."
