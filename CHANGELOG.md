@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.12.0] (2026-12-20)
+
+
+### Features
+* Removed the obsolete carbonio-license-service package from the installation playbook.
+
+
 ### [26.9.0] (2026-10-15)
 
 
