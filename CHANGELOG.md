@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. 
 
 
+### [26.12.0] (2026-12-20)
+
+
+### Features
+* Added a prerequisite check to validate the default system locale and current task locale before Carbonio installation.
+
+
 ### [26.9.0] (2026-10-15)
 
 

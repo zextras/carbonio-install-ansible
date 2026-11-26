@@ -1,0 +1,89 @@
+# SPDX-FileCopyrightText: Zextras <https://www.zextras.com>
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+---
+- name: Get default system locale
+  ansible.builtin.command: localectl --no-pager status
+  environment:
+    LC_ALL: C
+  register: system_locale
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Get current locale
+  ansible.builtin.command: locale
+  register: current_locale
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Prepare locale settings for validation
+  ansible.builtin.set_fact:
+    system_locale_settings: >-
+      {{
+        system_locale.stdout_lines | default([])
+        | map('trim')
+        | map('regex_replace', '^System Locale: *', '')
+        | map('replace', '"', '')
+        | map('regex_replace', '(?i)[.]utf-?8(?=$|:)', '.utf8')
+        | list
+      }}
+    current_locale_settings: >-
+      {{
+        current_locale.stdout_lines | default([])
+        | map('trim')
+        | map('replace', '"', '')
+        | map('regex_replace', '(?i)[.]utf-?8(?=$|:)', '.utf8')
+        | list
+      }}
+
+- name: Identify unsupported locale settings
+  ansible.builtin.set_fact:
+    unsupported_locale_settings: >-
+      {{
+        (system_locale_settings + current_locale_settings)
+        | select('match', '^(LANG=|LC_)')
+        | reject('equalto', 'LC_ALL=')
+        | reject('search', '=en_US[.]utf8$')
+        | unique
+        | list
+      }}
+    unsupported_languages: >-
+      {{
+        (system_locale_settings + current_locale_settings)
+        | select('match', '^LANGUAGE=')
+        | map('regex_replace', '^LANGUAGE=', '')
+        | join(':')
+        | split(':')
+        | difference(['', 'en', 'en_US', 'en.utf8', 'en_US.utf8'])
+      }}
+
+- name: Validate Carbonio locale requirements
+  ansible.builtin.assert:
+    that:
+      - system_locale.rc | default(1) == 0
+      - current_locale.rc | default(1) == 0
+      - current_locale.stderr | default('') | trim == ''
+      - "'LANG=en_US.utf8' in system_locale_settings"
+      - "'LANG=en_US.utf8' in current_locale_settings"
+      - unsupported_locale_settings | length == 0
+      - unsupported_languages | length == 0
+    fail_msg: |
+      Invalid locale configuration on {{ inventory_hostname }}.
+
+      Required system locale: en_US.UTF-8
+
+      Default system locale:
+      {{ system_locale.stdout | default('Unavailable', true) }}
+
+      Current locale:
+      {{ current_locale.stdout | default('Unavailable', true) }}
+
+      Configure the required system locale and remove conflicting
+      environment overrides before retrying.
+
+      Documentation:
+      https://docs.zextras.com/carbonio/html/admincli/administration/locale.html
+    success_msg: "Locale configuration meets Carbonio requirements."
