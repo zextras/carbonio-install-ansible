@@ -17,6 +17,40 @@
   gather_facts: false
   roles:
     - ../roles/prepare_ansible_controller
+
+- name: Detect existing HA configuration
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check Patroni on first postgres server
+      ansible.builtin.shell: systemctl list-unit-files | grep -E '^patroni\.service' || true
+      delegate_to: "{{ groups['postgresServers'][0] }}"
+      register: patroni_check
+      changed_when: false
+      failed_when: false
+      when: groups['postgresServers'] | default([]) | length > 0
+ 
+    - name: Check carbonio-kafka on first kafka server
+      ansible.builtin.shell: systemctl list-unit-files | grep -E '^carbonio-kafka\.service' || true
+      delegate_to: "{{ groups['kafka'][0] }}"
+      register: kafka_check
+      changed_when: false
+      failed_when: false
+      when: groups['kafka'] | default([]) | length > 0
+ 
+    - name: Set HA configured flag
+      ansible.builtin.set_fact:
+        ha_already_configured: >-
+          {{ (patroni_check.stdout | default('') | trim | length > 0)
+             or (kafka_check.stdout | default('') | trim | length > 0) }}
+ 
+    - name: Show HA detection result
+      ansible.builtin.debug:
+        msg: 
+          - "patroni output: {{ patroni_check.stdout | default('check skipped') }}"
+          - "kafka output: {{ kafka_check.stdout | default('check skipped') }}"
+          - "HA already configured: {{ ha_already_configured }}. Primary cluster steps will {{ 'be skipped' if ha_already_configured else 'run' }}."
+
     
 - name: Validate hosts and install Carbonio packages
   hosts: all
@@ -33,7 +67,8 @@
   order: inventory
   gather_facts: true
   roles:
-    - ../roles/bootstrap_cluster_services
+    - role: ../roles/bootstrap_cluster_services
+      when: not (hostvars['localhost']['ha_already_configured'] | bool)
 
 - name: Bootstrap remaining cluster services
   hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers
@@ -48,8 +83,10 @@
   order: inventory
   gather_facts: true
   roles:
-    - ../roles/bootstrap_carbonio
-    - ../roles/execute_final_setups
+    - role: ../roles/bootstrap_carbonio
+      when: not (hostvars['localhost']['ha_already_configured'] | bool)
+    - role: ../roles/execute_final_setups
+      when: not (hostvars['localhost']['ha_already_configured'] | bool)
 
 - name: Configure remaining Carbonio servers (except video servers)
   hosts: all, !postgresServers, !masterDirectoryServers, !replicaDirectoryServers, !videoServers
