@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Features
 * Removed the obsolete carbonio-license-service package from the installation playbook.
+* Added a prerequisite check to validate the default system locale and current task locale before Carbonio installation.
 
 
 ### [26.9.0] (2026-10-15)

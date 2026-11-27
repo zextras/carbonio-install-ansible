@@ -5,6 +5,7 @@
 ---
 - ansible.builtin.import_tasks: confirm_license.yml
 - ansible.builtin.import_tasks: gather_facts.yml
+- ansible.builtin.import_tasks: validate_locale.yml
 - ansible.builtin.import_tasks: check_playbook_metadata.yml
 - ansible.builtin.import_tasks: check_carbonio_repositories.yml
 - ansible.builtin.import_tasks: confirm_repository_and_playbook.yml
