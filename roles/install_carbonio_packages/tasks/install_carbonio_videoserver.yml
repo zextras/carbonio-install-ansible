@@ -14,7 +14,7 @@
     tags:
       - install-carbonio-videoserver
       
-  - name: Install Carbonio Video Server RH
+  - name: Install Carbonio Video Server [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

@@ -107,6 +107,9 @@
     - carbonio-videoserver-advanced
     - carbonio-videorecorder
 
+  turn_server_packages: 
+    - carbonio-turn-server
+
   workstream_packages:
     - carbonio-ws-collaboration
 

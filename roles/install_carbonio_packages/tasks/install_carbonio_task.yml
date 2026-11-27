@@ -14,7 +14,7 @@
     tags:
       - install-carbonio-task
       
-  - name: Install Carbonio task RH
+  - name: Install Carbonio task [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

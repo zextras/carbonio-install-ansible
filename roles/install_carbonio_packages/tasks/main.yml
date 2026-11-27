@@ -18,6 +18,7 @@
 - ansible.builtin.import_tasks: install_carbonio_docs.yml
 - ansible.builtin.import_tasks: install_carbonio_preview.yml
 - ansible.builtin.import_tasks: install_carbonio_videoserver.yml
+- ansible.builtin.import_tasks: install_carbonio_turnserver.yml
 - ansible.builtin.import_tasks: install_carbonio_wsc.yml
 - ansible.builtin.import_tasks: install_carbonio_notification_push.yml
 - ansible.builtin.import_tasks: install_carbonio_prometheus.yml

@@ -14,7 +14,7 @@
     tags:
       - install-carbonio-prometheus
       
-  - name: Install Carbonio Prometheus Server RH
+  - name: Install Carbonio Prometheus Server [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:

@@ -13,7 +13,7 @@
     tags:
       - install-carbonio-message-broker
       
-  - name: Install Message Broker on RH
+  - name: Install Message Broker on [RHEL]
     become: true
     ansible.builtin.yum: name={{ item }} state=present
     with_items:
